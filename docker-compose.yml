@@ -10,7 +10,7 @@ services:
     depends_on:
       - postgres-db
     volumes:
-      - ./backend:/app
+      - .:/app
 
 
   postgres-db:
