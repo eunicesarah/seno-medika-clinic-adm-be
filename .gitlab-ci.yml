@@ -4,9 +4,9 @@ default:
   tags: 
     - be-runner
 
-stages:         
+stages: 
+  - test        
   - build
-   - test
   # - deploy
 
 test:
