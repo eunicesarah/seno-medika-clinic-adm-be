@@ -1,0 +1,28 @@
+image: docker
+
+default:
+  tags: 
+    - be-runner
+
+stages:         
+  - build
+  # - test
+  # - deploy
+
+
+build-job:       
+  stage: build
+  when: on_success
+  only: 
+    - main
+  image: docker:stable
+
+  services:
+      - name: docker:dind
+        command: ["--tls=false"]
+
+  script:
+      - docker login gitlab.informatika.org:4567 -u access-token-sm-be -p $CI_TOKEN
+      - docker build -t gitlab.informatika.org:4567/if3250_2024_k03_02_sm-02/sm-be .
+      - docker push gitlab.informatika.org:4567/if3250_2024_k03_02_sm-02/sm-be
+
