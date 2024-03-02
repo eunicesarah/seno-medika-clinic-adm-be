@@ -6,7 +6,7 @@ default:
 
 stages:         
   - build
-   - test
+  - test
   # - deploy
 
 test:
