@@ -7,6 +7,8 @@ import (
 	"seno-medika.com/config/variable"
 )
 
+var DB = Conn()
+
 func Conn() *sql.DB {
 	postgresInfo := fmt.Sprintf("host=%s port=%d user=%s password=%s dbname=%s sslmode=disable",
 		variable.DbHost, 5432, variable.DbUser, variable.DBPass, variable.DBName)
