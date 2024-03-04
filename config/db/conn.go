@@ -17,12 +17,6 @@ func Conn() *sql.DB {
 	if err != nil {
 		panic(err)
 	}
-	defer func(db *sql.DB) {
-		err := db.Close()
-		if err != nil {
-			panic(err)
-		}
-	}(db)
 
 	err = db.Ping()
 	if err != nil {

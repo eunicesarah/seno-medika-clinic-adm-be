@@ -1,4 +1,4 @@
-CREATE TABLE public."Antrian" (
+CREATE TABLE public.antrian (
                                   antrian_id integer NOT NULL,
                                   pasien_id integer NOT NULL,
                                   nomor_antrian integer NOT NULL,
@@ -8,7 +8,7 @@ CREATE TABLE public."Antrian" (
                                   create_at date NOT NULL
 );
 
-CREATE TABLE public."Pasien" (
+CREATE TABLE public.pasien (
                                  pasien_id integer NOT NULL,
                                  no_erm integer NOT NULL,
                                  pasien_uuid uuid NOT NULL,
@@ -44,7 +44,7 @@ CREATE TABLE public."Pasien" (
                                  updated_by character varying(50) NOT NULL
 );
 
-CREATE TABLE public."Users" (
+CREATE TABLE public.users (
                                 user_id integer NOT NULL,
                                 user_uuid character varying(50) NOT NULL,
                                 nama character varying(50) NOT NULL,
@@ -54,17 +54,17 @@ CREATE TABLE public."Users" (
 );
 
 
-ALTER TABLE ONLY public."Antrian"
+ALTER TABLE ONLY public.antrian
     ADD CONSTRAINT "PK_Antrian" PRIMARY KEY (antrian_id);
 
-ALTER TABLE ONLY public."Pasien"
+ALTER TABLE ONLY public.pasien
     ADD CONSTRAINT "PK_pasien" PRIMARY KEY (pasien_id, no_erm);
 
-ALTER TABLE ONLY public."Pasien"
+ALTER TABLE ONLY public.pasien
     ADD CONSTRAINT "UNIQUE_Pasien" UNIQUE (pasien_id);
 
-ALTER TABLE ONLY public."Users"
+ALTER TABLE ONLY public.users
     ADD CONSTRAINT "User_pkey" PRIMARY KEY (user_id);
 
-ALTER TABLE ONLY public."Antrian"
-    ADD CONSTRAINT "FK_Antrian" FOREIGN KEY (pasien_id) REFERENCES public."Pasien"(pasien_id) NOT VALID;
+ALTER TABLE ONLY public.antrian
+    ADD CONSTRAINT "FK_Antrian" FOREIGN KEY (pasien_id) REFERENCES public.pasien(pasien_id) NOT VALID;
