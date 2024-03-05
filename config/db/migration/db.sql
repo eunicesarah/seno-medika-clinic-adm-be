@@ -38,19 +38,19 @@ CREATE TABLE public.pasien (
                                  warga_negara character varying(20) NOT NULL,
                                  pendidikan character varying(5) NOT NULL,
                                  status_perkawinan character varying(20) NOT NULL,
-                                 created_at date NOT NULL,
+                                 created_at timestamp NOT NULL,
                                  created_by character varying(50) NOT NULL,
-                                 updated_at date NOT NULL,
+                                 updated_at timestamp NOT NULL,
                                  updated_by character varying(50) NOT NULL
 );
 
 CREATE TABLE public.users (
-                                user_id integer NOT NULL,
+                                user_id SERIAL NOT NULL,
                                 user_uuid uuid NOT NULL,
-                                nama character varying(50) NOT NULL,
-                                password character varying(50) NOT NULL,
-                                email character varying(50) NOT NULL,
-                                role character varying(50) NOT NULL
+                                nama character varying(225) NOT NULL,
+                                password character varying(225) NOT NULL,
+                                email character varying(225) NOT NULL,
+                                role character varying(10) NOT NULL
 );
 
 
