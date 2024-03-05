@@ -87,3 +87,49 @@ func DeleteAntrian(c *gin.Context) {
 	})
 }
 
+func GetAllAntrian(c *gin.Context) {
+	var antrians []antrian.Antrian
+	rows, err := db.DB.Query(
+	`SELECT antrian_id, pasien_id, nomor_antrian, status, poli, instalasi, created_at FROM antrian`)
+
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, common.Response{
+			Message:    err.Error(),
+			Status:     "Internal Server Error",
+			StatusCode: http.StatusInternalServerError,
+			Data:       nil,
+		})
+		return
+	}
+	
+	for rows.Next() {
+		var antrianItem antrian.Antrian
+		err := rows.Scan(
+			&antrianItem.AntrianID,
+			&antrianItem.PasienID,
+			&antrianItem.NomorAntrian,
+			&antrianItem.Status,
+			&antrianItem.Poli,
+			&antrianItem.Instalasi,
+			&antrianItem.CreatedAt)
+
+		if err != nil {
+			c.JSON(http.StatusInternalServerError, common.Response{
+				Message:    err.Error(),
+				Status:     "Internal Server Error",
+				StatusCode: http.StatusInternalServerError,
+				Data:       nil,
+			})
+			return
+		}
+
+		antrians = append(antrians, antrianItem)
+	}
+
+	c.JSON(http.StatusOK, common.Response{
+		Message:    "Berhasil mendapatkan data antrian",
+		Status:     "ok",
+		StatusCode: http.StatusOK,
+		Data:       antrians,
+	})
+}
