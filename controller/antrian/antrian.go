@@ -62,3 +62,28 @@ func AddAntrianOffline(c *gin.Context) {
 	})
 }
 
+func DeleteAntrian(c *gin.Context) {
+	id := c.Query("id")
+
+	_, err := db.DB.Exec(
+		`DELETE FROM antrian WHERE antrian_id = $1`,
+		id)
+
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, common.Response{
+			Message:    err.Error(),
+			Status:     "Internal Server Error",
+			StatusCode: http.StatusInternalServerError,
+			Data:       nil,
+		})
+		return
+	}
+
+	c.JSON(http.StatusOK, common.Response{
+		Message:    "Antrian berhasil dihapus",
+		Status:     "ok",
+		StatusCode: http.StatusOK,
+		Data:       nil,
+	})
+}
+
