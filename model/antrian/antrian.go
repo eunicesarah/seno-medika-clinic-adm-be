@@ -9,3 +9,13 @@ type Antrian struct {
 	Instalasi 			string `json:"instalasi"`
 	CreatedAt 			string `json:"created_at"`
 }
+
+type AntrianOnline struct {
+	AntrianID   		int    `json:"antrian_id"`
+	NIK   				string `json:"nik"`
+	NomorAntrian		int    `json:"nomor_antrian"`
+	Status              bool   `json:"status"`
+	Poli 			  	string `json:"poli"`
+	Instalasi 			string `json:"instalasi"`
+	CreatedAt 			string `json:"created_at"`
+}
