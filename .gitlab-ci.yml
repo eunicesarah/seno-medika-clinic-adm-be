@@ -6,8 +6,8 @@ default:
 
 stages:
   # - init 
-  - build        
-  - test
+  - test        
+  - build
   # - deploy
 
 # init:
