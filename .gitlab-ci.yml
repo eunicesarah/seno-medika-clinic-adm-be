@@ -5,15 +5,15 @@ default:
     - be-runner
 
 stages:
-  - init 
+  # - init 
   - test        
   - build
   # - deploy
 
-init:
-  stage: init
-  script:
-    - sudo docker-compose up -d --build
+# init:
+#   stage: init
+#   script:
+#     - sudo docker-compose up -d --build
 
 test:
   stage: test
