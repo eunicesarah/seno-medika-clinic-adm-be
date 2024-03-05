@@ -13,6 +13,7 @@ import (
 	"strconv"
 )
 
+// AddUser TODO: Add validation for email
 func AddUser(c *gin.Context) {
 	var userInput person.User
 
@@ -92,6 +93,16 @@ func DeleteUser(c *gin.Context) {
 	deleteBy := c.Query("delete_by")
 	target := c.Query("target")
 
+	if deleteBy == "" || target == "" {
+		c.JSON(http.StatusBadRequest, common.Response{
+			Message:    "Bad Request",
+			StatusCode: http.StatusBadRequest,
+			Status:     "Bad Request",
+			Data:       nil,
+		})
+		return
+	}
+
 	switch deleteBy {
 	case "id":
 		val, _ := strconv.Atoi(target)
@@ -153,6 +164,7 @@ func DeleteUser(c *gin.Context) {
 			})
 			return
 		}
+		return
 	}
 
 	c.JSON(http.StatusOK, common.Response{
@@ -168,6 +180,16 @@ func UpdateUser(c *gin.Context) {
 	updateBy := c.Query("update_by")
 	target := c.Query("target")
 	var userInput person.User
+
+	if updateBy == "" || target == "" {
+		c.JSON(http.StatusBadRequest, common.Response{
+			Message:    "Bad Request",
+			StatusCode: http.StatusBadRequest,
+			Status:     "Bad Request",
+			Data:       nil,
+		})
+		return
+	}
 
 	if err := c.ShouldBind(&userInput); err != nil {
 		c.JSON(http.StatusBadRequest, common.Response{
@@ -220,6 +242,15 @@ func PutUser(c *gin.Context) {
 
 	changeType := c.Query("change_type")
 	changeBy := c.Query("change_by")
+
+	if changeType == "" || changeBy == "" {
+		c.JSON(http.StatusBadRequest, common.Response{
+			Message:    "Bad Request",
+			StatusCode: http.StatusBadRequest,
+			Status:     "Bad Request",
+		})
+		return
+	}
 
 	switch changeType {
 	case "name":
@@ -493,6 +524,16 @@ func PutUser(c *gin.Context) {
 func GetUser(c *gin.Context) {
 	findBy := c.Query("find_by")
 	target := c.Query("target")
+
+	if findBy == "" || target == "" {
+		c.JSON(http.StatusBadRequest, common.Response{
+			Message:    "Bad Request",
+			StatusCode: http.StatusBadRequest,
+			Status:     "Bad Request",
+			Data:       nil,
+		})
+		return
+	}
 
 	switch findBy {
 	case "id":
