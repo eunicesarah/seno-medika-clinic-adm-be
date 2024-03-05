@@ -230,4 +230,27 @@ func UpdatePasien(c *gin.Context) {
 	})
 }
 
+func DeletePasien(c *gin.Context) {
+	pasienTarget := c.Query("pasien_target")
 
+	_, err := db.DB.Exec(
+		`DELETE FROM pasien WHERE pasien_uuid = $1`,
+		pasienTarget)
+
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, common.Response{
+			Message:    err.Error(),
+			Status:     "Internal Server Error",
+			StatusCode: http.StatusInternalServerError,
+			Data:       nil,
+		})
+		return
+	}
+
+	c.JSON(http.StatusOK, common.Response{
+		Message:    "Successfully delete pasien",
+		Status:     "ok",
+		StatusCode: http.StatusOK,
+		Data:       nil,
+	})
+}
