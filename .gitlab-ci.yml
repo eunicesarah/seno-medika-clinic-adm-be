@@ -18,7 +18,7 @@ stages:
 test:
   stage: test
   script:
-    - sudo rm -f tmp/build-errors.log
+    - sudo chown gitlab-runner:gitlab-runner tmp/build-errors.log
     - CGO_ENABLED=0 go test ./... -coverprofile=coverage-report.out
     - go tool cover -html=coverage-report.out -o coverage-report.html
     - go tool cover -func=coverage-report.out
