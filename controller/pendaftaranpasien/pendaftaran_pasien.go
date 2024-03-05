@@ -254,3 +254,95 @@ func DeletePasien(c *gin.Context) {
 		Data:       nil,
 	})
 }
+
+func GetPasien(c *gin.Context) {
+	pasienTarget := c.Query("pasien_target")
+
+	var pasien person.Pasien
+	err := db.DB.QueryRow(
+		`SELECT
+			no_erm,
+			pasien_uuid,
+			no_rm_lama,
+			no_dok_rm,
+			penjamin,
+			no_penjamin,
+			nik,
+			no_kk,
+			nama,
+			tempat_lahir,
+			tanggal_lahir,
+			no_ihs,
+			jenis_kelamin,
+			golongan_darah,
+			no_telpon,
+			email,
+			provinsi,
+			kabupaten_kota,
+			kecamatan,
+			kelurahan,
+			alamat,
+			nama_kontak_darurat,
+			nomor_kontak_darurat,
+			pekerjaan,
+			agama,
+			warga_negara,
+			pendidikan,
+			status_perkawinan,
+			created_at,
+			created_by,
+			updated_at,
+			updated_by
+		FROM pasien WHERE pasien_uuid = $1`,
+		pasienTarget).Scan(
+		&pasien.NoERM,
+		&pasien.PasienUUID,
+		&pasien.NoRMLama,
+		&pasien.NoDokRM,
+		&pasien.Penjamin,
+		&pasien.NoPenjamin,
+		&pasien.NIK,
+		&pasien.NoKK,
+		&pasien.Nama,
+		&pasien.TempatLahir,
+		&pasien.TanggalLahir,
+		&pasien.NoIHS,
+		&pasien.JenisKelamin,
+		&pasien.GolonganDarah,
+		&pasien.NoTelpon,
+		&pasien.Email,
+		&pasien.Provinsi,
+		&pasien.KabupatenKota,
+		&pasien.Kecamatan,
+		&pasien.Kelurahan,
+		&pasien.Alamat,
+		&pasien.NamaKontakDarurat,
+		&pasien.NomorKontakDarurat,
+		&pasien.Pekerjaan,
+		&pasien.Agama,
+		&pasien.WargaNegara,
+		&pasien.Pendidikan,
+		&pasien.StatusPerkawinan,
+		&pasien.CreatedAt,
+		&pasien.CreatedBy,
+		&pasien.UpdatedAt,
+		&pasien.UpdatedBy)
+	
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, common.Response{
+			Message:    err.Error(),
+			Status:     "Internal Server Error",
+			StatusCode: http.StatusInternalServerError,
+			Data:       nil,
+		})
+		return
+	}
+
+	c.JSON(http.StatusOK, common.Response{
+		Message:    "Successfully get pasien",
+		Status:     "ok",
+		StatusCode: http.StatusOK,
+		Data:       pasien,
+	})
+
+}
