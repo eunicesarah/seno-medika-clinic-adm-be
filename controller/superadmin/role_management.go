@@ -176,7 +176,7 @@ func DeleteUser(c *gin.Context) {
 	return
 }
 
-func UpdateUser(c *gin.Context) {
+func PutUser(c *gin.Context) {
 	updateBy := c.Query("update_by")
 	target := c.Query("target")
 	var userInput person.User
@@ -237,7 +237,7 @@ func UpdateUser(c *gin.Context) {
 	return
 }
 
-func PutUser(c *gin.Context) {
+func PatchUser(c *gin.Context) {
 	var putInput common.PutInput
 
 	changeType := c.Query("change_type")
