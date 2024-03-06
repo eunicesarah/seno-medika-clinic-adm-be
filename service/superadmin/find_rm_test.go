@@ -133,6 +133,7 @@ func TestFindAll_Success(t *testing.T) {
 func TestFindAll_Fail(t *testing.T) {
 	_db := db.DB
 	defer func() {
+		_db = db.Conn()
 		db.DB = _db
 	}()
 
