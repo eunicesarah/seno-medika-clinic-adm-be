@@ -26,10 +26,15 @@ func TestDeleteUserById_Fail(t *testing.T) {
 	_db := db.DB
 
 	defer func() {
+		_db = db.Conn()
 		db.DB = _db
 	}()
 
 	err := DeleteUserById(1)
+	require.Error(t, err)
+
+	_db.Close()
+	err = DeleteUserById(1)
 	require.Error(t, err)
 }
 
@@ -53,10 +58,15 @@ func TestDeleteUserByUuid_Fail(t *testing.T) {
 	_db := db.DB
 
 	defer func() {
+		_db = db.Conn()
 		db.DB = _db
 	}()
 
 	err := DeleteUserByUuid(uuid.New().String())
+	require.Error(t, err)
+
+	_db.Close()
+	err = DeleteUserByUuid(uuid.New().String())
 	require.Error(t, err)
 }
 
@@ -80,10 +90,15 @@ func TestDeleteUserByEmail_Fail(t *testing.T) {
 	_db := db.DB
 
 	defer func() {
+		_db = db.Conn()
 		db.DB = _db
 	}()
 
 	err := DeleteUserByEmail("test")
+	require.Error(t, err)
+
+	_db.Close()
+	err = DeleteUserByEmail("test")
 	require.Error(t, err)
 }
 
@@ -107,10 +122,15 @@ func TestDeleteUserByName_Fail(t *testing.T) {
 	_db := db.DB
 
 	defer func() {
+		_db = db.Conn()
 		db.DB = _db
 	}()
 
 	err := DeleteUserByName("test")
+	require.Error(t, err)
+
+	_db.Close()
+	err = DeleteUserByName("test")
 	require.Error(t, err)
 }
 
@@ -134,9 +154,14 @@ func TestDeleteUserByRole_Fail(t *testing.T) {
 	_db := db.DB
 
 	defer func() {
+		_db = db.Conn()
 		db.DB = _db
 	}()
 
 	err := DeleteUserByRole("test")
+	require.Error(t, err)
+
+	_db.Close()
+	err = DeleteUserByRole("test")
 	require.Error(t, err)
 }
