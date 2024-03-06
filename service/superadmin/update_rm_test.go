@@ -38,6 +38,22 @@ func TestUpdateUserById_Fail(t *testing.T) {
 	if err == nil {
 		t.Errorf("Expected error, got nil")
 	}
+
+	_db := db.DB
+	defer func() {
+		_db = db.Conn()
+		db.DB = _db
+	}()
+
+	_db.Close()
+	err = UpdateUserById(1, person.User{
+		Nama:  "test",
+		Email: "test",
+		Role:  "test",
+	})
+	if err == nil {
+		t.Errorf("Expected error, got nil")
+	}
 }
 
 func TestUpdateUserByUuid_Success(t *testing.T) {
@@ -68,6 +84,22 @@ func TestUpdateUserByUuid_Fail(t *testing.T) {
 		Role:  "test",
 	})
 
+	if err == nil {
+		t.Errorf("Expected error, got nil")
+	}
+
+	_db := db.DB
+	defer func() {
+		_db = db.Conn()
+		db.DB = _db
+	}()
+
+	_db.Close()
+	err = UpdateUserByUuid("ajdhahjsfbjasf", person.User{
+		Nama:  "test",
+		Email: "test",
+		Role:  "test",
+	})
 	if err == nil {
 		t.Errorf("Expected error, got nil")
 	}
