@@ -122,7 +122,7 @@ func TestDeleteUserByRole_Success(t *testing.T) {
 		db.DB = _db
 	}()
 
-	_db.Query("INSERT INTO users (user_id, user_uuid, nama, email, password, role) VALUES (1, $1, 'test', 'test', '', '')", uuid.New())
+	_db.Query("INSERT INTO users (user_id, user_uuid, nama, email, password, role) VALUES (1, $1, 'test', 'test', '', 'test')", uuid.New())
 
 	err := DeleteUserByRole("test")
 	if err != nil {
