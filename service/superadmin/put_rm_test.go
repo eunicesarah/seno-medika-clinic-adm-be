@@ -27,6 +27,18 @@ func TestChangeEmailById_Fail(t *testing.T) {
 	if err == nil {
 		t.Errorf("Expected error, got nil")
 	}
+
+	_db := db.DB
+	defer func() {
+		_db = db.Conn()
+		db.DB = _db
+	}()
+
+	_db.Close()
+	err = ChangeEmailById("1", "test")
+	if err == nil {
+		t.Errorf("Expected error, got nil")
+	}
 }
 
 func TestChangeEmailByUuid_Success(t *testing.T) {
@@ -47,6 +59,18 @@ func TestChangeEmailByUuid_Success(t *testing.T) {
 
 func TestChangeEmailByUuid_Fail(t *testing.T) {
 	err := ChangeEmailByUuid(uuid.New().String(), "test")
+	if err == nil {
+		t.Errorf("Expected error, got nil")
+	}
+
+	_db := db.DB
+	defer func() {
+		_db = db.Conn()
+		db.DB = _db
+	}()
+
+	_db.Close()
+	err = ChangeEmailByUuid(uuid.New().String(), "test")
 	if err == nil {
 		t.Errorf("Expected error, got nil")
 	}
@@ -73,6 +97,18 @@ func TestChangeNameById_Fail(t *testing.T) {
 	if err == nil {
 		t.Errorf("Expected error, got nil")
 	}
+
+	_db := db.DB
+	defer func() {
+		_db = db.Conn()
+		db.DB = _db
+	}()
+
+	_db.Close()
+	err = ChangeNameById(1, "test")
+	if err == nil {
+		t.Errorf("Expected error, got nil")
+	}
 }
 
 func TestChangeNameByUuid_Success(t *testing.T) {
@@ -93,6 +129,18 @@ func TestChangeNameByUuid_Success(t *testing.T) {
 
 func TestChangeNameByUuid_Fail(t *testing.T) {
 	err := ChangeNameByUuid(uuid.New().String(), "test")
+	if err == nil {
+		t.Errorf("Expected error, got nil")
+	}
+
+	_db := db.DB
+	defer func() {
+		_db = db.Conn()
+		db.DB = _db
+	}()
+
+	_db.Close()
+	err = ChangeNameByUuid(uuid.New().String(), "test")
 	if err == nil {
 		t.Errorf("Expected error, got nil")
 	}
@@ -119,6 +167,18 @@ func TestChangeRoleById_Fail(t *testing.T) {
 	if err == nil {
 		t.Errorf("Expected error, got nil")
 	}
+
+	_db := db.DB
+	defer func() {
+		_db = db.Conn()
+		db.DB = _db
+	}()
+
+	_db.Close()
+	err = ChangeRoleById(1, "test")
+	if err == nil {
+		t.Errorf("Expected error, got nil")
+	}
 }
 
 func TestChangeRoleByUuid_Success(t *testing.T) {
@@ -139,6 +199,18 @@ func TestChangeRoleByUuid_Success(t *testing.T) {
 
 func TestChangeRoleByUuid_Fail(t *testing.T) {
 	err := ChangeRoleByUuid(uuid.New().String(), "test")
+	if err == nil {
+		t.Errorf("Expected error, got nil")
+	}
+
+	_db := db.DB
+	defer func() {
+		_db = db.Conn()
+		db.DB = _db
+	}()
+
+	_db.Close()
+	err = ChangeRoleByUuid(uuid.New().String(), "test")
 	if err == nil {
 		t.Errorf("Expected error, got nil")
 	}
@@ -165,6 +237,18 @@ func TestChangePasswordById_Fail(t *testing.T) {
 	if err == nil {
 		t.Errorf("Expected error, got nil")
 	}
+
+	_db := db.DB
+	defer func() {
+		_db = db.Conn()
+		db.DB = _db
+	}()
+
+	_db.Close()
+	err = ChangePasswordById(1, "test")
+	if err == nil {
+		t.Errorf("Expected error, got nil")
+	}
 }
 
 func TestChangePasswordByUuid_Success(t *testing.T) {
@@ -185,6 +269,18 @@ func TestChangePasswordByUuid_Success(t *testing.T) {
 
 func TestChangePasswordByUuid_Fail(t *testing.T) {
 	err := ChangePasswordByUuid(uuid.New().String(), "test")
+	if err == nil {
+		t.Errorf("Expected error, got nil")
+	}
+
+	_db := db.DB
+	defer func() {
+		_db = db.Conn()
+		db.DB = _db
+	}()
+
+	_db.Close()
+	err = ChangePasswordByUuid(uuid.New().String(), "test")
 	if err == nil {
 		t.Errorf("Expected error, got nil")
 	}
