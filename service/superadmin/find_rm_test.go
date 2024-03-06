@@ -9,13 +9,26 @@ import (
 )
 
 func TestFindById_Fail(t *testing.T) {
+	_db := db.DB
+	defer func() {
+		_db = db.Conn()
+		db.DB = _db
+	}()
+
 	val, err := FindById(1)
+	require.Error(t, err)
+	require.Equal(t, person.UserWithoutPassword{}, val)
+
+	_db.Close()
+	val, err = FindById(1)
 	require.Error(t, err)
 	require.Equal(t, person.UserWithoutPassword{}, val)
 }
 
 func TestFindById_Success(t *testing.T) {
 	_db := db.DB
+	val, _ := FindById(2)
+	require.Equal(t, person.UserWithoutPassword{}, val)
 	defer func() {
 		_db.Exec("DELETE FROM users WHERE user_id = 2")
 		db.DB = _db
@@ -29,13 +42,26 @@ func TestFindById_Success(t *testing.T) {
 }
 
 func TestFindByUuid_Fail(t *testing.T) {
+	_db := db.DB
+	defer func() {
+		_db = db.Conn()
+		db.DB = _db
+	}()
+
 	val, err := FindByUuid(uuid.New().String())
+	require.Error(t, err)
+	require.Equal(t, person.UserWithoutPassword{}, val)
+
+	_db.Close()
+	val, err = FindByUuid(uuid.New().String())
 	require.Error(t, err)
 	require.Equal(t, person.UserWithoutPassword{}, val)
 }
 
 func TestFindByUuid_Success(t *testing.T) {
 	_db := db.DB
+	val, _ := FindByUuid(uuid.New().String())
+	require.Equal(t, person.UserWithoutPassword{}, val)
 	defer func() {
 		_db.Exec("DELETE FROM users WHERE user_id = 3")
 		db.DB = _db
@@ -50,13 +76,26 @@ func TestFindByUuid_Success(t *testing.T) {
 }
 
 func TestFindByName_Fail(t *testing.T) {
+	_db := db.DB
+	defer func() {
+		_db = db.Conn()
+		db.DB = _db
+	}()
+
 	val, err := FindByName("test")
 	require.NoError(t, err)
+	require.Equal(t, []person.UserWithoutPassword(nil), val)
+
+	_db.Close()
+	val, err = FindByName("test")
+	require.Error(t, err)
 	require.Equal(t, []person.UserWithoutPassword(nil), val)
 }
 
 func TestFindByName_Success(t *testing.T) {
 	_db := db.DB
+	val, _ := FindByName("test")
+	require.Equal(t, []person.UserWithoutPassword(nil), val)
 	defer func() {
 		_db.Exec("DELETE FROM users WHERE user_id = 4")
 		db.DB = _db
@@ -71,13 +110,26 @@ func TestFindByName_Success(t *testing.T) {
 }
 
 func TestFindByEmail_Fail(t *testing.T) {
+	_db := db.DB
+	defer func() {
+		_db = db.Conn()
+		db.DB = _db
+	}()
+
 	val, err := FindByEmail("test")
 	require.NoError(t, err)
+	require.Equal(t, []person.UserWithoutPassword(nil), val)
+
+	_db.Close()
+	val, err = FindByEmail("test")
+	require.Error(t, err)
 	require.Equal(t, []person.UserWithoutPassword(nil), val)
 }
 
 func TestFindByEmail_Success(t *testing.T) {
 	_db := db.DB
+	val, _ := FindByEmail("test")
+	require.Equal(t, []person.UserWithoutPassword(nil), val)
 	defer func() {
 		_db.Exec("DELETE FROM users WHERE user_id = 5")
 		db.DB = _db
@@ -92,9 +144,19 @@ func TestFindByEmail_Success(t *testing.T) {
 }
 
 func TestFindByRole_Fail(t *testing.T) {
+	_db := db.DB
+	defer func() {
+		_db = db.Conn()
+		db.DB = _db
+	}()
+
 	val, err := FindByRole("test")
 	require.NoError(t, err)
 	require.Equal(t, []person.UserWithoutPassword(nil), val)
+
+	_db.Close()
+	val, err = FindByRole("test")
+	require.Error(t, err)
 }
 
 func TestFindByRole_Success(t *testing.T) {
@@ -114,6 +176,10 @@ func TestFindByRole_Success(t *testing.T) {
 
 func TestFindAll_Success(t *testing.T) {
 	_db := db.DB
+
+	val, _ := FindAll()
+
+	require.Equal(t, []person.UserWithoutPassword(nil), val)
 	defer func() {
 		_db.Exec("DELETE FROM users WHERE user_id = 1")
 		db.DB = _db
