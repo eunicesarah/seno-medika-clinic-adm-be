@@ -100,6 +100,7 @@ func TestUpdateUserByUuid_Fail(t *testing.T) {
 		Email: "test",
 		Role:  "test",
 	})
+
 	if err == nil {
 		t.Errorf("Expected error, got nil")
 	}
