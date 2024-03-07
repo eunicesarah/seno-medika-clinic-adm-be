@@ -4,10 +4,16 @@ default:
   tags: 
     - be-runner
 
-stages: 
+stages:
+  # - init 
   - test        
   - build
   # - deploy
+
+# init:
+#   stage: init
+#   script:
+#     - sudo docker-compose up -d --build
 
 test:
   stage: test
