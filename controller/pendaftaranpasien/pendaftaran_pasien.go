@@ -9,7 +9,6 @@ import (
 	"seno-medika.com/config/db"
 	"seno-medika.com/model/common"
 	"seno-medika.com/model/person"
-	
 )
 
 // TODO: get user that created and updated the data
@@ -25,12 +24,29 @@ func AddPasien(c *gin.Context) {
 		})
 		return
 	}
-	
+
+	// cek apakah pasien sudah ada melalui NIK
+	var pasienExist person.Pasien
+	errExist := db.DB.QueryRow(
+		`SELECT
+		FROM pasien WHERE nik = $1`,
+		pasien.NIK).Scan(
+		&pasienExist.NIK)
+
+	if errExist == nil {
+		c.JSON(http.StatusBadRequest, common.Response{
+			Message:    "Pasien already exist",
+			Status:     "Bad Request",
+			StatusCode: http.StatusBadRequest,
+			Data:       nil,
+		})
+		return
+	}
 
 	pasien.PasienUUID = uuid.New()
 	pasien.CreatedAt = time.Now().Local().String()
-	pasien.UpdatedAt = time.Now().Local().String()
-	// pasien.CreatedBy 
+	pasien.UpdatedAt = pasien.CreatedAt
+	// pasien.CreatedBy
 	// pasien.UpdatedBy
 
 	_, err := db.DB.Exec(
@@ -126,7 +142,7 @@ func AddPasien(c *gin.Context) {
 
 }
 
-// TODO: 
+// TODO:
 // - get user that updated the data
 // - updateBy and target
 func UpdatePasien(c *gin.Context) {
@@ -327,7 +343,7 @@ func GetPasien(c *gin.Context) {
 		&pasien.CreatedBy,
 		&pasien.UpdatedAt,
 		&pasien.UpdatedBy)
-	
+
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, common.Response{
 			Message:    err.Error(),
