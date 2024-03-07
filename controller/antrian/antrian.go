@@ -6,8 +6,8 @@ import (
 
 	"github.com/gin-gonic/gin"
 	"seno-medika.com/config/db"
-	"seno-medika.com/model/common"
 	"seno-medika.com/model/antrian"
+	"seno-medika.com/model/common"
 	"seno-medika.com/service/antrianpasien"
 )
 
@@ -27,7 +27,7 @@ func AddAntrianOffline(c *gin.Context) {
 	}
 
 	antrian.CreatedAt = time.Now().Local().String()
-	// antrian.PasienID = 
+	// antrian.PasienID =
 
 	_, err := db.DB.Exec(
 		`INSERT INTO antrian (
@@ -66,7 +66,7 @@ func AddAntrianOffline(c *gin.Context) {
 func AddAntrianOnline(c *gin.Context) {
 	var antrianOnline antrian.AntrianOnline
 	var antrian antrian.Antrian
-	
+
 	if err := c.ShouldBind(&antrianOnline); err != nil {
 		c.JSON(http.StatusBadRequest, common.Response{
 			Message:    err.Error(),
@@ -77,7 +77,7 @@ func AddAntrianOnline(c *gin.Context) {
 		return
 	}
 
-	pasienID, err := antrianpasien.ConvertNIKtoPasienID(antrianOnline.NIK)
+	pasienID, err := antrianpasien.FindIDbyNIK(antrianOnline.NIK)
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, common.Response{
 			Message:    err.Error(),
@@ -153,7 +153,7 @@ func DeleteAntrian(c *gin.Context) {
 func GetAllAntrian(c *gin.Context) {
 	var antrians []antrian.Antrian
 	rows, err := db.DB.Query(
-	`SELECT antrian_id, pasien_id, nomor_antrian, status, poli, instalasi, created_at FROM antrian`)
+		`SELECT antrian_id, pasien_id, nomor_antrian, status, poli, instalasi, created_at FROM antrian`)
 
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, common.Response{
@@ -164,7 +164,7 @@ func GetAllAntrian(c *gin.Context) {
 		})
 		return
 	}
-	
+
 	for rows.Next() {
 		var antrianItem antrian.Antrian
 		err := rows.Scan(
