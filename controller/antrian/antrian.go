@@ -1,22 +1,20 @@
 package antrian
 
 import (
-	"net/http"
-	"time"
-
 	"github.com/gin-gonic/gin"
+	"net/http"
 	"seno-medika.com/config/db"
 	"seno-medika.com/model/antrian"
 	"seno-medika.com/model/common"
-	"seno-medika.com/service/antrianpasien"
+	antrian2 "seno-medika.com/service/antrian"
+	"strconv"
+	"time"
 )
 
-// TODO: get pasien from list
-func AddAntrianOffline(c *gin.Context) {
-	var antrian antrian.Antrian
-	// var pasien antrian.Pasien
+func AddAntrian(c *gin.Context) {
+	var antr antrian.Antrian
 
-	if err := c.ShouldBind(&antrian); err != nil {
+	if err := c.ShouldBind(&antr); err != nil {
 		c.JSON(http.StatusBadRequest, common.Response{
 			Message:    err.Error(),
 			Status:     "Bad Request",
@@ -26,24 +24,47 @@ func AddAntrianOffline(c *gin.Context) {
 		return
 	}
 
-	antrian.CreatedAt = time.Now().Local().String()
-	// antrian.PasienID =
+	var count int
 
-	_, err := db.DB.Exec(
-		`INSERT INTO antrian (
-			pasien_id,
-			nomor_antrian,
-			status,
-			poli,
-			instalasi,
-			created_at
-		) VALUES ($1, $2, $3, $4, $5, $6)`,
-		antrian.PasienID,
-		antrian.NomorAntrian,
-		antrian.Status,
-		antrian.Poli,
-		antrian.Instalasi,
-		antrian.CreatedAt)
+	err := db.DB.QueryRow("SELECT COUNT(*) FROM pasien WHERE pasien_id = $1", antr.PasienID).Scan(&count)
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, common.Response{
+			Message:    err.Error(),
+			Status:     "Internal Server Error",
+			StatusCode: http.StatusInternalServerError,
+			Data:       nil,
+		})
+		return
+	}
+
+	if count == 0 {
+		c.JSON(http.StatusBadRequest, common.Response{
+			Message:    "Pasien tidak ditemukan",
+			Status:     "Bad Request",
+			StatusCode: http.StatusBadRequest,
+			Data:       nil,
+		})
+		return
+	}
+
+	var jumlahAntrian int
+
+	err = db.DB.QueryRow("SELECT COUNT(*) FROM antrian WHERE created_at = $1 ORDER BY created_at ASC", time.Now().Format("2006-01-02")).Scan(&jumlahAntrian)
+
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, common.Response{
+			Message:    err.Error(),
+			Status:     "Internal Server Error",
+			StatusCode: http.StatusInternalServerError,
+			Data:       nil,
+		})
+		return
+	}
+
+	antr.NomorAntrian = jumlahAntrian + 1
+	antr.CreatedAt = time.Now().Local().String()
+
+	_, err = db.DB.Exec("INSERT INTO antrian (pasien_id, nomor_antrian, status, poli, instalasi, created_at) VALUES ($1, $2, $3, $4, $5, $6)", antr.PasienID, antr.NomorAntrian, antr.Status, antr.Poli, antr.Instalasi, antr.CreatedAt)
 
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, common.Response{
@@ -61,68 +82,7 @@ func AddAntrianOffline(c *gin.Context) {
 		StatusCode: http.StatusOK,
 		Data:       nil,
 	})
-}
-
-func AddAntrianOnline(c *gin.Context) {
-	var antrianOnline antrian.AntrianOnline
-	var antrian antrian.Antrian
-
-	if err := c.ShouldBind(&antrianOnline); err != nil {
-		c.JSON(http.StatusBadRequest, common.Response{
-			Message:    err.Error(),
-			Status:     "Bad Request",
-			StatusCode: http.StatusBadRequest,
-			Data:       nil,
-		})
-		return
-	}
-
-	pasienID, err := antrianpasien.FindIDbyNIK(antrianOnline.NIK)
-	if err != nil {
-		c.JSON(http.StatusInternalServerError, common.Response{
-			Message:    err.Error(),
-			Status:     "Internal Server Error",
-			StatusCode: http.StatusInternalServerError,
-			Data:       nil,
-		})
-		return
-	}
-
-	antrian.PasienID = pasienID
-	antrian.NomorAntrian = antrianOnline.NomorAntrian
-
-	_, err = db.DB.Exec(
-		`INSERT INTO antrian (
-			pasien_id,
-			nomor_antrian,
-			status,
-			poli,
-			instalasi,
-			created_at
-		) VALUES ($1, $2, $3, $4, $5, $6)`,
-		antrian.PasienID,
-		antrian.NomorAntrian,
-		antrian.Status,
-		antrian.Poli,
-		antrian.Instalasi,
-		antrian.CreatedAt)
-
-	if err != nil {
-		c.JSON(http.StatusInternalServerError, common.Response{
-			Message:    err.Error(),
-			Status:     "Internal Server Error",
-			StatusCode: http.StatusInternalServerError,
-			Data:       nil,
-		})
-		return
-	}
-
-	c.JSON(http.StatusCreated, common.Response{
-		Message:    "Antrian berhasil ditambahkan",
-		Status:     "Created",
-		StatusCode: http.StatusOK,
-		Data:       nil,
-	})
+	return
 }
 
 func DeleteAntrian(c *gin.Context) {
@@ -150,10 +110,42 @@ func DeleteAntrian(c *gin.Context) {
 	})
 }
 
-func GetAllAntrian(c *gin.Context) {
-	var antrians []antrian.Antrian
-	rows, err := db.DB.Query(
-		`SELECT antrian_id, pasien_id, nomor_antrian, status, poli, instalasi, created_at FROM antrian`)
+func GetAntrian(c *gin.Context) {
+	var target = c.Query("target")
+	var findBy = c.Query("find_by")
+
+	if findBy == "id" {
+		val, err := strconv.Atoi(target)
+		if err != nil {
+			c.JSON(http.StatusBadRequest, common.Response{
+				Message:    "Invalid target",
+				Status:     "Bad Request",
+				StatusCode: http.StatusBadRequest,
+				Data:       nil,
+			})
+			return
+		}
+		data, err := antrian2.FindAntrianById(val)
+		if err != nil {
+			c.JSON(http.StatusInternalServerError, common.Response{
+				Message:    err.Error(),
+				Status:     "Internal Server Error",
+				StatusCode: http.StatusInternalServerError,
+				Data:       nil,
+			})
+			return
+		}
+
+		c.JSON(http.StatusOK, common.Response{
+			Message:    "Successfully get antrian",
+			Status:     "ok",
+			StatusCode: http.StatusOK,
+			Data:       data,
+		})
+		return
+	}
+
+	antrianList, err := antrian2.FindAntrianAll()
 
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, common.Response{
@@ -165,34 +157,12 @@ func GetAllAntrian(c *gin.Context) {
 		return
 	}
 
-	for rows.Next() {
-		var antrianItem antrian.Antrian
-		err := rows.Scan(
-			&antrianItem.AntrianID,
-			&antrianItem.PasienID,
-			&antrianItem.NomorAntrian,
-			&antrianItem.Status,
-			&antrianItem.Poli,
-			&antrianItem.Instalasi,
-			&antrianItem.CreatedAt)
-
-		if err != nil {
-			c.JSON(http.StatusInternalServerError, common.Response{
-				Message:    err.Error(),
-				Status:     "Internal Server Error",
-				StatusCode: http.StatusInternalServerError,
-				Data:       nil,
-			})
-			return
-		}
-
-		antrians = append(antrians, antrianItem)
-	}
-
 	c.JSON(http.StatusOK, common.Response{
-		Message:    "Berhasil mendapatkan data antrian",
+		Message:    "Successfully get antrian",
 		Status:     "ok",
 		StatusCode: http.StatusOK,
-		Data:       antrians,
+		Data:       antrianList,
 	})
+
+	return
 }
