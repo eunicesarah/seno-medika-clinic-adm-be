@@ -31,9 +31,21 @@ func AddPasien(c *gin.Context) {
 		FROM pasien WHERE nik = $1`,
 		pasien.NIK)
 
-	if err == nil {
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, common.Response{
+			Message:    err.Error(),
+			Status:     "Internal Server Error",
+			StatusCode: http.StatusInternalServerError,
+			Data:       nil,
+		})
+		return
+	}
+	defer val.Close()
+
+	if val.Next() {
+		// Jika ada hasil kueri, maka pasien sudah ada
 		c.JSON(http.StatusBadRequest, common.Response{
-			Message:    "Pasien already exist",
+			Message:    "Pasien already exists",
 			Status:     "Bad Request",
 			StatusCode: http.StatusBadRequest,
 			Data:       nil,
@@ -41,14 +53,17 @@ func AddPasien(c *gin.Context) {
 		return
 	}
 
-	if val.Next() {
-		c.JSON(http.StatusBadRequest, common.Response{
-			Message:    "Pasien already exist",
-			Status:     "Bad Request",
-			StatusCode: http.StatusBadRequest,
+	tx, err := db.DB.Begin()
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, common.Response{
+			Message:    err.Error(),
+			Status:     "Internal Server Error",
+			StatusCode: http.StatusInternalServerError,
+			Data:       nil,
 		})
 		return
 	}
+	defer tx.Rollback()
 
 	pasien.PasienUUID = uuid.New()
 	pasien.CreatedAt = time.Now().Local().String()
@@ -128,7 +143,7 @@ func AddPasien(c *gin.Context) {
 		pasien.UpdatedAt,
 		pasien.UpdatedBy)
 
-	if err != nil {
+	if err := tx.Commit(); err != nil {
 		c.JSON(http.StatusInternalServerError, common.Response{
 			Message:    err.Error(),
 			Status:     "Internal Server Error",
@@ -139,8 +154,8 @@ func AddPasien(c *gin.Context) {
 	}
 
 	c.JSON(http.StatusOK, common.Response{
-		Message:    "Successfully insert pasien",
-		Status:     "ok",
+		Message:    "Successfully inserted pasien",
+		Status:     "OK",
 		StatusCode: http.StatusOK,
 		Data:       nil,
 	})
@@ -272,7 +287,7 @@ func DeletePasien(c *gin.Context) {
 func GetPasien(c *gin.Context) {
 	var pasienList []person.Pasien
 
-	updateBy := c.Query("update_by")
+	updateBy := c.Query("find_by")
 	target := c.Query("target")
 
 	switch updateBy {
@@ -312,6 +327,19 @@ func GetPasien(c *gin.Context) {
 			return
 		}
 
+	case "nik":
+		var err error
+		pasienList, err = pasien.FindPasienByNIK(target)
+		if err != nil {
+			c.JSON(http.StatusInternalServerError, common.Response{
+				Message:    err.Error(),
+				Status:     "Internal Server Error",
+				StatusCode: http.StatusInternalServerError,
+				Data:       nil,
+			})
+			return
+		}
+
 	default:
 		var err error
 		pasienList, err = pasien.FindPasienAll()
@@ -333,5 +361,6 @@ func GetPasien(c *gin.Context) {
 		StatusCode: http.StatusOK,
 		Data:       pasienList,
 	})
+	
 	return
 }
