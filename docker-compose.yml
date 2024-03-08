@@ -3,9 +3,7 @@ version: '3'
 services:
   backend:
     container_name: backend
-    build:
-      context: .
-      dockerfile: Dockerfile
+    build: .
     restart: always
     environment:
       POSTGRES_ROOT_PASSWORD: $POSTGRES_ROOT_PASSWORD
@@ -18,7 +16,7 @@ services:
     depends_on:
       - postgres-db
     volumes:
-      - ./:/app
+      - .:/app
 
   postgres-db:
     image: postgres:latest

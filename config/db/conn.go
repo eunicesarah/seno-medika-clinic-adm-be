@@ -10,8 +10,8 @@ import (
 var DB = Conn()
 
 func Conn() *sql.DB {
-	postgresInfo := fmt.Sprintf("host=%s port=%d user=%s password=%s dbname=%s sslmode=disable",
-		variable.DbHost, 5432, variable.DbUser, variable.DBPass, variable.DBName)
+	postgresInfo := fmt.Sprintf("host=%s port=5432 user=%s password=%s dbname=%s sslmode=disable",
+		variable.DbHost, variable.DbUser, variable.DBPass, variable.DBName)
 
 	db, err := sql.Open("postgres", postgresInfo)
 	if err != nil {

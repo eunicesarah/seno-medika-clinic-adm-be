@@ -1,15 +1,15 @@
 CREATE TABLE public.antrian (
-                                  antrian_id integer NOT NULL,
-                                  pasien_id integer NOT NULL,
+                                  antrian_id SERIAL NOT NULL,
+                                  pasien_id SERIAL NOT NULL,
                                   nomor_antrian integer NOT NULL,
                                   status boolean NOT NULL,
                                   poli character varying(20) NOT NULL,
                                   instalasi character varying(20) NOT NULL,
-                                  create_at date NOT NULL
+                                  created_at timestamp NOT NULL
 );
 
 CREATE TABLE public.pasien (
-                                 pasien_id integer NOT NULL,
+                                 pasien_id SERIAL NOT NULL,
                                  no_erm integer NOT NULL,
                                  pasien_uuid uuid NOT NULL,
                                  no_rm_lama character varying(50) NOT NULL,
