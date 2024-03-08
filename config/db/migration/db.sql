@@ -10,7 +10,7 @@ CREATE TABLE public.antrian (
 
 CREATE TABLE public.pasien (
                                  pasien_id SERIAL NOT NULL,
-                                 no_erm integer NOT NULL,
+                                 no_erm character varying(50) NOT NULL,
                                  pasien_uuid uuid NOT NULL,
                                  no_rm_lama character varying(50) NOT NULL,
                                  no_dok_rm character varying(50) NOT NULL,
