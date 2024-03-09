@@ -1,14 +1,15 @@
 package antrian
 
 import (
-	"github.com/gin-gonic/gin"
 	"net/http"
+	"strconv"
+	"time"
+
+	"github.com/gin-gonic/gin"
 	"seno-medika.com/config/db"
 	"seno-medika.com/model/antrian"
 	"seno-medika.com/model/common"
 	antrian2 "seno-medika.com/service/antrian"
-	"strconv"
-	"time"
 )
 
 func AddAntrian(c *gin.Context) {
@@ -63,6 +64,7 @@ func AddAntrian(c *gin.Context) {
 
 	antr.NomorAntrian = jumlahAntrian + 1
 	antr.CreatedAt = time.Now().Local().Format("2006-01-02")
+	antr.Status = false
 
 	_, err = db.DB.Exec("INSERT INTO antrian (pasien_id, nomor_antrian, status, poli, instalasi, created_at) VALUES ($1, $2, $3, $4, $5, $6)", antr.PasienID, antr.NomorAntrian, antr.Status, antr.Poli, antr.Instalasi, antr.CreatedAt)
 
