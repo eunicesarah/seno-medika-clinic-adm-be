@@ -15,7 +15,7 @@ CREATE TABLE public.pasien (
                                  no_rm_lama character varying(50) NOT NULL,
                                  no_dok_rm character varying(50) NOT NULL,
                                  penjamin character varying(50) NOT NULL,
-                             ant    no_penjamin character varying(50) NOT NULL,
+                                 no_penjamin character varying(50) NOT NULL,
                                  nik character varying(16) NOT NULL,
                                  no_kk character varying(16) NOT NULL,
                                  nama character varying(50) NOT NULL,

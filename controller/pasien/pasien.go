@@ -2,9 +2,10 @@ package pasien
 
 import (
 	"net/http"
-	"seno-medika.com/service/pasien"
 	"strconv"
 	"time"
+
+	"seno-medika.com/service/pasien"
 
 	"github.com/gin-gonic/gin"
 	"github.com/google/uuid"
@@ -340,7 +341,7 @@ func GetPasien(c *gin.Context) {
 		}
 		return
 	}
-
+	
 	c.JSON(http.StatusOK, common.Response{
 		Message:    "Successfully get pasien",
 		Status:     "ok",
