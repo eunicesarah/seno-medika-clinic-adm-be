@@ -6,7 +6,7 @@ import (
 
 type Pasien struct {
 	PasienID           int       `json:"pasien_id"`
-	NoERM              int       `json:"no_erm"`
+	NoERM              string    `json:"no_erm"`
 	PasienUUID         uuid.UUID `json:"pasien_uuid"`
 	NoRMLama           string    `json:"no_rm_lama"`
 	NoDokRM            string    `json:"no_dok_rm"`
