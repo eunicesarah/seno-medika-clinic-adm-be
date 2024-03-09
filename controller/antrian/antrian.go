@@ -1,7 +1,6 @@
 package antrian
 
 import (
-	"fmt"
 	"net/http"
 	"strconv"
 	"time"
@@ -11,7 +10,6 @@ import (
 	"seno-medika.com/model/antrian"
 	"seno-medika.com/model/common"
 	antrian2 "seno-medika.com/service/antrian"
-
 )
 
 func AddAntrian(c *gin.Context) {
@@ -30,7 +28,6 @@ func AddAntrian(c *gin.Context) {
 	var count int
 
 	check := db.DB.QueryRow("SELECT pasien_id FROM pasien WHERE nik = $1 and nama = $2", antr.NIK, antr.Nama).Scan(&antr.PasienID)
-	fmt.Println("pasien_id: ", antr.PasienID)
 	if check != nil {
 		c.JSON(http.StatusBadRequest, common.Response{
 			Message:    "Pasien tidak ditemukan",
@@ -78,6 +75,7 @@ func AddAntrian(c *gin.Context) {
 
 	antr.NomorAntrian = jumlahAntrian + 1
 	antr.CreatedAt = time.Now().Local().Format("2006-01-02")
+	antr.Status = false
 
 	_, err = db.DB.Exec("INSERT INTO antrian (pasien_id, nomor_antrian, status, poli, instalasi, created_at) VALUES ($1, $2, $3, $4, $5, $6)", antr.PasienID, antr.NomorAntrian, antr.Status, antr.Poli, antr.Instalasi, antr.CreatedAt)
 
