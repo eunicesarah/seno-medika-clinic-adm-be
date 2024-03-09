@@ -14,9 +14,9 @@ import (
 )
 
 func AddPasien(c *gin.Context) {
-	var pasien person.Pasien
+	var pasienVar person.Pasien
 
-	if err := c.ShouldBind(&pasien); err != nil {
+	if err := c.ShouldBind(&pasienVar); err != nil {
 		c.JSON(http.StatusBadRequest, common.Response{
 			Message:    err.Error(),
 			Status:     "Bad Request",
@@ -29,7 +29,7 @@ func AddPasien(c *gin.Context) {
 	val, err := db.DB.Query(
 		`SELECT *
 		FROM pasien WHERE nik = $1`,
-		pasien.NIK)
+		pasienVar.NIK)
 
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, common.Response{
@@ -40,12 +40,10 @@ func AddPasien(c *gin.Context) {
 		})
 		return
 	}
-	defer val.Close()
 
 	if val.Next() {
-		// Jika ada hasil kueri, maka pasien sudah ada
 		c.JSON(http.StatusBadRequest, common.Response{
-			Message:    "Pasien already exists",
+			Message:    "Pasien already exist",
 			Status:     "Bad Request",
 			StatusCode: http.StatusBadRequest,
 			Data:       nil,
@@ -53,21 +51,9 @@ func AddPasien(c *gin.Context) {
 		return
 	}
 
-	tx, err := db.DB.Begin()
-	if err != nil {
-		c.JSON(http.StatusInternalServerError, common.Response{
-			Message:    err.Error(),
-			Status:     "Internal Server Error",
-			StatusCode: http.StatusInternalServerError,
-			Data:       nil,
-		})
-		return
-	}
-	defer tx.Rollback()
-
-	pasien.PasienUUID = uuid.New()
-	pasien.CreatedAt = time.Now().Local().String()
-	pasien.UpdatedAt = time.Now().Local().String()
+	pasienVar.PasienUUID = uuid.New()
+	pasienVar.CreatedAt = time.Now().Local().String()
+	pasienVar.UpdatedAt = time.Now().Local().String()
 
 	_, err = db.DB.Exec(
 		`INSERT INTO pasien (
@@ -110,40 +96,40 @@ func AddPasien(c *gin.Context) {
 			$25, $26, $27, $28, $29, $30, $31, $32
 		)
 		`,
-		pasien.NoERM,
-		pasien.PasienUUID,
-		pasien.NoRMLama,
-		pasien.NoDokRM,
-		pasien.Penjamin,
-		pasien.NoPenjamin,
-		pasien.NIK,
-		pasien.NoKK,
-		pasien.Nama,
-		pasien.TempatLahir,
-		pasien.TanggalLahir,
-		pasien.NoIHS,
-		pasien.JenisKelamin,
-		pasien.GolonganDarah,
-		pasien.NoTelpon,
-		pasien.Email,
-		pasien.Provinsi,
-		pasien.KabupatenKota,
-		pasien.Kecamatan,
-		pasien.Kelurahan,
-		pasien.Alamat,
-		pasien.NamaKontakDarurat,
-		pasien.NomorKontakDarurat,
-		pasien.Pekerjaan,
-		pasien.Agama,
-		pasien.WargaNegara,
-		pasien.Pendidikan,
-		pasien.StatusPerkawinan,
-		pasien.CreatedAt,
-		pasien.CreatedBy,
-		pasien.UpdatedAt,
-		pasien.UpdatedBy)
+		pasienVar.NoERM,
+		pasienVar.PasienUUID,
+		pasienVar.NoRMLama,
+		pasienVar.NoDokRM,
+		pasienVar.Penjamin,
+		pasienVar.NoPenjamin,
+		pasienVar.NIK,
+		pasienVar.NoKK,
+		pasienVar.Nama,
+		pasienVar.TempatLahir,
+		pasienVar.TanggalLahir,
+		pasienVar.NoIHS,
+		pasienVar.JenisKelamin,
+		pasienVar.GolonganDarah,
+		pasienVar.NoTelpon,
+		pasienVar.Email,
+		pasienVar.Provinsi,
+		pasienVar.KabupatenKota,
+		pasienVar.Kecamatan,
+		pasienVar.Kelurahan,
+		pasienVar.Alamat,
+		pasienVar.NamaKontakDarurat,
+		pasienVar.NomorKontakDarurat,
+		pasienVar.Pekerjaan,
+		pasienVar.Agama,
+		pasienVar.WargaNegara,
+		pasienVar.Pendidikan,
+		pasienVar.StatusPerkawinan,
+		pasienVar.CreatedAt,
+		pasienVar.CreatedBy,
+		pasienVar.UpdatedAt,
+		pasienVar.UpdatedBy)
 
-	if err := tx.Commit(); err != nil {
+	if err != nil {
 		c.JSON(http.StatusInternalServerError, common.Response{
 			Message:    err.Error(),
 			Status:     "Internal Server Error",
@@ -154,8 +140,8 @@ func AddPasien(c *gin.Context) {
 	}
 
 	c.JSON(http.StatusOK, common.Response{
-		Message:    "Successfully inserted pasien",
-		Status:     "OK",
+		Message:    "Successfully insert pasien",
+		Status:     "ok",
 		StatusCode: http.StatusOK,
 		Data:       nil,
 	})
@@ -361,6 +347,6 @@ func GetPasien(c *gin.Context) {
 		StatusCode: http.StatusOK,
 		Data:       pasienList,
 	})
-	
+
 	return
 }

@@ -5,7 +5,7 @@ CREATE TABLE public.antrian (
                                   status boolean NOT NULL,
                                   poli character varying(20) NOT NULL,
                                   instalasi character varying(20) NOT NULL,
-                                  created_at character varying(225) NOT NULL,
+                                  created_at character varying(225) NOT NULL
 );
 
 CREATE TABLE public.pasien (
@@ -15,7 +15,7 @@ CREATE TABLE public.pasien (
                                  no_rm_lama character varying(50) NOT NULL,
                                  no_dok_rm character varying(50) NOT NULL,
                                  penjamin character varying(50) NOT NULL,
-                                 no_penjamin character varying(50) NOT NULL,
+                             ant    no_penjamin character varying(50) NOT NULL,
                                  nik character varying(16) NOT NULL,
                                  no_kk character varying(16) NOT NULL,
                                  nama character varying(50) NOT NULL,
@@ -38,9 +38,9 @@ CREATE TABLE public.pasien (
                                  warga_negara character varying(20) NOT NULL,
                                  pendidikan character varying(5) NOT NULL,
                                  status_perkawinan character varying(20) NOT NULL,
-                                 created_at timestamp NOT NULL,
+                                 created_at character varying(225) NOT NULL,
                                  created_by character varying(50) NOT NULL,
-                                 updated_at timestamp NOT NULL,
+                                 updated_at character varying(225) NOT NULL,
                                  updated_by character varying(50) NOT NULL
 );
 
