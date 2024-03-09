@@ -7,19 +7,35 @@ import (
 	"golang.org/x/crypto/bcrypt"
 	"net/http"
 	"seno-medika.com/config/db"
+	"seno-medika.com/helper"
 	"seno-medika.com/model/common"
 	"seno-medika.com/model/person"
 	"seno-medika.com/service/superadmin"
 	"strconv"
 )
 
-// AddUser TODO: Add validation for email
 func AddUser(c *gin.Context) {
 	var userInput person.User
 
 	if err := c.ShouldBind(&userInput); err != nil {
 		c.JSON(http.StatusBadRequest, common.Response{
 			Message:    err.Error(),
+			Status:     "Bad Request",
+			StatusCode: http.StatusBadRequest,
+			Data:       nil,
+		})
+		return
+	}
+
+	var errChan = make(chan error)
+
+	go helper.ValidationEmail(userInput.Email, errChan)
+	go helper.ValidationPassword(userInput.Password, errChan)
+	go helper.IsEmailExists(userInput.Email, errChan)
+
+	if <-errChan != nil {
+		c.JSON(http.StatusBadRequest, common.Response{
+			Message:    "Bad Request",
 			Status:     "Bad Request",
 			StatusCode: http.StatusBadRequest,
 			Data:       nil,

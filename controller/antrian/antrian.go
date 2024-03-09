@@ -49,7 +49,7 @@ func AddAntrian(c *gin.Context) {
 
 	var jumlahAntrian int
 
-	err = db.DB.QueryRow("SELECT COUNT(*) FROM antrian WHERE created_at = $1 ORDER BY created_at ASC", time.Now().Format("2006-01-02")).Scan(&jumlahAntrian)
+	err = db.DB.QueryRow("SELECT COUNT(*) FROM antrian WHERE created_at = $1", time.Now().Local().Format("2006-01-02")).Scan(&jumlahAntrian)
 
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, common.Response{
@@ -62,7 +62,7 @@ func AddAntrian(c *gin.Context) {
 	}
 
 	antr.NomorAntrian = jumlahAntrian + 1
-	antr.CreatedAt = time.Now().Local().String()
+	antr.CreatedAt = time.Now().Local().Format("2006-01-02")
 
 	_, err = db.DB.Exec("INSERT INTO antrian (pasien_id, nomor_antrian, status, poli, instalasi, created_at) VALUES ($1, $2, $3, $4, $5, $6)", antr.PasienID, antr.NomorAntrian, antr.Status, antr.Poli, antr.Instalasi, antr.CreatedAt)
 
