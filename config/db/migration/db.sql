@@ -5,7 +5,7 @@ CREATE TABLE public.antrian (
                                   status boolean NOT NULL,
                                   poli character varying(20) NOT NULL,
                                   instalasi character varying(20) NOT NULL,
-                                  created_at timestamp NOT NULL
+                                  created_at character varying(225) NOT NULL,
 );
 
 CREATE TABLE public.pasien (
