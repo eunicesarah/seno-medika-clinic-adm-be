@@ -3,10 +3,11 @@ package pasien
 import (
 	"seno-medika.com/config/db"
 	"seno-medika.com/model/person"
+	"errors"
 )
 
 func UpdatePasienByUuid(uid string, pasien person.Pasien) error {
-	_, err := db.DB.Exec(
+	val, err := db.DB.Exec(
 		`UPDATE pasien SET
 			no_erm = $1,
 			no_rm_lama = $2,
@@ -74,11 +75,15 @@ func UpdatePasienByUuid(uid string, pasien person.Pasien) error {
 		return err
 	}
 
+	if rows, _ := val.RowsAffected(); rows == 0 {
+		return errors.New("uuid not found")
+	}
+
 	return nil
 }
 
 func UpdatePasienById(id int, pasien person.Pasien) error {
-	_, err := db.DB.Exec(
+	val, err := db.DB.Exec(
 		`UPDATE pasien SET
 			no_erm = $1,
 			no_rm_lama = $2,
@@ -145,5 +150,10 @@ func UpdatePasienById(id int, pasien person.Pasien) error {
 	if err != nil {
 		return err
 	}
+
+	if rows, _ := val.RowsAffected(); rows == 0 {
+		return errors.New("id not found")
+	}
+
 	return nil
 }
