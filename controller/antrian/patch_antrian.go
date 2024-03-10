@@ -12,7 +12,7 @@ import (
 
 func ConfirmPasien(c *gin.Context) {
     var antrianPasien antrian.Antrian
-    antrianID := c.Param("AntrianID")
+    antrianID := c.Query("AntrianID")
 
     if err := c.ShouldBind(&antrianPasien); err != nil {
         c.JSON(http.StatusBadRequest, common.Response{
