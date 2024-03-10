@@ -9,4 +9,5 @@ func AntrianRouter(r *gin.Engine) {
 	r.POST("/antrian", antrian.AddAntrian)
 	r.GET("/antrian", antrian.GetAntrian)
 	r.DELETE("/antrian", antrian.DeleteAntrian)
+	r.PATCH("/antrian", antrian.ConfirmPasien)
 }
