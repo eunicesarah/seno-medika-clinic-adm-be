@@ -13,7 +13,7 @@ import (
 )
 
 func AddAntrian(c *gin.Context) {
-	var antr antrian.Antrian
+	var antr antrian.PendaftaranAntrian
 
 	if err := c.ShouldBind(&antr); err != nil {
 		c.JSON(http.StatusBadRequest, common.Response{
@@ -26,6 +26,17 @@ func AddAntrian(c *gin.Context) {
 	}
 
 	var count int
+
+	check := db.DB.QueryRow("SELECT pasien_id FROM pasien WHERE nik = $1 and nama = $2", antr.NIK, antr.Nama).Scan(&antr.PasienID)
+	if check != nil {
+		c.JSON(http.StatusBadRequest, common.Response{
+			Message:    "Pasien tidak ditemukan",
+			Status:     "Bad Request",
+			StatusCode: http.StatusBadRequest,
+			Data:       nil,
+		})
+		return
+	}
 
 	err := db.DB.QueryRow("SELECT COUNT(*) FROM pasien WHERE pasien_id = $1", antr.PasienID).Scan(&count)
 	if err != nil {
