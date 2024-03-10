@@ -78,7 +78,7 @@ func TestDeletePasienById_Fail(t *testing.T) {
 	require.Error(t, err)
 }
 
-func DeletePasienByUuid_Success(t *testing.T) {
+func TestDeletePasienByUuid_Success(t *testing.T) {
 	_db := db.DB
 
 	defer func() {
@@ -132,7 +132,7 @@ func DeletePasienByUuid_Success(t *testing.T) {
 	}
 }
 
-func DeletePasienByUuid_Fail(t *testing.T) {
+func TestDeletePasienByUuid_Fail(t *testing.T) {
 	_db := db.DB
 
 	defer func() {
