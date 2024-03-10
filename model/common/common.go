@@ -7,7 +7,7 @@ type Response struct {
 	Data       interface{} `json:"data"`
 }
 
-type PutInput struct {
+type PatchInput struct {
 	Key   interface{} `json:"key"`
 	Value interface{} `json:"value"`
 }

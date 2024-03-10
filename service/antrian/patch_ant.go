@@ -2,15 +2,40 @@ package antrian
 
 import (
 	"seno-medika.com/config/db"
-	"seno-medika.com/model/antrian"
 )
 
-func UpdateStatusAntrianById(antrianID int, ant antrian.Antrian) error {
+func ChangeStatusAntrianById(antrianID int, status bool) error {
 	_, err := db.DB.Exec(
 		`UPDATE antrian
-        SET status = true
-        WHERE antrian_id = $1`,
-		antrianID,
+        SET status = $1
+        WHERE antrian_id = $2`,
+		status, antrianID,
+	)
+	if err != nil {
+		return err
+	}
+	return nil
+}
+
+func ChangeStatusByPoli(poli string, status bool) error {
+	_, err := db.DB.Exec(
+		`UPDATE antrian
+		SET status = $1
+		WHERE poli = $2`,
+		status, poli,
+	)
+	if err != nil {
+		return err
+	}
+	return nil
+}
+
+func ChangeStatusByInstalasi(instalasi string, status bool) error {
+	_, err := db.DB.Exec(
+		`UPDATE antrian
+		SET status = $1
+		WHERE instalasi = $2`,
+		status, instalasi,
 	)
 	if err != nil {
 		return err
