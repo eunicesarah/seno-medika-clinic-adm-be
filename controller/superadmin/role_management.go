@@ -254,7 +254,7 @@ func PutUser(c *gin.Context) {
 }
 
 func PatchUser(c *gin.Context) {
-	var putInput common.PutInput
+	var putInput common.PatchInput
 
 	changeType := c.Query("change_type")
 	changeBy := c.Query("change_by")

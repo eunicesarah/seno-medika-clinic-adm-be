@@ -2,9 +2,10 @@ package pasien
 
 import (
 	"net/http"
-	"seno-medika.com/service/pasien"
 	"strconv"
 	"time"
+
+	"seno-medika.com/service/pasien"
 
 	"github.com/gin-gonic/gin"
 	"github.com/google/uuid"
@@ -271,14 +272,14 @@ func DeletePasien(c *gin.Context) {
 }
 
 func GetPasien(c *gin.Context) {
-	var pasienList []person.Pasien
 
 	updateBy := c.Query("find_by")
 	target := c.Query("target")
 
 	switch updateBy {
 	case "id":
-		val, err := strconv.Atoi(target)
+		val, _ := strconv.Atoi(target)
+		pasien, err := pasien.FindPasienById(val)
 		if err != nil {
 			c.JSON(http.StatusBadRequest, common.Response{
 				Message:    "Invalid target",
@@ -288,21 +289,16 @@ func GetPasien(c *gin.Context) {
 			})
 			return
 		}
-
-		pasienList, err = pasien.FindPasienById(val)
-		if err != nil {
-			c.JSON(http.StatusInternalServerError, common.Response{
-				Message:    err.Error(),
-				Status:     "Internal Server Error",
-				StatusCode: http.StatusInternalServerError,
-				Data:       nil,
-			})
-			return
-		}
+		c.JSON(http.StatusOK, common.Response{
+			Message:    "Successfully get pasien",
+			Status:     "ok",
+			StatusCode: http.StatusOK,
+			Data:       pasien,
+		})
+		return
 
 	case "uuid":
-		var err error
-		pasienList, err = pasien.FindPasienByUuid(target)
+		pasien, err := pasien.FindPasienByUuid(target)
 		if err != nil {
 			c.JSON(http.StatusInternalServerError, common.Response{
 				Message:    err.Error(),
@@ -312,10 +308,16 @@ func GetPasien(c *gin.Context) {
 			})
 			return
 		}
+		c.JSON(http.StatusOK, common.Response{
+			Message:    "Successfully get pasien",
+			Status:     "ok",
+			StatusCode: http.StatusOK,
+			Data:       pasien,
+		})
+		return
 
 	case "nik":
-		var err error
-		pasienList, err = pasien.FindPasienByNIK(target)
+		pasien, err := pasien.FindPasienByNIK(target)
 		if err != nil {
 			c.JSON(http.StatusInternalServerError, common.Response{
 				Message:    err.Error(),
@@ -325,10 +327,16 @@ func GetPasien(c *gin.Context) {
 			})
 			return
 		}
+		c.JSON(http.StatusOK, common.Response{
+			Message:    "Successfully get pasien",
+			Status:     "ok",
+			StatusCode: http.StatusOK,
+			Data:       pasien,
+		})
+		return
 
 	default:
-		var err error
-		pasienList, err = pasien.FindPasienAll()
+		pasien, err := pasien.FindPasienAll()
 		if err != nil {
 			c.JSON(http.StatusInternalServerError, common.Response{
 				Message:    err.Error(),
@@ -338,15 +346,12 @@ func GetPasien(c *gin.Context) {
 			})
 			return
 		}
+		c.JSON(http.StatusOK, common.Response{
+			Message:    "Successfully get pasien",
+			Status:     "ok",
+			StatusCode: http.StatusOK,
+			Data:       pasien,
+		})
 		return
 	}
-
-	c.JSON(http.StatusOK, common.Response{
-		Message:    "Successfully get pasien",
-		Status:     "ok",
-		StatusCode: http.StatusOK,
-		Data:       pasienList,
-	})
-
-	return
 }

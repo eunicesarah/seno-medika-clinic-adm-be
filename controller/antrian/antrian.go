@@ -168,3 +168,89 @@ func GetAntrian(c *gin.Context) {
 
 	return
 }
+
+func PatchAntrian(c *gin.Context) {
+	var patchInput common.PatchInput
+
+	changeBy := c.Query("change_by")
+	changeType := c.Query("change_type")
+
+	if err := c.ShouldBind(&patchInput); err != nil {
+		c.JSON(http.StatusBadRequest, common.Response{
+			Message:    err.Error(),
+			Status:     "Bad Request",
+			StatusCode: http.StatusBadRequest,
+			Data:       nil,
+		})
+		return
+	}
+
+	switch changeType {
+	case "status":
+
+		switch changeBy {
+		case "id":
+			err := antrian2.ChangeStatusAntrianById(patchInput.Key.(int), patchInput.Value.(bool))
+
+			if err != nil {
+				c.JSON(http.StatusInternalServerError, common.Response{
+					Message:    err.Error(),
+					Status:     "Internal Server Error",
+					StatusCode: http.StatusInternalServerError,
+					Data:       nil,
+				})
+				return
+			}
+
+			c.JSON(http.StatusOK, common.Response{
+				Message:    "Successfully update antrian",
+				Status:     "ok",
+				StatusCode: http.StatusOK,
+				Data:       nil,
+			})
+			return
+
+		case "poli":
+			err := antrian2.ChangeStatusByPoli(patchInput.Key.(string), patchInput.Value.(bool))
+
+			if err != nil {
+				c.JSON(http.StatusInternalServerError, common.Response{
+					Message:    err.Error(),
+					Status:     "Internal Server Error",
+					StatusCode: http.StatusInternalServerError,
+					Data:       nil,
+				})
+				return
+			}
+
+			c.JSON(http.StatusOK, common.Response{
+				Message:    "Successfully update antrian",
+				Status:     "ok",
+				StatusCode: http.StatusOK,
+				Data:       nil,
+			})
+			return
+
+		case "instalasi":
+			err := antrian2.ChangeStatusByInstalasi(patchInput.Key.(string), patchInput.Value.(bool))
+
+			if err != nil {
+				c.JSON(http.StatusInternalServerError, common.Response{
+					Message:    err.Error(),
+					Status:     "Internal Server Error",
+					StatusCode: http.StatusInternalServerError,
+					Data:       nil,
+				})
+				return
+			}
+
+			c.JSON(http.StatusOK, common.Response{
+				Message:    "Successfully update antrian",
+				Status:     "ok",
+				StatusCode: http.StatusOK,
+				Data:       nil,
+			})
+			return
+		}
+	}
+}
