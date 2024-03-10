@@ -7,8 +7,6 @@ import (
 
 	"seno-medika.com/service/pasien"
 
-	"seno-medika.com/service/pasien"
-
 	"github.com/gin-gonic/gin"
 	"github.com/google/uuid"
 	"seno-medika.com/config/db"
