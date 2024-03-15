@@ -50,7 +50,7 @@ CREATE TABLE public.users (
                                 nama character varying(225) NOT NULL,
                                 password character varying(225) NOT NULL,
                                 email character varying(225) NOT NULL,
-                                role character varying(10) NOT NULL
+                                role character varying(225) NOT NULL
 );
 
 CREATE TABLE public.alergi (
