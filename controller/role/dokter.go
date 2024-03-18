@@ -9,6 +9,7 @@ import (
 	"seno-medika.com/helper"
 	"seno-medika.com/model/common"
 	"seno-medika.com/model/person"
+	"seno-medika.com/service/dokter"
 	"sync"
 )
 
@@ -110,6 +111,116 @@ func AddDokter(c *gin.Context) {
 		Message:    "Dokter created",
 		Status:     "ok",
 		StatusCode: http.StatusCreated,
+		Data:       nil,
+	})
+	return
+}
+
+func DeleteDokter(c *gin.Context) {
+	changeType := c.Query("change_type")
+	target := c.Query("target")
+
+	switch changeType {
+	case "dokter":
+		if err := dokter.DeleteDokterById(target); err != nil {
+			c.JSON(http.StatusInternalServerError, common.Response{
+				Message:    err.Error(),
+				Status:     "Internal Server Error",
+				StatusCode: http.StatusInternalServerError,
+				Data:       nil,
+			})
+			return
+		}
+	case "jadwal":
+		if err := dokter.DeleteListJadwalById(target); err != nil {
+			c.JSON(http.StatusInternalServerError, common.Response{
+				Message:    err.Error(),
+				Status:     "Internal Server Error",
+				StatusCode: http.StatusInternalServerError,
+				Data:       nil,
+			})
+			return
+		}
+	default:
+		c.JSON(http.StatusBadRequest, common.Response{
+			Message:    "Invalid change type",
+			Status:     "Bad Request",
+			StatusCode: http.StatusBadRequest,
+			Data:       nil,
+		})
+		return
+	}
+
+	c.JSON(http.StatusOK, common.Response{
+		Message:    "Successfully delete dokter",
+		Status:     "ok",
+		StatusCode: http.StatusOK,
+		Data:       nil,
+	})
+	return
+}
+
+func PatchDokter(c *gin.Context) {
+	changeType := c.Query("change_type")
+	target := c.Query("target")
+
+	switch changeType {
+	case "dokter":
+		var dokterVar person.DokterData
+		if err := c.ShouldBind(&dokterVar); err != nil {
+			c.JSON(http.StatusBadRequest, common.Response{
+				Message:    err.Error(),
+				Status:     "Bad Request",
+				StatusCode: http.StatusBadRequest,
+				Data:       nil,
+			})
+			return
+		}
+
+		if err := dokter.ChangeDokterById(target, dokterVar); err != nil {
+			c.JSON(http.StatusInternalServerError, common.Response{
+				Message:    err.Error(),
+				Status:     "Internal Server Error",
+				StatusCode: http.StatusInternalServerError,
+				Data:       nil,
+			})
+			return
+		}
+	case "jadwal":
+		var dokterVar person.ListJadwalDokter
+		if err := c.ShouldBind(&dokterVar); err != nil {
+			c.JSON(http.StatusBadRequest, common.Response{
+				Message:    err.Error(),
+				Status:     "Bad Request",
+				StatusCode: http.StatusBadRequest,
+				Data:       nil,
+			})
+			return
+		}
+
+		if err := dokter.ChangeListJadwalById(target, dokterVar); err != nil {
+			c.JSON(http.StatusInternalServerError, common.Response{
+				Message:    err.Error(),
+				Status:     "Internal Server Error",
+				StatusCode: http.StatusInternalServerError,
+				Data:       nil,
+			})
+			return
+		}
+	default:
+		c.JSON(http.StatusBadRequest, common.Response{
+			Message:    "Invalid change type",
+			Status:     "Bad Request",
+			StatusCode: http.StatusBadRequest,
+			Data:       nil,
+		})
+		return
+	}
+
+	c.JSON(http.StatusOK, common.Response{
+		Message:    "Successfully delete dokter",
+		Status:     "ok",
+		StatusCode: http.StatusOK,
 		Data:       nil,
 	})
 	return

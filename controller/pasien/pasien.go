@@ -2,10 +2,9 @@ package pasien
 
 import (
 	"net/http"
+	pasien3 "seno-medika.com/service/pasien"
 	"strconv"
 	"time"
-
-	"seno-medika.com/service/pasien"
 
 	"github.com/gin-gonic/gin"
 	"github.com/google/uuid"
@@ -177,7 +176,7 @@ func UpdatePasien(c *gin.Context) {
 			})
 			return
 		}
-		err = pasien.UpdatePasienById(val, pasienVar)
+		err = pasien3.UpdatePasienById(val, pasienVar)
 		if err != nil {
 			c.JSON(http.StatusInternalServerError, common.Response{
 				Message:    err.Error(),
@@ -188,7 +187,7 @@ func UpdatePasien(c *gin.Context) {
 			return
 		}
 	case "uuid":
-		err := pasien.UpdatePasienByUuid(target, pasienVar)
+		err := pasien3.UpdatePasienByUuid(target, pasienVar)
 		if err != nil {
 			c.JSON(http.StatusInternalServerError, common.Response{
 				Message:    err.Error(),
@@ -233,7 +232,7 @@ func DeletePasien(c *gin.Context) {
 			return
 		}
 
-		err = pasien.DeletePasienById(val)
+		err = pasien3.DeletePasienById(val)
 		if err != nil {
 			c.JSON(http.StatusInternalServerError, common.Response{
 				Message:    err.Error(),
@@ -244,7 +243,7 @@ func DeletePasien(c *gin.Context) {
 			return
 		}
 	case "uuid":
-		err := pasien.DeletePasienByUuid(target)
+		err := pasien3.DeletePasienByUuid(target)
 		if err != nil {
 			c.JSON(http.StatusInternalServerError, common.Response{
 				Message:    err.Error(),
@@ -279,7 +278,7 @@ func GetPasien(c *gin.Context) {
 	switch updateBy {
 	case "id":
 		val, _ := strconv.Atoi(target)
-		pasien, err := pasien.FindPasienById(val)
+		pasien, err := pasien3.FindPasienById(val)
 		if err != nil {
 			c.JSON(http.StatusBadRequest, common.Response{
 				Message:    "Invalid target",
@@ -298,7 +297,7 @@ func GetPasien(c *gin.Context) {
 		return
 
 	case "uuid":
-		pasien, err := pasien.FindPasienByUuid(target)
+		pasien, err := pasien3.FindPasienByUuid(target)
 		if err != nil {
 			c.JSON(http.StatusInternalServerError, common.Response{
 				Message:    err.Error(),
@@ -317,7 +316,7 @@ func GetPasien(c *gin.Context) {
 		return
 
 	case "nik":
-		pasien, err := pasien.FindPasienByNIK(target)
+		pasien, err := pasien3.FindPasienByNIK(target)
 		if err != nil {
 			c.JSON(http.StatusInternalServerError, common.Response{
 				Message:    err.Error(),
@@ -336,7 +335,7 @@ func GetPasien(c *gin.Context) {
 		return
 
 	default:
-		pasien, err := pasien.FindPasienAll()
+		pasien, err := pasien3.FindPasienAll()
 		if err != nil {
 			c.JSON(http.StatusInternalServerError, common.Response{
 				Message:    err.Error(),

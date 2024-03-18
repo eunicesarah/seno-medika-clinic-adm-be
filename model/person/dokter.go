@@ -3,13 +3,13 @@ package person
 import "github.com/google/uuid"
 
 type Dokter struct {
-	UserID     int        `json:"user_id" binding:"required"`
-	UserUUID   uuid.UUID  `json:"user_uuid" binding:"required"`
-	Nama       string     `json:"nama" binding:"required"`
-	Password   string     `json:"password" binding:"required"`
-	Email      string     `json:"email" binding:"required"`
-	Role       string     `json:"role" binding:"required"`
-	DokterData DokterData `json:"dokter_data" binding:"required"`
+	UserID     int        `json:"user_id"`
+	UserUUID   uuid.UUID  `json:"user_uuid"`
+	Nama       string     `json:"nama"`
+	Password   string     `json:"password"`
+	Email      string     `json:"email"`
+	Role       string     `json:"role"`
+	DokterData DokterData `json:"dokter_data"`
 }
 
 type DokterData struct {
