@@ -73,6 +73,7 @@ func AddDokter(c *gin.Context) {
 		return
 	}
 	dokterVar.UserUUID = uuid.New()
+	dokterVar.Role = "Dokter"
 
 	errChan := make(chan error, 3)
 	wg.Add(3)
@@ -115,13 +116,21 @@ func AddDokter(c *gin.Context) {
 
 	dokterVar.Password = string(pass)
 
-	row := db.DB.QueryRow(
+	var dokterId string
+	if _, err := db.DB.Query(
 		"INSERT INTO users(user_uuid, nama, password, email, role)"+
 			" VALUES($1,$2,$3,$4,$5)", dokterVar.UserUUID, dokterVar.Nama, dokterVar.Password,
-		dokterVar.Email, dokterVar.Role)
+		dokterVar.Email, dokterVar.Role); err != nil {
+		c.JSON(http.StatusInternalServerError, common.Response{
+			Message:    err.Error(),
+			Status:     "Internal Server Error",
+			StatusCode: http.StatusInternalServerError,
+			Data:       nil,
+		})
+		return
+	}
 
-	var dokterId string
-	if err = row.Scan(&dokterId); err != nil {
+	if err := db.DB.QueryRow("SELECT user_id FROM users WHERE user_uuid = $1", dokterVar.UserUUID).Scan(&dokterId); err != nil {
 		c.JSON(http.StatusInternalServerError, common.Response{
 			Message:    err.Error(),
 			Status:     "Internal Server Error",

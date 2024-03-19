@@ -102,6 +102,7 @@ func AddPerawat(c *gin.Context) {
 	}
 
 	perawatVar.UserUUID = uuid.New()
+	perawatVar.Role = "Perawat"
 	pass, err := bcrypt.GenerateFromPassword([]byte(perawatVar.Password), bcrypt.DefaultCost)
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, common.Response{
@@ -114,12 +115,10 @@ func AddPerawat(c *gin.Context) {
 	}
 	perawatVar.Password = string(pass)
 
-	row := db.DB.QueryRow("INSERT INTO users (user_uuid, nama, email, password, role) VALUES ($1, $2, $3, $4, $5)",
-		perawatVar.UserUUID, perawatVar.Nama, perawatVar.Email, perawatVar.Password, perawatVar.Role)
-
 	var perawatId string
 
-	if err := row.Scan(&perawatId); err != nil {
+	if _, err := db.DB.Query("INSERT INTO users (user_uuid, nama, email, password, role) VALUES ($1, $2, $3, $4, $5)",
+		perawatVar.UserUUID, perawatVar.Nama, perawatVar.Email, perawatVar.Password, perawatVar.Role); err != nil {
 		c.JSON(http.StatusInternalServerError, common.Response{
 			Message:    err.Error(),
 			Status:     "Internal Server Error",
@@ -129,8 +128,18 @@ func AddPerawat(c *gin.Context) {
 		return
 	}
 
-	if _, err := db.DB.Exec("INSERT INTO perawat(perwat_id, nomor_lisensi) VALUES ($1, $2)",
-		perawatVar.UserID, perawatVar.PerawatData.NomorLisensi); err != nil {
+	if err := db.DB.QueryRow("SELECT user_id FROM users WHERE user_uuid = $1", perawatVar.UserUUID).Scan(&perawatId); err != nil {
+		c.JSON(http.StatusInternalServerError, common.Response{
+			Message:    err.Error(),
+			Status:     "Internal Server Error",
+			StatusCode: http.StatusInternalServerError,
+			Data:       nil,
+		})
+		return
+	}
+
+	if _, err := db.DB.Exec("INSERT INTO perawat(perawat_id, nomor_lisensi) VALUES ($1, $2)",
+		perawatId, perawatVar.PerawatData.NomorLisensi); err != nil {
 		c.JSON(http.StatusInternalServerError, common.Response{
 			Message:    err.Error(),
 			Status:     "Internal Server Error",
