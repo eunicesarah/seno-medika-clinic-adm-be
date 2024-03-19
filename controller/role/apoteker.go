@@ -6,6 +6,7 @@ import (
 	"golang.org/x/crypto/bcrypt"
 	"net/http"
 	"seno-medika.com/config/db"
+	"seno-medika.com/helper"
 	"seno-medika.com/model/common"
 	"seno-medika.com/model/person"
 	"seno-medika.com/service/apoteker"
@@ -82,8 +83,30 @@ func AddApoteker(c *gin.Context) {
 	}
 	apotekerVar.Password = string(pass)
 
-	if _, err := db.DB.Exec("INSERT INTO users (user_uuid, nama, email, password, role) VALUES ($1, $2, $3, $4, $5)",
-		apotekerVar.UserUUID, apotekerVar.Nama, apotekerVar.Email, apotekerVar.Password, apotekerVar.Role); err != nil {
+	errChan := make(chan error)
+
+	go helper.ValidationEmail(apotekerVar.Email, errChan)
+	go helper.IsEmailExists(apotekerVar.Email, errChan)
+	go helper.ValidationEmail(apotekerVar.Email, errChan)
+
+	close(errChan)
+
+	if err := <-errChan; err != nil {
+		c.JSON(http.StatusBadRequest, common.Response{
+			Message:    err.Error(),
+			Status:     "Bad Request",
+			StatusCode: http.StatusBadRequest,
+			Data:       nil,
+		})
+		return
+	}
+
+	row := db.DB.QueryRow("INSERT INTO users (user_uuid, nama, email, password, role) VALUES ($1, $2, $3, $4, $5)",
+		apotekerVar.UserUUID, apotekerVar.Nama, apotekerVar.Email, apotekerVar.Password, apotekerVar.Role)
+
+	var apotekerId string
+
+	if err := row.Scan(&apotekerId); err != nil {
 		c.JSON(http.StatusInternalServerError, common.Response{
 			Message:    err.Error(),
 			Status:     "Internal Server Error",
@@ -94,7 +117,7 @@ func AddApoteker(c *gin.Context) {
 	}
 
 	if _, err := db.DB.Exec("INSERT INTO apoteker (apoteker_id, nomor_lisensi) VALUES ($1,$2)",
-		apotekerVar.UserID, apotekerVar.ApotekerData.NomorLisensi); err != nil {
+		apotekerId, apotekerVar.ApotekerData.NomorLisensi); err != nil {
 		c.JSON(http.StatusInternalServerError, common.Response{
 			Message:    err.Error(),
 			Status:     "Internal Server Error",

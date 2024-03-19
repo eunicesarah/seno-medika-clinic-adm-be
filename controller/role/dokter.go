@@ -80,6 +80,8 @@ func AddDokter(c *gin.Context) {
 	go helper.IsEmailExists(dokterVar.Email, errChan)
 	go helper.ValidationEmail(dokterVar.Email, errChan)
 
+	close(errChan)
+
 	if err := <-errChan; err != nil {
 		c.JSON(http.StatusBadRequest, common.Response{
 			Message:    err.Error(),
@@ -103,10 +105,13 @@ func AddDokter(c *gin.Context) {
 
 	dokterVar.Password = string(pass)
 
-	if _, err = db.DB.Query(
+	row := db.DB.QueryRow(
 		"INSERT INTO users(user_uuid, nama, password, email, role)"+
 			" VALUES($1,$2,$3,$4,$5)", dokterVar.UserUUID, dokterVar.Nama, dokterVar.Password,
-		dokterVar.Email, dokterVar.Role); err != nil {
+		dokterVar.Email, dokterVar.Role)
+
+	var dokterId string
+	if err = row.Scan(&dokterId); err != nil {
 		c.JSON(http.StatusInternalServerError, common.Response{
 			Message:    err.Error(),
 			Status:     "Internal Server Error",
@@ -116,14 +121,14 @@ func AddDokter(c *gin.Context) {
 		return
 	}
 
-	errChan = make(chan error)
+	errChan = make(chan error, 2)
 
 	wg.Add(2)
 	go func() {
 		defer wg.Done()
 		if _, err = db.DB.Query(
 			"INSERT INTO dokter(dokter_id, jaga_poli_mana, jadwal_jaga, nomor_lisensi) VALUES ($1,$2,$3,$4)",
-			dokterVar.UserID, dokterVar.DokterData.JagaPoliMana, dokterVar.DokterData.JadwalJaga, dokterVar.DokterData.NomorLisensi); err != nil {
+			dokterId, dokterVar.DokterData.JagaPoliMana, dokterVar.DokterData.JadwalJaga, dokterVar.DokterData.NomorLisensi); err != nil {
 			errChan <- err
 			return
 		}
@@ -134,7 +139,7 @@ func AddDokter(c *gin.Context) {
 		for _, value := range dokterVar.DokterData.ListJadwalDokter {
 			if _, err := db.DB.Query(
 				"INSERT INTO list_jadwal_dokter(dokter_id, hari, shift) VALUES ($1,$2,$3)",
-				dokterVar.UserID, value.Hari, value.Shift); err != nil {
+				dokterId, value.Hari, value.Shift); err != nil {
 				errChan <- err
 				return
 			}
@@ -142,7 +147,7 @@ func AddDokter(c *gin.Context) {
 	}()
 
 	wg.Wait()
-
+	close(errChan)
 	if err = <-errChan; err != nil {
 		c.JSON(http.StatusInternalServerError, common.Response{
 			Message:    err.Error(),
