@@ -8,7 +8,54 @@ import (
 	"seno-medika.com/config/db"
 	"seno-medika.com/model/common"
 	"seno-medika.com/model/person"
+	"seno-medika.com/service/perawat"
 )
+
+func GetPerawat(c *gin.Context) {
+	findBy := c.Query("find_by")
+	target := c.Query("target")
+
+	switch findBy {
+	case "id":
+		perawatVar, err := perawat.FindPerawatByID(target)
+		if err != nil {
+			c.JSON(http.StatusInternalServerError, common.Response{
+				Message:    err.Error(),
+				Status:     "Internal Server Error",
+				StatusCode: http.StatusInternalServerError,
+				Data:       nil,
+			})
+			return
+		}
+
+		c.JSON(http.StatusOK, common.Response{
+			Message:    "Successfully get perawat",
+			Status:     "ok",
+			StatusCode: http.StatusOK,
+			Data:       perawatVar,
+		})
+		return
+	default:
+		perawatVars, err := perawat.FindAllPerawat()
+		if err != nil {
+			c.JSON(http.StatusInternalServerError, common.Response{
+				Message:    err.Error(),
+				Status:     "Internal Server Error",
+				StatusCode: http.StatusInternalServerError,
+				Data:       nil,
+			})
+			return
+		}
+
+		c.JSON(http.StatusOK, common.Response{
+			Message:    "Successfully get perawat",
+			Status:     "ok",
+			StatusCode: http.StatusOK,
+			Data:       perawatVars,
+		})
+		return
+	}
+}
 
 func AddPerawat(c *gin.Context) {
 	var perawatVar person.Perawat

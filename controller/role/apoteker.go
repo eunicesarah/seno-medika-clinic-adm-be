@@ -8,7 +8,54 @@ import (
 	"seno-medika.com/config/db"
 	"seno-medika.com/model/common"
 	"seno-medika.com/model/person"
+	"seno-medika.com/service/apoteker"
 )
+
+func GetApoteker(c *gin.Context) {
+	findBy := c.Query("find_by")
+	target := c.Query("target")
+
+	switch findBy {
+	case "id":
+		apotekerVar, err := apoteker.FindApotekerByID(target)
+		if err != nil {
+			c.JSON(http.StatusInternalServerError, common.Response{
+				Message:    err.Error(),
+				Status:     "Internal Server Error",
+				StatusCode: http.StatusInternalServerError,
+				Data:       nil,
+			})
+			return
+		}
+
+		c.JSON(http.StatusOK, common.Response{
+			Message:    "Successfully get apoteker",
+			Status:     "ok",
+			StatusCode: http.StatusOK,
+			Data:       apotekerVar,
+		})
+		return
+	default:
+		apotekerVars, err := apoteker.FindAllApoteker()
+		if err != nil {
+			c.JSON(http.StatusInternalServerError, common.Response{
+				Message:    err.Error(),
+				Status:     "Internal Server Error",
+				StatusCode: http.StatusInternalServerError,
+				Data:       nil,
+			})
+			return
+		}
+
+		c.JSON(http.StatusOK, common.Response{
+			Message:    "Successfully get apoteker",
+			Status:     "ok",
+			StatusCode: http.StatusOK,
+			Data:       apotekerVars,
+		})
+		return
+	}
+}
 
 func AddApoteker(c *gin.Context) {
 	var apotekerVar person.Apoteker

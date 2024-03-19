@@ -13,6 +13,52 @@ import (
 	"sync"
 )
 
+func GetDokter(c *gin.Context) {
+	findBy := c.Query("find_by")
+	target := c.Query("target")
+
+	switch findBy {
+	case "id":
+		dokterVar, err := dokter.FindDokterByID(target)
+		if err != nil {
+			c.JSON(http.StatusInternalServerError, common.Response{
+				Message:    err.Error(),
+				Status:     "Internal Server Error",
+				StatusCode: http.StatusInternalServerError,
+				Data:       nil,
+			})
+			return
+		}
+
+		c.JSON(http.StatusOK, common.Response{
+			Message:    "Successfully get dokter",
+			Status:     "ok",
+			StatusCode: http.StatusOK,
+			Data:       dokterVar,
+		})
+		return
+	default:
+		dokterVars, err := dokter.FindAllDokter()
+		if err != nil {
+			c.JSON(http.StatusInternalServerError, common.Response{
+				Message:    err.Error(),
+				Status:     "Internal Server Error",
+				StatusCode: http.StatusInternalServerError,
+				Data:       nil,
+			})
+			return
+		}
+
+		c.JSON(http.StatusOK, common.Response{
+			Message:    "Successfully get dokter",
+			Status:     "ok",
+			StatusCode: http.StatusOK,
+			Data:       dokterVars,
+		})
+		return
+	}
+}
+
 func AddDokter(c *gin.Context) {
 	var dokterVar person.Dokter
 	var wg sync.WaitGroup

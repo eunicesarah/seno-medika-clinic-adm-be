@@ -624,7 +624,7 @@ func GetUser(c *gin.Context) {
 			Data:       user,
 		})
 		return
-	case "all":
+	default:
 		user, err := superadmin.FindAll()
 		if err != nil {
 			c.JSON(http.StatusBadRequest, common.Response{
