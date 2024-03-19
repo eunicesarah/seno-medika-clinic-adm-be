@@ -10,6 +10,7 @@ import (
 	"seno-medika.com/model/common"
 	"seno-medika.com/model/person"
 	"seno-medika.com/service/apoteker"
+	"sync"
 )
 
 func GetApoteker(c *gin.Context) {
@@ -60,6 +61,7 @@ func GetApoteker(c *gin.Context) {
 
 func AddApoteker(c *gin.Context) {
 	var apotekerVar person.Apoteker
+	var wg sync.WaitGroup
 	if err := c.ShouldBind(&apotekerVar); err != nil {
 		c.JSON(http.StatusBadRequest, common.Response{
 			Message:    err.Error(),
@@ -68,6 +70,36 @@ func AddApoteker(c *gin.Context) {
 			Data:       nil,
 		})
 		return
+	}
+
+	errChan := make(chan error, 3)
+	wg.Add(3)
+
+	go func() {
+		defer wg.Done()
+		helper.ValidationEmail(apotekerVar.Email, errChan)
+	}()
+	go func() {
+		defer wg.Done()
+		helper.IsEmailExists(apotekerVar.Email, errChan)
+	}()
+	go func() {
+		defer wg.Done()
+		helper.ValidationPassword(apotekerVar.Password, errChan)
+	}()
+
+	wg.Wait()
+
+	for val := range errChan {
+		if val != nil {
+			c.JSON(http.StatusBadRequest, common.Response{
+				Message:    val.Error(),
+				Status:     "Bad Request",
+				StatusCode: http.StatusBadRequest,
+				Data:       nil,
+			})
+			return
+		}
 	}
 
 	apotekerVar.UserUUID = uuid.New()
@@ -83,30 +115,20 @@ func AddApoteker(c *gin.Context) {
 	}
 	apotekerVar.Password = string(pass)
 
-	errChan := make(chan error)
-
-	go helper.ValidationEmail(apotekerVar.Email, errChan)
-	go helper.IsEmailExists(apotekerVar.Email, errChan)
-	go helper.ValidationEmail(apotekerVar.Email, errChan)
-
-	close(errChan)
-
-	if err := <-errChan; err != nil {
-		c.JSON(http.StatusBadRequest, common.Response{
+	if _, err := db.DB.Exec("INSERT INTO users (user_uuid, nama, email, password, role) VALUES ($1, $2, $3, $4, $5)",
+		apotekerVar.UserUUID, apotekerVar.Nama, apotekerVar.Email, apotekerVar.Password, apotekerVar.Role); err != nil {
+		c.JSON(http.StatusInternalServerError, common.Response{
 			Message:    err.Error(),
-			Status:     "Bad Request",
-			StatusCode: http.StatusBadRequest,
+			Status:     "Internal Server Error",
+			StatusCode: http.StatusInternalServerError,
 			Data:       nil,
 		})
 		return
 	}
 
-	row := db.DB.QueryRow("INSERT INTO users (user_uuid, nama, email, password, role) VALUES ($1, $2, $3, $4, $5)",
-		apotekerVar.UserUUID, apotekerVar.Nama, apotekerVar.Email, apotekerVar.Password, apotekerVar.Role)
-
 	var apotekerId string
 
-	if err := row.Scan(&apotekerId); err != nil {
+	if err := db.DB.QueryRow("SELECT user_id FROM users WHERE user_uuid = $1", apotekerVar.UserUUID).Scan(&apotekerId); err != nil {
 		c.JSON(http.StatusInternalServerError, common.Response{
 			Message:    err.Error(),
 			Status:     "Internal Server Error",

@@ -1,17 +1,20 @@
 package helper
 
-import "seno-medika.com/config/db"
+import (
+	"errors"
+	"seno-medika.com/config/db"
+)
 
-func IsEmailExists(email string, errChan chan error) {
+func IsEmailExists(email string, errorChan chan error) {
 	val, err := db.DB.Query("SELECT email FROM users WHERE email = $1", email)
 	if err != nil {
-		errChan <- err
+		errorChan <- err
 		return
+
 	}
 	if val.Next() {
-		errChan <- nil
+		errorChan <- errors.New("Email already exists")
 		return
 	}
-	errChan <- nil
 	return
 }

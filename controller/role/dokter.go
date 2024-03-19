@@ -74,11 +74,21 @@ func AddDokter(c *gin.Context) {
 	}
 	dokterVar.UserUUID = uuid.New()
 
-	errChan := make(chan error)
-
-	go helper.ValidationEmail(dokterVar.Email, errChan)
-	go helper.IsEmailExists(dokterVar.Email, errChan)
-	go helper.ValidationEmail(dokterVar.Email, errChan)
+	errChan := make(chan error, 3)
+	wg.Add(3)
+	go func() {
+		defer wg.Done()
+		helper.ValidationEmail(dokterVar.Email, errChan)
+	}()
+	go func() {
+		defer wg.Done()
+		helper.IsEmailExists(dokterVar.Email, errChan)
+	}()
+	go func() {
+		defer wg.Done()
+		helper.ValidationPassword(dokterVar.Password, errChan)
+	}()
+	wg.Wait()
 
 	close(errChan)
 

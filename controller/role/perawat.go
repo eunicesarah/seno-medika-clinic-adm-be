@@ -10,6 +10,7 @@ import (
 	"seno-medika.com/model/common"
 	"seno-medika.com/model/person"
 	"seno-medika.com/service/perawat"
+	"sync"
 )
 
 func GetPerawat(c *gin.Context) {
@@ -60,8 +61,37 @@ func GetPerawat(c *gin.Context) {
 
 func AddPerawat(c *gin.Context) {
 	var perawatVar person.Perawat
+	var wg sync.WaitGroup
 
 	if err := c.ShouldBind(&perawatVar); err != nil {
+		c.JSON(http.StatusBadRequest, common.Response{
+			Message:    err.Error(),
+			Status:     "Bad Request",
+			StatusCode: http.StatusBadRequest,
+			Data:       nil,
+		})
+		return
+	}
+
+	errChan := make(chan error, 3)
+	wg.Add(3)
+	go func() {
+		defer wg.Done()
+		helper.ValidationEmail(perawatVar.Email, errChan)
+	}()
+	go func() {
+		defer wg.Done()
+		helper.IsEmailExists(perawatVar.Email, errChan)
+	}()
+	go func() {
+		defer wg.Done()
+		helper.ValidationPassword(perawatVar.Password, errChan)
+	}()
+	wg.Wait()
+
+	close(errChan)
+
+	if err := <-errChan; err != nil {
 		c.JSON(http.StatusBadRequest, common.Response{
 			Message:    err.Error(),
 			Status:     "Bad Request",
@@ -83,24 +113,6 @@ func AddPerawat(c *gin.Context) {
 		return
 	}
 	perawatVar.Password = string(pass)
-
-	errChan := make(chan error)
-
-	go helper.ValidationEmail(perawatVar.Email, errChan)
-	go helper.IsEmailExists(perawatVar.Email, errChan)
-	go helper.ValidationEmail(perawatVar.Email, errChan)
-
-	close(errChan)
-
-	if err := <-errChan; err != nil {
-		c.JSON(http.StatusBadRequest, common.Response{
-			Message:    err.Error(),
-			Status:     "Bad Request",
-			StatusCode: http.StatusBadRequest,
-			Data:       nil,
-		})
-		return
-	}
 
 	row := db.DB.QueryRow("INSERT INTO users (user_uuid, nama, email, password, role) VALUES ($1, $2, $3, $4, $5)",
 		perawatVar.UserUUID, perawatVar.Nama, perawatVar.Email, perawatVar.Password, perawatVar.Role)
