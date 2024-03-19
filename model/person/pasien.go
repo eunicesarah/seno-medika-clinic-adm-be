@@ -39,3 +39,13 @@ type Pasien struct {
 	UpdatedAt          string    `json:"updated_at"`
 	UpdatedBy          string    `json:"updated_by"`
 }
+
+type RekamMedis struct {
+	RekamMedisID int    `json:"rekam_medis_id"`
+	PasienID     int    `json:"pasien_id"`
+	NoERM        string `json:"no_erm"`
+	ResepID      int    `json:"resep_id"`
+	Resume       string `json:"resume"`
+	CreatedAt    string `json:"created_at"`
+	UpdateAt     string `json:"update_at"`
+}
