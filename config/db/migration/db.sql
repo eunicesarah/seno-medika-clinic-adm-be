@@ -148,7 +148,7 @@ CREATE TABLE public.skrining_awal (
                                 skrin_awal_id integer NOT NULL,
                                 disabilitas boolean NOT NULL,
                                 ambulansi boolean NOT NULL,
-                                hambatan _komunikasi boolean NOT NULL,
+                                hambatan_komunikasi boolean NOT NULL,
                                 jalan_tidak_seimbang boolean NOT NULL,
                                 jalan_alat_bantu boolean NOT NULL,
                                 menopang_saat_duduk boolean NOT NULL,
