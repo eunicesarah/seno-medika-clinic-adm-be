@@ -57,30 +57,6 @@ func AddUser(c *gin.Context) {
 
 	userInput.Password = string(hashPass)
 
-	val, err := db.DB.Query(
-		"SELECT * FROM users"+
-			" WHERE nama = $1 AND email = $2 AND role = $3",
-		userInput.Nama, userInput.Email, userInput.Role)
-
-	if err != nil {
-		c.JSON(http.StatusInternalServerError, common.Response{
-			Message:    err.Error(),
-			Status:     "Internal Server Error",
-			StatusCode: http.StatusInternalServerError,
-			Data:       nil,
-		})
-	}
-
-	if val.Next() {
-		c.JSON(http.StatusBadRequest, common.Response{
-			Message:    err.Error(),
-			Status:     "Bad Request",
-			StatusCode: http.StatusBadRequest,
-			Data:       nil,
-		})
-		return
-	}
-
 	_, err = db.DB.Query(
 		"INSERT INTO users(user_uuid, nama, password, email, role)"+
 			" VALUES($1,$2,$3,$4,$5)", userInput.UserUUID, userInput.Nama, userInput.Password,
