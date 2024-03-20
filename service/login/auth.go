@@ -55,3 +55,4 @@ func LoginCheck(email, password string) (string, error) {
 
 	return token, nil
 }
+
