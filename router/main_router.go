@@ -6,6 +6,7 @@ import (
 	"seno-medika.com/router/login"
 	"seno-medika.com/router/pasien"
 	"seno-medika.com/router/role"
+	"seno-medika.com/router/ttv"
 	"seno-medika.com/router/user"
 )
 
@@ -17,4 +18,5 @@ func MainRouter(r *gin.Engine) {
 	role.PerawatRouter(r)
 	role.DokterRouter(r)
 	role.ApotekerRouter(r)
+	ttv.TTVRouter(r)
 }
