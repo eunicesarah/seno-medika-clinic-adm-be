@@ -54,7 +54,7 @@ CREATE TABLE public.users (
 );
 
 CREATE TABLE public.alergi (
-                                alergi_id integer NOT NULL,
+                                alergi_id SERIAL NOT NULL,
                                 obat character varying(50),
                                 makanan character varying(50),
                                 lainnya character varying(100)
@@ -62,13 +62,13 @@ CREATE TABLE public.alergi (
 
 
 CREATE TABLE public.anamnesis (
-                                anamnesis_id integer NOT NULL,
-                                pasien_id integer NOT NULL,
-                                skrin_awal_id integer NOT NULL,
-                                skrin_gizi_id integer NOT NULL,
-                                ttv_id integer NOT NULL,
-                                riwayat_penyakit_id integer NOT NULL,
-                                alergi_id integer NOT NULL,
+                                anamnesis_id SERIAL NOT NULL,
+                                pasien_id SERIAL NOT NULL,
+                                skrin_awal_id SERIAL NOT NULL,
+                                skrin_gizi_id SERIAL NOT NULL,
+                                ttv_id SERIAL NOT NULL,
+                                riwayat_penyakit_id SERIAL NOT NULL,
+                                alergi_id SERIAL NOT NULL,
                                 dokter_id SERIAL NOT NULL,
                                 perawat_id SERIAL NOT NULL,
                                 keluhan_utama character varying(255) NOT NULL,
@@ -96,22 +96,22 @@ CREATE TABLE public.list_jadwal_dokter (
 );
 
 CREATE TABLE public.list_obat (
-                                obat_id integer NOT NULL,
-                                resep_id integer NOT NULL,
+                                obat_id SERIAL NOT NULL,
+                                resep_id SERIAL NOT NULL,
                                 jumlah integer NOT NULL,
                                 dosis character varying(50) NOT NULL
 );
 
 CREATE TABLE public.nota (
-                                nota_id integer NOT NULL,
-                                pasien_id integer NOT NULL,
+                                nota_id SERIAL NOT NULL,
+                                pasien_id SERIAL NOT NULL,
                                 dokter_id SERIAL NOT NULL,
-                                resep_id integer NOT NULL,
+                                resep_id SERIAL NOT NULL,
                                 total_biaya integer NOT NULL
 );
 
 CREATE TABLE public.obat (
-                                obat_id integer NOT NULL,
+                                obat_id SERIAL NOT NULL,
                                 nama_obat character varying(50) NOT NULL,
                                 jenis_asuransi character varying(50) NOT NULL,
                                 harga integer NOT NULL
@@ -123,29 +123,29 @@ CREATE TABLE public.perawat (
 );
 
 CREATE TABLE public.rekam_medis (
-                                rekam_medis_id integer NOT NULL,
-                                pasien_id integer NOT NULL,
+                                rekam_medis_id SERIAL NOT NULL,
+                                pasien_id SERIAL NOT NULL,
                                 no_erm character varying(50) NOT NULL,
-                                resep_id integer NOT NULL,
+                                resep_id SERIAL NOT NULL,
                                 resume character varying(50) NOT NULL,
                                 created_at character varying(225) NOT NULL,
                                 update_at character varying(225) NOT NULL
 );
 
 CREATE TABLE public.resep (
-                                resep_id integer NOT NULL,
+                                resep_id SERIAL NOT NULL,
                                 deskripsi character varying(500) NOT NULL
 );
 
 CREATE TABLE public.riwayat_penyakit (
-                                riwayat_penyakit_id integer NOT NULL,
+                                riwayat_penyakit_id SERIAL NOT NULL,
                                 rps character varying(20),
                                 rpd character varying(20),
                                 rpk character varying(20)
 );
 
 CREATE TABLE public.skrining_awal (
-                                skrin_awal_id integer NOT NULL,
+                                skrin_awal_id SERIAL NOT NULL,
                                 disabilitas boolean NOT NULL,
                                 ambulansi boolean NOT NULL,
                                 hambatan_komunikasi boolean NOT NULL,
@@ -158,7 +158,7 @@ CREATE TABLE public.skrining_awal (
 );
 
 CREATE TABLE public.skrining_gizi (
-                                skrin_gizi_id integer NOT NULL,
+                                skrin_gizi_id SERIAL NOT NULL,
                                 penurunan_bb integer NOT NULL,
                                 tdk_nafsu_makan boolean NOT NULL,
                                 diagnosis_khusus boolean NOT NULL,
@@ -169,7 +169,7 @@ CREATE TABLE public.skrining_gizi (
 );
 
 CREATE TABLE public.ttv (
-                                ttv_id integer NOT NULL,
+                                ttv_id SERIAL NOT NULL,
                                 kesadaran character varying(20) NOT NULL,
                                 sistole integer NOT NULL,
                                 diastole integer NOT NULL,
