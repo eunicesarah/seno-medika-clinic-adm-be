@@ -1,5 +1,17 @@
 package nursestation
 
+import "seno-medika.com/model/doctorstation"
+
+type NurseStation struct {
+	NurseStationID  int                     `json:"nurse_station_id"`
+	SkriningAwal    SkriningAwal            `json:"skrining_awal"`
+	SkriningGizi    SkriningGizi            `json:"skrining_gizi"`
+	TTV             TTV                     `json:"ttv"`
+	RiwayatPenyakit RiwayatPenyakit         `json:"riwayat_penyakit"`
+	Alergi          doctorstation.Alergi    `json:"alergi"`
+	Anamnesis       doctorstation.Anamnesis `json:"anamnesis"`
+}
+
 type SkriningAwal struct {
 	SkriningAwalID     int    `json:"skrining_awal_id"`
 	Disabilitas        bool   `json:"disabilitas"`
