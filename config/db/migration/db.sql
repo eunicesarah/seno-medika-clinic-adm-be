@@ -69,28 +69,28 @@ CREATE TABLE public.anamnesis (
                                 ttv_id integer NOT NULL,
                                 riwayat_penyakit_id integer NOT NULL,
                                 alergi_id integer NOT NULL,
-                                dokter_id integer NOT NULL,
-                                perawat_id integer NOT NULL,
+                                dokter_id SERIAL NOT NULL,
+                                perawat_id SERIAL NOT NULL,
                                 keluhan_utama character varying(255) NOT NULL,
                                 keluhan_tambahan character varying(255),
                                 lama_sakit integer NOT NULL
 );
 
 CREATE TABLE public.apoteker (
-                                apoteker_id integer NOT NULL,
+                                apoteker_id SERIAL NOT NULL,
                                 nomor_lisensi character varying(50) NOT NULL
 );
 
 
 CREATE TABLE public.dokter (
-                                dokter_id integer NOT NULL,
+                                dokter_id SERIAL NOT NULL,
                                 jaga_poli_mana character varying(50) NOT NULL,
                                 jadwal_jaga character varying(50) NOT NULL,
                                 nomor_lisensi character varying(50) NOT NULL
 );
 
 CREATE TABLE public.list_jadwal_dokter (
-                                dokter_id integer NOT NULL,
+                                dokter_id SERIAL NOT NULL,
                                 hari character varying(20) NOT NULL,
                                 shift integer NOT NULL
 );
@@ -105,7 +105,7 @@ CREATE TABLE public.list_obat (
 CREATE TABLE public.nota (
                                 nota_id integer NOT NULL,
                                 pasien_id integer NOT NULL,
-                                dokter_id integer NOT NULL,
+                                dokter_id SERIAL NOT NULL,
                                 resep_id integer NOT NULL,
                                 total_biaya integer NOT NULL
 );
@@ -118,7 +118,7 @@ CREATE TABLE public.obat (
 );
 
 CREATE TABLE public.perawat (
-                                perawat_id integer NOT NULL,
+                                perawat_id SERIAL NOT NULL,
                                 nomor_lisensi character varying(50) NOT NULL
 );
 
@@ -148,7 +148,7 @@ CREATE TABLE public.skrining_awal (
                                 skrin_awal_id integer NOT NULL,
                                 disabilitas boolean NOT NULL,
                                 ambulansi boolean NOT NULL,
-                                hambatan _komunikasi boolean NOT NULL,
+                                hambatan_komunikasi boolean NOT NULL,
                                 jalan_tidak_seimbang boolean NOT NULL,
                                 jalan_alat_bantu boolean NOT NULL,
                                 menopang_saat_duduk boolean NOT NULL,
@@ -247,61 +247,61 @@ ALTER TABLE ONLY public.ttv
     ADD CONSTRAINT ttv_pkey PRIMARY KEY (ttv_id);
 
 ALTER TABLE ONLY public.anamnesis
-    ADD CONSTRAINT anamnesis_alergi_id_fkey FOREIGN KEY (alergi_id) REFERENCES public.alergi(alergi_id);
+    ADD CONSTRAINT anamnesis_alergi_id_fkey FOREIGN KEY (alergi_id) REFERENCES public.alergi(alergi_id) ON UPDATE CASCADE ON DELETE CASCADE;
 
 ALTER TABLE ONLY public.anamnesis
-    ADD CONSTRAINT anamnesis_dokter_id_fkey FOREIGN KEY (dokter_id) REFERENCES public.dokter(dokter_id);
+    ADD CONSTRAINT anamnesis_dokter_id_fkey FOREIGN KEY (dokter_id) REFERENCES public.dokter(dokter_id)ON UPDATE CASCADE ON DELETE CASCADE;
 
 ALTER TABLE ONLY public.anamnesis
-    ADD CONSTRAINT anamnesis_pasien_id_fkey FOREIGN KEY (pasien_id) REFERENCES public.pasien(pasien_id);
+    ADD CONSTRAINT anamnesis_pasien_id_fkey FOREIGN KEY (pasien_id) REFERENCES public.pasien(pasien_id)ON UPDATE CASCADE ON DELETE CASCADE;
 
 ALTER TABLE ONLY public.anamnesis
-    ADD CONSTRAINT anamnesis_perawat_id_fkey FOREIGN KEY (perawat_id) REFERENCES public.perawat(perawat_id);
+    ADD CONSTRAINT anamnesis_perawat_id_fkey FOREIGN KEY (perawat_id) REFERENCES public.perawat(perawat_id)ON UPDATE CASCADE ON DELETE CASCADE;
 
 ALTER TABLE ONLY public.anamnesis
-    ADD CONSTRAINT anamnesis_riwayat_penyakit_id_fkey FOREIGN KEY (riwayat_penyakit_id) REFERENCES public.riwayat_penyakit(riwayat_penyakit_id);
+    ADD CONSTRAINT anamnesis_riwayat_penyakit_id_fkey FOREIGN KEY (riwayat_penyakit_id) REFERENCES public.riwayat_penyakit(riwayat_penyakit_id)ON UPDATE CASCADE ON DELETE CASCADE;
 
 ALTER TABLE ONLY public.anamnesis
-    ADD CONSTRAINT anamnesis_skrin_awal_id_fkey FOREIGN KEY (skrin_awal_id) REFERENCES public.skrining_awal(skrin_awal_id);
+    ADD CONSTRAINT anamnesis_skrin_awal_id_fkey FOREIGN KEY (skrin_awal_id) REFERENCES public.skrining_awal(skrin_awal_id)ON UPDATE CASCADE ON DELETE CASCADE;
 
 ALTER TABLE ONLY public.anamnesis
-    ADD CONSTRAINT anamnesis_skrin_gizi_id_fkey FOREIGN KEY (skrin_gizi_id) REFERENCES public.skrining_gizi(skrin_gizi_id);
+    ADD CONSTRAINT anamnesis_skrin_gizi_id_fkey FOREIGN KEY (skrin_gizi_id) REFERENCES public.skrining_gizi(skrin_gizi_id)ON UPDATE CASCADE ON DELETE CASCADE;
 
 ALTER TABLE ONLY public.anamnesis
-    ADD CONSTRAINT anamnesis_ttv_id_fkey FOREIGN KEY (ttv_id) REFERENCES public.ttv(ttv_id);
+    ADD CONSTRAINT anamnesis_ttv_id_fkey FOREIGN KEY (ttv_id) REFERENCES public.ttv(ttv_id)ON UPDATE CASCADE ON DELETE CASCADE;
 
 ALTER TABLE ONLY public.apoteker
-    ADD CONSTRAINT apoteker_apoteker_id_fkey FOREIGN KEY (apoteker_id) REFERENCES public.users(user_id);
+    ADD CONSTRAINT apoteker_apoteker_id_fkey FOREIGN KEY (apoteker_id) REFERENCES public.users(user_id)ON UPDATE CASCADE ON DELETE CASCADE;
 
 ALTER TABLE ONLY public.dokter
-    ADD CONSTRAINT dokter_dokter_id_fkey FOREIGN KEY (dokter_id) REFERENCES public.users(user_id);
+    ADD CONSTRAINT dokter_dokter_id_fkey FOREIGN KEY (dokter_id) REFERENCES public.users(user_id) ON UPDATE CASCADE ON DELETE CASCADE;
 
 ALTER TABLE ONLY public.list_jadwal_dokter
-    ADD CONSTRAINT list_jadwal_dokter_dokter_id_fkey FOREIGN KEY (dokter_id) REFERENCES public.dokter(dokter_id);
+    ADD CONSTRAINT list_jadwal_dokter_dokter_id_fkey FOREIGN KEY (dokter_id) REFERENCES public.dokter(dokter_id)ON UPDATE CASCADE ON DELETE CASCADE;
 
 ALTER TABLE ONLY public.list_obat
-    ADD CONSTRAINT list_obat_obat_id_fkey FOREIGN KEY (obat_id) REFERENCES public.obat(obat_id);
+    ADD CONSTRAINT list_obat_obat_id_fkey FOREIGN KEY (obat_id) REFERENCES public.obat(obat_id)ON UPDATE CASCADE ON DELETE CASCADE;
 
 ALTER TABLE ONLY public.list_obat
-    ADD CONSTRAINT list_obat_resep_id_fkey FOREIGN KEY (resep_id) REFERENCES public.resep(resep_id);
+    ADD CONSTRAINT list_obat_resep_id_fkey FOREIGN KEY (resep_id) REFERENCES public.resep(resep_id)ON UPDATE CASCADE ON DELETE CASCADE;
 
 ALTER TABLE ONLY public.nota
-    ADD CONSTRAINT nota_dokter_id_fkey FOREIGN KEY (dokter_id) REFERENCES public.dokter(dokter_id);
+    ADD CONSTRAINT nota_dokter_id_fkey FOREIGN KEY (dokter_id) REFERENCES public.dokter(dokter_id)ON UPDATE CASCADE ON DELETE CASCADE;
 
 ALTER TABLE ONLY public.nota
-    ADD CONSTRAINT nota_pasien_id_fkey FOREIGN KEY (pasien_id) REFERENCES public.pasien(pasien_id);
+    ADD CONSTRAINT nota_pasien_id_fkey FOREIGN KEY (pasien_id) REFERENCES public.pasien(pasien_id)ON UPDATE CASCADE ON DELETE CASCADE;
 
 ALTER TABLE ONLY public.nota
-    ADD CONSTRAINT nota_resep_id_fkey FOREIGN KEY (resep_id) REFERENCES public.resep(resep_id);
+    ADD CONSTRAINT nota_resep_id_fkey FOREIGN KEY (resep_id) REFERENCES public.resep(resep_id)ON UPDATE CASCADE ON DELETE CASCADE;
 
 ALTER TABLE ONLY public.perawat
-    ADD CONSTRAINT perawat_perawat_id_fkey FOREIGN KEY (perawat_id) REFERENCES public.users(user_id);
+    ADD CONSTRAINT perawat_perawat_id_fkey FOREIGN KEY (perawat_id) REFERENCES public.users(user_id)ON UPDATE CASCADE ON DELETE CASCADE;
 
 ALTER TABLE ONLY public.rekam_medis
-    ADD CONSTRAINT rekam_medis_no_erm_fkey FOREIGN KEY (no_erm) REFERENCES public.pasien(no_erm) NOT VALID;
+    ADD CONSTRAINT rekam_medis_no_erm_fkey FOREIGN KEY (no_erm) REFERENCES public.pasien(no_erm) ON UPDATE CASCADE ON DELETE CASCADE;
 
 ALTER TABLE ONLY public.rekam_medis
-    ADD CONSTRAINT rekam_medis_pasien_id_fkey FOREIGN KEY (pasien_id) REFERENCES public.pasien(pasien_id) NOT VALID;
+    ADD CONSTRAINT rekam_medis_pasien_id_fkey FOREIGN KEY (pasien_id) REFERENCES public.pasien(pasien_id) ON UPDATE CASCADE ON DELETE CASCADE;
 
 ALTER TABLE ONLY public.rekam_medis
-    ADD CONSTRAINT rekam_medis_resep_id_fkey FOREIGN KEY (resep_id) REFERENCES public.resep(resep_id) NOT VALID;
+    ADD CONSTRAINT rekam_medis_resep_id_fkey FOREIGN KEY (resep_id) REFERENCES public.resep(resep_id) ON UPDATE CASCADE ON DELETE CASCADE;
