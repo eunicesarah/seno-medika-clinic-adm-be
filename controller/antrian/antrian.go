@@ -262,6 +262,15 @@ func PatchAntrian(c *gin.Context) {
 				Data:       nil,
 			})
 			return
+
+		default:
+			c.JSON(http.StatusBadRequest, common.Response{
+				Message:    "Invalid change_by",
+				Status:     "Bad Request",
+				StatusCode: http.StatusBadRequest,
+				Data:       nil,
+			})
+			return
 		}
 	}
 }

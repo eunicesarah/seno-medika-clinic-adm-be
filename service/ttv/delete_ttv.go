@@ -3,7 +3,7 @@ package ttv
 import "seno-medika.com/config/db"
 
 func DeleteSkriningAwalById(id string) error {
-	if _, err := db.DB.Exec("DELETE FROM skrining_awal WHERE skrining_awal_id = $1", id); err != nil {
+	if _, err := db.DB.Exec("DELETE FROM skrining_awal WHERE skrin_awal_id = $1", id); err != nil {
 		return err
 	}
 
@@ -11,7 +11,7 @@ func DeleteSkriningAwalById(id string) error {
 }
 
 func DeleteSkriningGiziById(id string) error {
-	if _, err := db.DB.Exec("DELETE FROM skrining_gizi WHERE skrining_gizi_id = $1", id); err != nil {
+	if _, err := db.DB.Exec("DELETE FROM skrining_gizi WHERE skrin_gizi_id = $1", id); err != nil {
 		return err
 	}
 
@@ -19,7 +19,7 @@ func DeleteSkriningGiziById(id string) error {
 }
 
 func DeleteSkriningPenyakitById(id string) error {
-	if _, err := db.DB.Exec("DELETE FROM skrining_penyakit WHERE skrining_penyakit_id = $1", id); err != nil {
+	if _, err := db.DB.Exec("DELETE FROM skrining_penyakit WHERE skrin_penyakit_id = $1", id); err != nil {
 		return err
 	}
 

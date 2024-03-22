@@ -18,7 +18,7 @@ func ChangeSkriningAwalById(id string, skriningAwal nursestation.SkriningAwal) e
 	           hasil_cara_jalan = $7,
 	           skala_nyeri = $8,
 	           nyeri_berulang = $9
-	           WHERE skrining_awal_id = $10`,
+	           WHERE skrin_awal_id = $10`,
 		skriningAwal.Disabilitas, skriningAwal.Ambulansi, skriningAwal.HambatanKomunikasi, skriningAwal.JalanTidakSeimbang, skriningAwal.JalanAlatBantu, skriningAwal.MenopangSaatDuduk, skriningAwal.HasilCaraJalan, skriningAwal.SkalaNyeri, skriningAwal.NyeriBerulang, id)
 	if err != nil {
 		return err
@@ -41,7 +41,7 @@ func ChangeSkriningGiziById(id string, skriningGizi nursestation.SkriningGizi) e
 	           skala_nyeri = $5,
 	           nyeri_berulang = $6,
 	           sifat_nyeri = $7
-	           WHERE skrining_gizi_id = $8`,
+	           WHERE skrin_gizi_id = $8`,
 		skriningGizi.PenurunanBB, skriningGizi.TdkNafsuMakan, skriningGizi.DiagnosisKhusus, skriningGizi.NamaPenyakit, skriningGizi.SkalaNyeri, skriningGizi.NyeriBerulang, skriningGizi.SifatNyeri, id)
 	if err != nil {
 		return err

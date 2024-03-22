@@ -26,7 +26,7 @@ func FindAllSkriningAwal() ([]nursestation.SkriningAwal, error) {
 
 func FindSkriningAwalById(id string) (nursestation.SkriningAwal, error) {
 	var skriningAwalVar nursestation.SkriningAwal
-	if err := db.DB.QueryRow("SELECT * FROM skrining_awal WHERE skrining_awal_id = $1", id).Scan(&skriningAwalVar.SkriningAwalID, &skriningAwalVar.Disabilitas, &skriningAwalVar.Ambulansi, &skriningAwalVar.HambatanKomunikasi, &skriningAwalVar.JalanTidakSeimbang, &skriningAwalVar.JalanAlatBantu, &skriningAwalVar.MenopangSaatDuduk, &skriningAwalVar.HasilCaraJalan, &skriningAwalVar.SkalaNyeri, &skriningAwalVar.NyeriBerulang); err != nil {
+	if err := db.DB.QueryRow("SELECT * FROM skrining_awal WHERE skrin_awal_id = $1", id).Scan(&skriningAwalVar.SkriningAwalID, &skriningAwalVar.Disabilitas, &skriningAwalVar.Ambulansi, &skriningAwalVar.HambatanKomunikasi, &skriningAwalVar.JalanTidakSeimbang, &skriningAwalVar.JalanAlatBantu, &skriningAwalVar.MenopangSaatDuduk, &skriningAwalVar.HasilCaraJalan, &skriningAwalVar.SkalaNyeri, &skriningAwalVar.NyeriBerulang); err != nil {
 		return nursestation.SkriningAwal{}, err
 	}
 
@@ -53,7 +53,7 @@ func FindAllSkriningGizi() ([]nursestation.SkriningGizi, error) {
 
 func FindSkriningGiziById(id string) (nursestation.SkriningGizi, error) {
 	var skriningGiziVar nursestation.SkriningGizi
-	if err := db.DB.QueryRow("SELECT * FROM skrining_gizi WHERE skrining_gizi_id = $1", id).Scan(&skriningGiziVar.SkriningGiziID, &skriningGiziVar.PenurunanBB, &skriningGiziVar.TdkNafsuMakan, &skriningGiziVar.DiagnosisKhusus, &skriningGiziVar.NamaPenyakit, &skriningGiziVar.SkalaNyeri, &skriningGiziVar.NyeriBerulang, &skriningGiziVar.SifatNyeri); err != nil {
+	if err := db.DB.QueryRow("SELECT * FROM skrining_gizi WHERE skrin_gizi_id = $1", id).Scan(&skriningGiziVar.SkriningGiziID, &skriningGiziVar.PenurunanBB, &skriningGiziVar.TdkNafsuMakan, &skriningGiziVar.DiagnosisKhusus, &skriningGiziVar.NamaPenyakit, &skriningGiziVar.SkalaNyeri, &skriningGiziVar.NyeriBerulang, &skriningGiziVar.SifatNyeri); err != nil {
 		return nursestation.SkriningGizi{}, err
 	}
 
