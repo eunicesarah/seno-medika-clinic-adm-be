@@ -5,29 +5,27 @@ import (
 	"github.com/asaskevich/govalidator"
 )
 
-func ValidationEmail(email string, err chan error) {
+func ValidationEmail(email string, errorChan chan error) {
 	if govalidator.IsNull(email) {
-		err <- errors.New("email is null")
+		errorChan <- errors.New("Email is null")
 		return
 	}
 
 	if !govalidator.IsEmail(email) {
-		err <- errors.New("Email isn't valid")
+		errorChan <- errors.New("Email isn't valid")
 		return
 	}
 
 	return
 }
 
-func ValidationPassword(password string, err chan error) {
+func ValidationPassword(password string, errorChan chan error) {
 	if govalidator.IsNull(password) {
-		err <- errors.New("password is null")
-		return
+		errorChan <- errors.New("password is null")
 	}
 
 	if len(password) <= 6 {
-		err <- errors.New("Password isn't valid")
-		return
+		errorChan <- errors.New("Password isn't valid")
 	}
 	return
 }

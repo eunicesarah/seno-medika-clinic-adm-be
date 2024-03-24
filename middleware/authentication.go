@@ -3,7 +3,7 @@ package middleware
 import (
 	"fmt"
 	"net/http"
-	"os"
+	"seno-medika.com/config/variable"
 	"time"
 
 	"github.com/gin-gonic/gin"
@@ -23,7 +23,7 @@ func Authentication(r *gin.Context) {
 		if _, ok := token.Method.(*jwt.SigningMethodHMAC); !ok {
 			return nil, fmt.Errorf("unexpected signing method: %v", token.Header["alg"])
 		}
-		return []byte(os.Getenv("JWT SECRET")), nil
+		return []byte(variable.JWTSecret), nil
 	})
 
 	if claims, ok := token.Claims.(jwt.MapClaims); ok && token.Valid {

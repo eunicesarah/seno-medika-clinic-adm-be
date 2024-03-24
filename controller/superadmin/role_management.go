@@ -12,10 +12,12 @@ import (
 	"seno-medika.com/model/person"
 	"seno-medika.com/service/superadmin"
 	"strconv"
+	"sync"
 )
 
 func AddUser(c *gin.Context) {
 	var userInput person.User
+	var wg sync.WaitGroup
 
 	if err := c.ShouldBind(&userInput); err != nil {
 		c.JSON(http.StatusBadRequest, common.Response{
@@ -27,15 +29,27 @@ func AddUser(c *gin.Context) {
 		return
 	}
 
-	var errChan = make(chan error)
+	errChan := make(chan error, 3)
+	wg.Add(3)
+	go func() {
+		defer wg.Done()
+		helper.ValidationEmail(userInput.Email, errChan)
+	}()
+	go func() {
+		defer wg.Done()
+		helper.IsEmailExists(userInput.Email, errChan)
+	}()
+	go func() {
+		defer wg.Done()
+		helper.ValidationPassword(userInput.Password, errChan)
+	}()
+	wg.Wait()
 
-	go helper.ValidationEmail(userInput.Email, errChan)
-	go helper.ValidationPassword(userInput.Password, errChan)
-	go helper.IsEmailExists(userInput.Email, errChan)
+	close(errChan)
 
-	if <-errChan != nil {
+	if err := <-errChan; err != nil {
 		c.JSON(http.StatusBadRequest, common.Response{
-			Message:    "Bad Request",
+			Message:    err.Error(),
 			Status:     "Bad Request",
 			StatusCode: http.StatusBadRequest,
 			Data:       nil,
