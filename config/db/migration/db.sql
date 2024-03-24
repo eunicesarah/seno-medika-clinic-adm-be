@@ -147,7 +147,7 @@ CREATE TABLE public.riwayat_penyakit (
 CREATE TABLE public.skrining_awal (
                                 skrin_awal_id SERIAL NOT NULL,
                                 disabilitas boolean NOT NULL,
-                                ambulansi boolean NOT NULL,
+                                ambulansi character varying(100) NOT NULL,
                                 hambatan_komunikasi boolean NOT NULL,
                                 jalan_tidak_seimbang boolean NOT NULL,
                                 jalan_alat_bantu boolean NOT NULL,
@@ -155,6 +155,7 @@ CREATE TABLE public.skrining_awal (
                                 hasil_cara_jalan character varying(50) NOT NULL,
                                 skala_nyeri integer NOT NULL,
                                 nyeri_berulang character varying(100) NOT NULL
+                                sifat_nyeri character varying(100) NOT NULL,
 );
 
 CREATE TABLE public.skrining_gizi (
