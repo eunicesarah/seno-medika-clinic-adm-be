@@ -117,3 +117,32 @@ func TestChangeStatusByInstalasi_Success(t *testing.T) {
 // 	}
 // }
 
+func TestChangeStatusAntrianById_Fail(t *testing.T) {
+	// Simulate DB error by closing the connection
+	db.DB.Close()
+
+	err := ChangeStatusAntrianById(2, true)
+	if err == nil {
+		t.Errorf("Expected error, got nil")
+	}
+}
+
+func TestChangeStatusByPoli_Fail(t *testing.T) {
+	// Simulate DB error by closing the connection
+	db.DB.Close()
+
+	err := ChangeStatusByPoli("test", true)
+	if err == nil {
+		t.Errorf("Expected error, got nil")
+	}
+}
+
+func TestChangeStatusByInstalasi_Fail(t *testing.T) {
+	// Simulate DB error by closing the connection
+	db.DB.Close()
+
+	err := ChangeStatusByInstalasi("test", true)
+	if err == nil {
+		t.Errorf("Expected error, got nil")
+	}
+}
