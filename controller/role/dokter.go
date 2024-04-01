@@ -140,34 +140,9 @@ func AddDokter(c *gin.Context) {
 		return
 	}
 
-	errChan = make(chan error, 2)
-
-	wg.Add(2)
-	go func() {
-		defer wg.Done()
-		if _, err = db.DB.Query(
-			"INSERT INTO dokter(dokter_id, jaga_poli_mana, jadwal_jaga, nomor_lisensi) VALUES ($1,$2,$3,$4)",
-			dokterId, dokterVar.DokterData.JagaPoliMana, dokterVar.DokterData.JadwalJaga, dokterVar.DokterData.NomorLisensi); err != nil {
-			errChan <- err
-			return
-		}
-	}()
-
-	go func() {
-		defer wg.Done()
-		for _, value := range dokterVar.DokterData.ListJadwalDokter {
-			if _, err := db.DB.Query(
-				"INSERT INTO list_jadwal_dokter(dokter_id, hari, shift) VALUES ($1,$2,$3)",
-				dokterId, value.Hari, value.Shift); err != nil {
-				errChan <- err
-				return
-			}
-		}
-	}()
-
-	wg.Wait()
-	close(errChan)
-	if err = <-errChan; err != nil {
+	if _, err = db.DB.Query(
+		"INSERT INTO dokter(dokter_id, jaga_poli_mana, jadwal_jaga, nomor_lisensi) VALUES ($1,$2,$3,$4)",
+		dokterId, dokterVar.DokterData.JagaPoliMana, dokterVar.DokterData.JadwalJaga, dokterVar.DokterData.NomorLisensi); err != nil {
 		c.JSON(http.StatusInternalServerError, common.Response{
 			Message:    err.Error(),
 			Status:     "Internal Server Error",
@@ -175,6 +150,20 @@ func AddDokter(c *gin.Context) {
 			Data:       nil,
 		})
 		return
+	}
+
+	for _, value := range dokterVar.DokterData.ListJadwalDokter {
+		if _, err := db.DB.Query(
+			"INSERT INTO list_jadwal_dokter(dokter_id, hari, shift) VALUES ($1,$2,$3)",
+			dokterId, value.Hari, value.Shift); err != nil {
+			c.JSON(http.StatusInternalServerError, common.Response{
+				Message:    err.Error(),
+				Status:     "Internal Server Error",
+				StatusCode: http.StatusInternalServerError,
+				Data:       nil,
+			})
+			return
+		}
 	}
 
 	c.JSON(http.StatusCreated, common.Response{

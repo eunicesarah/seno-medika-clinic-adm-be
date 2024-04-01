@@ -154,8 +154,8 @@ CREATE TABLE public.skrining_awal (
                                 menopang_saat_duduk boolean NOT NULL,
                                 hasil_cara_jalan character varying(50) NOT NULL,
                                 skala_nyeri integer NOT NULL,
-                                nyeri_berulang character varying(100) NOT NULL
-                                sifat_nyeri character varying(100) NOT NULL,
+                                nyeri_berulang character varying(100) NOT NULL,
+                                sifat_nyeri character varying(100) NOT NULL
 );
 
 CREATE TABLE public.skrining_gizi (
@@ -163,7 +163,7 @@ CREATE TABLE public.skrining_gizi (
                                 penurunan_bb integer NOT NULL,
                                 tdk_nafsu_makan boolean NOT NULL,
                                 diagnosis_khusus boolean NOT NULL,
-                                nama_penyakit character varying(100),
+                                nama_penyakit character varying(100)
 );
 
 CREATE TABLE public.ttv (

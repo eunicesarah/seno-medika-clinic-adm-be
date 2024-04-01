@@ -42,7 +42,7 @@ func FindAllSkriningGizi() ([]nursestation.SkriningGizi, error) {
 
 	for rows.Next() {
 		var skriningGiziVar nursestation.SkriningGizi
-		if err := rows.Scan(&skriningGiziVar.SkriningGiziID, &skriningGiziVar.PenurunanBB, &skriningGiziVar.TdkNafsuMakan, &skriningGiziVar.DiagnosisKhusus, &skriningGiziVar.NamaPenyakit, &skriningGiziVar.SkalaNyeri, &skriningGiziVar.NyeriBerulang, &skriningGiziVar.SifatNyeri); err != nil {
+		if err := rows.Scan(&skriningGiziVar.SkriningGiziID, &skriningGiziVar.PenurunanBB, &skriningGiziVar.TdkNafsuMakan, &skriningGiziVar.DiagnosisKhusus, &skriningGiziVar.NamaPenyakit); err != nil {
 			return nil, err
 		}
 		skriningGizi = append(skriningGizi, skriningGiziVar)
@@ -53,7 +53,7 @@ func FindAllSkriningGizi() ([]nursestation.SkriningGizi, error) {
 
 func FindSkriningGiziById(id string) (nursestation.SkriningGizi, error) {
 	var skriningGiziVar nursestation.SkriningGizi
-	if err := db.DB.QueryRow("SELECT * FROM skrining_gizi WHERE skrin_gizi_id = $1", id).Scan(&skriningGiziVar.SkriningGiziID, &skriningGiziVar.PenurunanBB, &skriningGiziVar.TdkNafsuMakan, &skriningGiziVar.DiagnosisKhusus, &skriningGiziVar.NamaPenyakit, &skriningGiziVar.SkalaNyeri, &skriningGiziVar.NyeriBerulang, &skriningGiziVar.SifatNyeri); err != nil {
+	if err := db.DB.QueryRow("SELECT * FROM skrining_gizi WHERE skrin_gizi_id = $1", id).Scan(&skriningGiziVar.SkriningGiziID, &skriningGiziVar.PenurunanBB, &skriningGiziVar.TdkNafsuMakan, &skriningGiziVar.DiagnosisKhusus, &skriningGiziVar.NamaPenyakit); err != nil {
 		return nursestation.SkriningGizi{}, err
 	}
 

@@ -22,6 +22,7 @@ type SkriningAwal struct {
 	HasilCaraJalan     string `json:"hasil_cara_jalan"`
 	SkalaNyeri         int    `json:"skala_nyeri"`
 	NyeriBerulang      string `json:"nyeri_berulang"`
+	SifatNyeri		   string `json:"sifat_nyeri"`
 }
 
 type SkriningGizi struct {
@@ -30,9 +31,6 @@ type SkriningGizi struct {
 	TdkNafsuMakan   bool   `json:"tdk_nafsu_makan"`
 	DiagnosisKhusus bool   `json:"diagnosis_khusus"`
 	NamaPenyakit    string `json:"nama_penyakit"`
-	SkalaNyeri      int    `json:"skala_nyeri"`
-	NyeriBerulang   string `json:"nyeri_berulang"`
-	SifatNyeri      string `json:"sifat_nyeri"`
 }
 
 type TTV struct {
@@ -60,3 +58,4 @@ type RiwayatPenyakit struct {
 	RPD               string `json:"rpd"`
 	RPK               string `json:"rpk"`
 }
+

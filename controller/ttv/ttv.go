@@ -37,8 +37,8 @@ func AddTTV(c *gin.Context) {
 
 	go func() {
 		defer wg.Done()
-		if err := db.DB.QueryRow("INSERT INTO skrining_awal(disabilitas, ambulansi, hambatan_komunikasi, jalan_tidak_seimbang, jalan_alat_bantu, menopang_saat_duduk, hasil_cara_jalan, skala_nyeri, nyeri_berulang) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9) RETURNING skrin_awal_id",
-			ttvVar.SkriningAwal.Disabilitas, ttvVar.SkriningAwal.Ambulansi, ttvVar.SkriningAwal.HambatanKomunikasi, ttvVar.SkriningAwal.JalanTidakSeimbang, ttvVar.SkriningAwal.JalanAlatBantu, ttvVar.SkriningAwal.MenopangSaatDuduk, ttvVar.SkriningAwal.HasilCaraJalan, ttvVar.SkriningAwal.SkalaNyeri, ttvVar.SkriningAwal.NyeriBerulang).Scan(&skrinAwalId); err != nil {
+		if err := db.DB.QueryRow("INSERT INTO skrining_awal(disabilitas, ambulansi, hambatan_komunikasi, jalan_tidak_seimbang, jalan_alat_bantu, menopang_saat_duduk, hasil_cara_jalan, skala_nyeri, nyeri_berulang, sifat_nyeri) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10) RETURNING skrin_awal_id",
+			ttvVar.SkriningAwal.Disabilitas, ttvVar.SkriningAwal.Ambulansi, ttvVar.SkriningAwal.HambatanKomunikasi, ttvVar.SkriningAwal.JalanTidakSeimbang, ttvVar.SkriningAwal.JalanAlatBantu, ttvVar.SkriningAwal.MenopangSaatDuduk, ttvVar.SkriningAwal.HasilCaraJalan, ttvVar.SkriningAwal.SkalaNyeri, ttvVar.SkriningAwal.NyeriBerulang, ttvVar.SkriningAwal.SifatNyeri).Scan(&skrinAwalId); err != nil {
 			errChan <- err
 			return
 		}
@@ -46,8 +46,8 @@ func AddTTV(c *gin.Context) {
 
 	go func() {
 		defer wg.Done()
-		if err := db.DB.QueryRow("INSERT INTO skrining_gizi(penurunan_bb, tdk_nafsu_makan, diagnosis_khusus, nama_penyakit, skala_nyeri, nyeri_berulang, sifat_nyeri) VALUES ($1, $2, $3, $4, $5, $6, $7) RETURNING skrin_gizi_id",
-			ttvVar.SkriningGizi.PenurunanBB, ttvVar.SkriningGizi.TdkNafsuMakan, ttvVar.SkriningGizi.DiagnosisKhusus, ttvVar.SkriningGizi.NamaPenyakit, ttvVar.SkriningGizi.SkalaNyeri, ttvVar.SkriningGizi.NyeriBerulang, ttvVar.SkriningGizi.SifatNyeri).Scan(&skrinGiziId); err != nil {
+		if err := db.DB.QueryRow("INSERT INTO skrining_gizi(penurunan_bb, tdk_nafsu_makan, diagnosis_khusus, nama_penyakit) VALUES ($1, $2, $3, $4) RETURNING skrin_gizi_id",
+			ttvVar.SkriningGizi.PenurunanBB, ttvVar.SkriningGizi.TdkNafsuMakan, ttvVar.SkriningGizi.DiagnosisKhusus, ttvVar.SkriningGizi.NamaPenyakit).Scan(&skrinGiziId); err != nil {
 			errChan <- err
 			return
 		}
