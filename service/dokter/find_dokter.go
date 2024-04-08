@@ -126,3 +126,6 @@ func FindDokterByID(id string) (person.Dokter, error) {
 
 	return dokter, nil
 }
+
+
+
