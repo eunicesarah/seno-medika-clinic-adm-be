@@ -125,7 +125,7 @@ CREATE TABLE public.perawat (
 CREATE TABLE public.rekam_medis (
                                 rekam_medis_id SERIAL NOT NULL,
                                 pasien_id SERIAL NOT NULL,
-                                no_erm character varying(50) NOT NULL,
+                                no_erm character varying(255) NOT NULL,
                                 resep_id SERIAL NOT NULL,
                                 resume character varying(50) NOT NULL,
                                 created_at character varying(225) NOT NULL,
@@ -187,14 +187,14 @@ CREATE TABLE public.ttv (
 
 CREATE TABLE public.list_cppt (
                                 pasien_id integer NOT NULL,
-                                no_erm integer NOT NULL,
+                                no_erm character varying(255) NOT NULL,
                                 cppt_id integer NOT NULL
 );
 
 CREATE TABLE public.cppt (
                                 cppt_id SERIAL NOT NULL,
                                 unit character varying(100) NOT NULL,
-                                tanggal datetime NOT NULL,
+                                tanggal date NOT NULL,
                                 objektif character varying(255) NOT NULL,
                                 assessment character varying(255) NOT NULL,
                                 penatalaksanaan character varying(255) NOT NULL
@@ -231,7 +231,7 @@ CREATE TABLE public.list_riwayat_pemeriksaan (
 
 CREATE TABLE public.riwayat_pemeriksaan (
                                 riwayat_pemeriksaan_id SERIAL NOT NULL,
-                                tanggal datetime NOT NULL,
+                                tanggal date NOT NULL,
                                 pemeriksaan character varying(255),
                                 keterangan character varying(255)
 );
