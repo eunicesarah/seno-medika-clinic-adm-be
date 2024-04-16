@@ -107,7 +107,8 @@ CREATE TABLE public.nota (
                                 pasien_id SERIAL NOT NULL,
                                 dokter_id SERIAL NOT NULL,
                                 resep_id SERIAL NOT NULL,
-                                total_biaya integer NOT NULL
+                                total_biaya integer NOT NULL,
+                                metode_pembayaran character varying(50) NOT NULL
 );
 
 CREATE TABLE public.obat (

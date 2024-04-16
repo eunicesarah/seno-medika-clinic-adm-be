@@ -6,4 +6,5 @@ type Nota struct {
 	DokterID   int `json:"dokter_id"`
 	ResepID    int `json:"resep_id"`
 	TotalBiaya int `json:"total_biaya"`
+	MetodePembayaran string `json:"metode_pembayaran"`
 }
