@@ -107,6 +107,7 @@ CREATE TABLE public.nota (
                                 pasien_id SERIAL NOT NULL,
                                 dokter_id SERIAL NOT NULL,
                                 resep_id SERIAL NOT NULL,
+                                list_tindakan_id integer NOT NULL,
                                 total_biaya integer NOT NULL,
                                 metode_pembayaran character varying(50) NOT NULL
 );
@@ -261,6 +262,23 @@ CREATE TABLE public.diagnosa (
                                 jenis character varying(255) NOT NULL,
                                 kasus character varying(255) NOT NULL,
                                 status_diagnosis character varying(255) NOT NULL
+);
+
+CREATE TABLE public.list_tindakan (
+                                list_tindakan_id SERIAL NOT NULL,
+                                tindakan_id integer NOT NULL
+);
+
+CREATE TABLE public.tindakan (
+                                tindakan_id SERIAL NOT NULL,
+                                nama_tindakan character varying(500) NOT NULL,
+                                deskripsi character varying(500),
+                                harga_tindakan integer NOT NULL
+);
+
+CREATE TABLE public.penanganan (
+                                tindakan_id integer NOT NULL,
+                                list_tindakan_id integer NOT NULL
 );
 
 ALTER TABLE ONLY public.antrian
@@ -439,3 +457,18 @@ ALTER TABLE ONLY public.list_riwayat_pemeriksaan
 
 ALTER TABLE ONLY public.list_riwayat_pemeriksaan
     ADD CONSTRAINT list_riwayat_pemeriksaan_pasien_id_fkey FOREIGN KEY (pasien_id) REFERENCES public.pasien(pasien_id) ON UPDATE CASCADE ON DELETE CASCADE;
+
+ALTER TABLE ONLY public.nota
+    ADD CONSTRAINT nota_list_tindakan_id_fkey FOREIGN KEY (list_tindakan_id) REFERENCES public.list_tindakan(list_tindakan_id) ON UPDATE CASCADE ON DELETE CASCADE;
+
+ALTER TABLE ONLY public.list_tindakan
+    ADD CONSTRAINT list_tindakan_tindakan_id_fkey FOREIGN KEY (tindakan_id) REFERENCES public.tindakan(tindakan_id) ON UPDATE CASCADE ON DELETE CASCADE;
+
+ALTER TABLE ONLY public.tindakan
+    ADD CONSTRAINT tindakan_tindakan_id_pkey PRIMARY KEY (tindakan_id);
+
+ALTER TABLE ONLY public.penanganan
+    ADD CONSTRAINT penanganan_tindakan_id_fkey FOREIGN KEY (tindakan_id) REFERENCES public.tindakan(tindakan_id) ON UPDATE CASCADE ON DELETE CASCADE;
+
+ALTER TABLE ONLY public.penanganan
+    ADD CONSTRAINT penanganan_list_tindakan_id_fkey FOREIGN KEY (list_tindakan_id) REFERENCES public.list_tindakan(list_tindakan_id) ON UPDATE CASCADE ON DELETE CASCADE;
