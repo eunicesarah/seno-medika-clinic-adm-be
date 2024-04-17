@@ -17,9 +17,10 @@ func ChangeSkriningAwalById(id string, skriningAwal nursestation.SkriningAwal) e
 	           menopang_saat_duduk = $6,
 	           hasil_cara_jalan = $7,
 	           skala_nyeri = $8,
-	           nyeri_berulang = $9
-	           WHERE skrin_awal_id = $10`,
-		skriningAwal.Disabilitas, skriningAwal.Ambulansi, skriningAwal.HambatanKomunikasi, skriningAwal.JalanTidakSeimbang, skriningAwal.JalanAlatBantu, skriningAwal.MenopangSaatDuduk, skriningAwal.HasilCaraJalan, skriningAwal.SkalaNyeri, skriningAwal.NyeriBerulang, id)
+	           nyeri_berulang = $9,
+			   sifat_nyeri = $10
+	           WHERE skrin_awal_id = $11`,
+		skriningAwal.Disabilitas, skriningAwal.Ambulansi, skriningAwal.HambatanKomunikasi, skriningAwal.JalanTidakSeimbang, skriningAwal.JalanAlatBantu, skriningAwal.MenopangSaatDuduk, skriningAwal.HasilCaraJalan, skriningAwal.SkalaNyeri, skriningAwal.NyeriBerulang, skriningAwal.SifatNyeri, id)
 	if err != nil {
 		return err
 	}
@@ -38,11 +39,8 @@ func ChangeSkriningGiziById(id string, skriningGizi nursestation.SkriningGizi) e
 	           tdk_nafsu_makan = $2,
 	           diagnosis_khusus = $3,
 	           nama_penyakit = $4,
-	           skala_nyeri = $5,
-	           nyeri_berulang = $6,
-	           sifat_nyeri = $7
-	           WHERE skrin_gizi_id = $8`,
-		skriningGizi.PenurunanBB, skriningGizi.TdkNafsuMakan, skriningGizi.DiagnosisKhusus, skriningGizi.NamaPenyakit, skriningGizi.SkalaNyeri, skriningGizi.NyeriBerulang, skriningGizi.SifatNyeri, id)
+	           WHERE skrin_gizi_id = $5`,
+		skriningGizi.PenurunanBB, skriningGizi.TdkNafsuMakan, skriningGizi.DiagnosisKhusus, skriningGizi.NamaPenyakit, id)
 	if err != nil {
 		return err
 	}

@@ -3,6 +3,7 @@ package antrian
 import (
 	"github.com/gin-gonic/gin"
 	"seno-medika.com/controller/antrian"
+	
 )
 
 func AntrianRouter(r *gin.Engine) {

@@ -10,6 +10,7 @@ import (
 	"seno-medika.com/model/antrian"
 	"seno-medika.com/model/common"
 	antrian2 "seno-medika.com/service/antrian"
+	antrian3 "seno-medika.com/service/nurse"
 )
 
 func AddAntrian(c *gin.Context) {
@@ -127,7 +128,7 @@ func GetAntrian(c *gin.Context) {
 	var target = c.Query("target")
 	var findBy = c.Query("find_by")
 
-	if findBy == "id" {
+	if (findBy == "id") {
 		val, err := strconv.Atoi(target)
 		if err != nil {
 			c.JSON(http.StatusBadRequest, common.Response{
@@ -157,6 +158,127 @@ func GetAntrian(c *gin.Context) {
 		})
 		return
 	}
+
+	if (findBy == "doktername") {
+		data, err := antrian3.FindAntrianByDoctorName(target)
+
+		
+		if err != nil {
+			c.JSON(http.StatusInternalServerError, common.Response{
+				Message:    err.Error(),
+				Status:     "Internal Server Error",
+				StatusCode: http.StatusInternalServerError,
+				Data:       nil,
+			})
+			return
+		}
+
+		c.JSON(http.StatusOK, common.Response{
+			Message:    "Successfully get antrian",
+			Status:     "ok",
+			StatusCode: http.StatusOK,
+			Data:       data,
+		})
+		return
+	}
+
+	if (findBy == "dokterpoli") {
+		data, err := antrian3.FindAntrianByDoctorPoli(target)
+		if err != nil {
+			c.JSON(http.StatusInternalServerError, common.Response{
+				Message:    err.Error(),
+				Status:     "Internal Server Error",
+				StatusCode: http.StatusInternalServerError,
+				Data:       nil,
+			})
+			return
+		}
+
+		c.JSON(http.StatusOK, common.Response{
+			Message:    "Successfully get antrian",
+			Status:     "ok",
+			StatusCode: http.StatusOK,
+			Data:       data,
+		})
+		return
+	}
+
+	if (findBy == "poli") {
+		data, err := antrian3.FindAntrianByPoli(target)
+		if err != nil {
+			c.JSON(http.StatusInternalServerError, common.Response{
+				Message:    err.Error(),
+				Status:     "Internal Server Error",
+				StatusCode: http.StatusInternalServerError,
+				Data:       nil,
+			})
+			return
+		}
+
+		c.JSON(http.StatusOK, common.Response{
+			Message:    "Successfully get antrian",
+			Status:     "ok",
+			StatusCode: http.StatusOK,
+			Data:       data,
+		})
+		return
+	}
+
+	if (findBy == "shift") {
+		val, err := strconv.Atoi(target)
+		if err != nil {
+			c.JSON(http.StatusBadRequest, common.Response{
+				Message:    "Invalid target",
+				Status:     "Bad Request",
+				StatusCode: http.StatusBadRequest,
+				Data:       nil,
+			})
+			return
+		}
+		
+		data, err := antrian3.FindAntrianByDoctorShift(val)
+
+		if err != nil {
+			c.JSON(http.StatusInternalServerError, common.Response{
+				Message:    err.Error(),
+				Status:     "Internal Server Error",
+				StatusCode: http.StatusInternalServerError,
+				Data:       nil,
+			})
+			return
+		}
+
+		c.JSON(http.StatusOK, common.Response{
+			Message:    "Successfully get antrian",
+			Status:     "ok",
+			StatusCode: http.StatusOK,
+			Data:       data,
+		})
+		return
+	}
+
+	// if (findBy == "day") {
+	// 	data, err := antrian3.FindAntrianToday()
+
+		
+	// 	if err != nil {
+	// 		c.JSON(http.StatusInternalServerError, common.Response{
+	// 			Message:    err.Error(),
+	// 			Status:     "Internal Server Error",
+	// 			StatusCode: http.StatusInternalServerError,
+	// 			Data:       nil,
+	// 		})
+	// 		return
+	// 	}
+
+	// 	c.JSON(http.StatusOK, common.Response{
+	// 		Message:    "Successfully get antrian",
+	// 		Status:     "ok",
+	// 		StatusCode: http.StatusOK,
+	// 		Data:       data,
+	// 	})
+	// 	return
+	// }
 
 	antrianList, err := antrian2.FindAntrianAll()
 
