@@ -13,3 +13,8 @@ type ListObat struct {
 	Jumlah  int    `json:"jumlah"`
 	Dosis   string `json:"dosis"`
 }
+
+type DetailObat struct {
+	Obat     Obat
+	ListObat ListObat
+}
