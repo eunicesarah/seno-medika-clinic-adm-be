@@ -252,267 +252,48 @@ func DeleteTTV(c *gin.Context) {
 
 func FindTTV(c *gin.Context) {
 	findBy := c.Query("find_by")
-	findType := c.Query("find_type")
 	target := c.Query("target")
 
-	switch findType {
-	case "skrining_awal":
-		switch findBy {
-		case "id":
-			skriningAwal, err := ttv.FindSkriningAwalById(target)
-			if err != nil {
-				c.JSON(http.StatusInternalServerError, common.Response{
-					Message:    err.Error(),
-					Status:     "Internal Server Error",
-					StatusCode: http.StatusInternalServerError,
-					Data:       nil,
-				})
-				return
-			}
-			c.JSON(http.StatusOK, common.Response{
-				Message:    "Successfully found skrining_awal",
-				Status:     "ok",
-				StatusCode: http.StatusOK,
-				Data:       skriningAwal,
-			})
-			return
-
-		default:
-			skriningAwal, err := ttv.FindAllSkriningAwal()
-			if err != nil {
-				c.JSON(http.StatusInternalServerError, common.Response{
-					Message:    err.Error(),
-					Status:     "Internal Server Error",
-					StatusCode: http.StatusInternalServerError,
-					Data:       nil,
-				})
-				return
-			}
-
-			c.JSON(http.StatusOK, common.Response{
-				Message:    "Successfully found skrining_awal",
-				Status:     "ok",
-				StatusCode: http.StatusOK,
-				Data:       skriningAwal,
+	switch findBy {
+	case "id":
+		ttvVar, err := ttv.FindNurseStationById(target)
+		if err != nil {
+			c.JSON(http.StatusInternalServerError, common.Response{
+				Message:    err.Error(),
+				Status:     "Internal Server Error",
+				StatusCode: http.StatusInternalServerError,
+				Data:       nil,
 			})
 			return
 		}
 
-	case "skrining_gizi":
-		switch findBy {
-		case "id":
-			skriningGizi, err := ttv.FindSkriningGiziById(target)
-			if err != nil {
-				c.JSON(http.StatusInternalServerError, common.Response{
-					Message:    err.Error(),
-					Status:     "Internal Server Error",
-					StatusCode: http.StatusInternalServerError,
-					Data:       nil,
-				})
-				return
-			}
-			c.JSON(http.StatusOK, common.Response{
-				Message:    "Successfully found skrining_gizi",
-				Status:     "ok",
-				StatusCode: http.StatusOK,
-				Data:       skriningGizi,
-			})
-			return
+		c.JSON(http.StatusOK, common.Response{
+			Message:    "Successfully get ttv",
+			Status:     "ok",
+			StatusCode: http.StatusOK,
+			Data:       ttvVar,
+		})
+		return
 
-		default:
-			skriningGizi, err := ttv.FindAllSkriningGizi()
-			if err != nil {
-				c.JSON(http.StatusInternalServerError, common.Response{
-					Message:    err.Error(),
-					Status:     "Internal Server Error",
-					StatusCode: http.StatusInternalServerError,
-					Data:       nil,
-				})
-				return
-			}
-
-			c.JSON(http.StatusOK, common.Response{
-				Message:    "Successfully found skrining_gizi",
-				Status:     "ok",
-				StatusCode: http.StatusOK,
-				Data:       skriningGizi,
+	default:
+		ttvVars, err := ttv.FindAllNurseStation()
+		if err != nil {
+			c.JSON(http.StatusInternalServerError, common.Response{
+				Message:    err.Error(),
+				Status:     "Internal Server Error",
+				StatusCode: http.StatusInternalServerError,
+				Data:       nil,
 			})
 			return
 		}
 
-	case "ttv":
-		switch findBy {
-		case "id":
-			ttv, err := ttv.FindTTVById(target)
-			if err != nil {
-				c.JSON(http.StatusInternalServerError, common.Response{
-					Message:    err.Error(),
-					Status:     "Internal Server Error",
-					StatusCode: http.StatusInternalServerError,
-					Data:       nil,
-				})
-				return
-			}
-
-			c.JSON(http.StatusOK, common.Response{
-				Message:    "Successfully found ttv",
-				Status:     "ok",
-				StatusCode: http.StatusOK,
-				Data:       ttv,
-			})
-			return
-
-		default:
-			ttv, err := ttv.FindAllTTV()
-			if err != nil {
-				c.JSON(http.StatusInternalServerError, common.Response{
-					Message:    err.Error(),
-					Status:     "Internal Server Error",
-					StatusCode: http.StatusInternalServerError,
-					Data:       nil,
-				})
-				return
-			}
-
-			c.JSON(http.StatusOK, common.Response{
-				Message:    "Successfully found ttv",
-				Status:     "ok",
-				StatusCode: http.StatusOK,
-				Data:       ttv,
-			})
-			return
-		}
-
-	case "alergi":
-		switch findBy {
-		case "id":
-			alergi, err := ttv.FindAlergiById(target)
-			if err != nil {
-				c.JSON(http.StatusInternalServerError, common.Response{
-					Message:    err.Error(),
-					Status:     "Internal Server Error",
-					StatusCode: http.StatusInternalServerError,
-					Data:       nil,
-				})
-				return
-			}
-
-			c.JSON(http.StatusOK, common.Response{
-				Message:    "Successfully found alergi",
-				Status:     "ok",
-				StatusCode: http.StatusOK,
-				Data:       alergi,
-			})
-			return
-
-		default:
-			alergi, err := ttv.FindAllAlergi()
-			if err != nil {
-				c.JSON(http.StatusInternalServerError, common.Response{
-					Message:    err.Error(),
-					Status:     "Internal Server Error",
-					StatusCode: http.StatusInternalServerError,
-					Data:       nil,
-				})
-				return
-			}
-
-			c.JSON(http.StatusOK, common.Response{
-				Message:    "Successfully found alergi",
-				Status:     "ok",
-				StatusCode: http.StatusOK,
-				Data:       alergi,
-			})
-			return
-		}
-
-	case "riwayat_penyakit":
-		switch findBy {
-		case "id":
-			riwayatPenyakit, err := ttv.FindRiwayatPenyakitById(target)
-			if err != nil {
-				c.JSON(http.StatusInternalServerError, common.Response{
-					Message:    err.Error(),
-					Status:     "Internal Server Error",
-					StatusCode: http.StatusInternalServerError,
-					Data:       nil,
-				})
-				return
-			}
-
-			c.JSON(http.StatusOK, common.Response{
-				Message:    "Successfully found riwayat_penyakit",
-				Status:     "ok",
-				StatusCode: http.StatusOK,
-				Data:       riwayatPenyakit,
-			})
-			return
-
-		default:
-			riwayatPenyakit, err := ttv.FindAllRiwayatPenyakit()
-			if err != nil {
-				c.JSON(http.StatusInternalServerError, common.Response{
-					Message:    err.Error(),
-					Status:     "Internal Server Error",
-					StatusCode: http.StatusInternalServerError,
-					Data:       nil,
-				})
-				return
-			}
-
-			c.JSON(http.StatusOK, common.Response{
-				Message:    "Successfully found riwayat_penyakit",
-				Status:     "ok",
-				StatusCode: http.StatusOK,
-				Data:       riwayatPenyakit,
-			})
-			return
-		}
-
-	case "anamnesis":
-		switch findBy {
-		case "id":
-			anamnesis, err := ttv.FindAnamnesisById(target)
-			if err != nil {
-				c.JSON(http.StatusInternalServerError, common.Response{
-					Message:    err.Error(),
-					Status:     "Internal Server Error",
-					StatusCode: http.StatusInternalServerError,
-					Data:       nil,
-				})
-				return
-			}
-
-			c.JSON(http.StatusOK, common.Response{
-				Message:    "Successfully found anamnesis",
-				Status:     "ok",
-				StatusCode: http.StatusOK,
-				Data:       anamnesis,
-			})
-			return
-
-		default:
-			anamnesis, err := ttv.FindAllAnamnesis()
-			if err != nil {
-				c.JSON(http.StatusInternalServerError, common.Response{
-					Message:    err.Error(),
-					Status:     "Internal Server Error",
-					StatusCode: http.StatusInternalServerError,
-					Data:       nil,
-				})
-				return
-			}
-
-			c.JSON(http.StatusOK, common.Response{
-				Message:    "Successfully found anamnesis",
-				Status:     "ok",
-				StatusCode: http.StatusOK,
-				Data:       anamnesis,
-			})
-
-			return
-		}
-
+		c.JSON(http.StatusOK, common.Response{
+			Message:    "Successfully get ttv",
+			Status:     "ok",
+			StatusCode: http.StatusOK,
+			Data:       ttvVars,
+		})
+		return
 	}
 }
 
