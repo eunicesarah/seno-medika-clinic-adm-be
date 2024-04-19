@@ -145,7 +145,7 @@ func AddDokter(c *gin.Context) {
 		dokterId, dokterVar.DokterData.JagaPoliMana, dokterVar.DokterData.JadwalJaga, dokterVar.DokterData.NomorLisensi); err != nil {
 		c.JSON(http.StatusInternalServerError, common.Response{
 			Message:    err.Error(),
-			Status:     "Internal Server Error",
+			Status:     "Internal Server Error " + dokterId,
 			StatusCode: http.StatusInternalServerError,
 			Data:       nil,
 		})
