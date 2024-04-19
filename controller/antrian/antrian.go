@@ -396,3 +396,25 @@ func PatchAntrian(c *gin.Context) {
 		}
 	}
 }
+
+func GetAntrianForNurse(c *gin.Context) {
+	data, err := antrian3.ListAntrianNurse()
+
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, common.Response{
+			Message:    err.Error(),
+			Status:     "Internal Server Error",
+			StatusCode: http.StatusInternalServerError,
+			Data:       nil,
+		})
+		return
+	}
+
+	c.JSON(http.StatusOK, common.Response{
+		Message:    "Successfully get antrian",
+		Status:     "ok",
+		StatusCode: http.StatusOK,
+		Data:       data,
+	})
+	return
+}

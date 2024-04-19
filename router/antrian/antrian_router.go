@@ -11,4 +11,5 @@ func AntrianRouter(r *gin.Engine) {
 	r.GET("/antrian", antrian.GetAntrian)
 	r.DELETE("/antrian", antrian.DeleteAntrian)
 	r.PATCH("/antrian", antrian.PatchAntrian)
+	r.GET("/antriannurse", antrian.GetAntrianForNurse)
 }
