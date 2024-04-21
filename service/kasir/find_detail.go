@@ -1,0 +1,39 @@
+package kasir
+
+import (
+	"seno-medika.com/config/db"
+	"seno-medika.com/model/cashierstation"
+	"seno-medika.com/model/pharmacystation"
+)
+
+func FindDetailByResepId(nota_id int) ([]pharmacystation.DetailObat, error) {
+	var details []pharmacystation.DetailObat
+
+	rows, err := db.DB.Query("SELECT o.nama_obat,  o.harga, lo.jumlah, lo.dosis, o.obat_id, o.jenis_asuransi, lo.resep_id, lo.obat_id FROM nota n "+
+		"INNER JOIN list_obat lo ON n.resep_id = lo.resep_id "+
+		"INNER JOIN obat o ON lo.obat_id = o.obat_id "+
+		"WHERE n.nota_id = $1", nota_id)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+
+	for rows.Next() {
+		var detail cashierstation.DetailNota
+		err := rows.Scan(&detail.Obat.NamaObat,  &detail.Obat.Harga, &detail.Jumlah, &detail.Dosis, &detail.Obat.ObatID, &detail.Obat.JenisAsuransi, &detail.ListObat.ResepID, &detail.ListObat.ObatID)
+		if err != nil {
+			return nil, err
+		}
+		obat := pharmacystation.Obat(detail.Obat)
+		listObat := pharmacystation.ListObat(detail.ListObat)
+		listObat.Jumlah = detail.Jumlah
+		listObat.Dosis = detail.Dosis
+		details = append(details, pharmacystation.DetailObat{Obat: obat, ListObat: listObat})
+	}
+
+	if err := rows.Err(); err != nil {
+		return nil, err
+	}
+
+	return details, nil
+}
