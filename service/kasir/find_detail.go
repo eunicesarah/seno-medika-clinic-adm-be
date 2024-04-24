@@ -37,3 +37,31 @@ func FindDetailByResepId(nota_id int) ([]pharmacystation.DetailObat, error) {
 
 	return details, nil
 }
+
+func FindTindakanByNotaId(nota_id int) ([]cashierstation.Tindakan, error) {
+	var tindakans []cashierstation.Tindakan
+
+	rows, err := db.DB.Query("SELECT t.nama_tindakan, t.deskripsi, t.harga_tindakan FROM nota n "+
+		"INNER JOIN list_tindakan lt ON n.list_tindakan_id = lt.list_tindakan_id "+
+		"INNER JOIN tindakan t ON lt.tindakan_id = t.tindakan_id "+
+		"WHERE n.nota_id = $1", nota_id)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+
+	for rows.Next() {
+		var tindakan cashierstation.Tindakan
+		err := rows.Scan(&tindakan.NamaTindakan, &tindakan.Deskripsi, &tindakan.HargaTindakan)
+		if err != nil {
+			return nil, err
+		}
+		tindakans = append(tindakans, tindakan)
+	}
+
+	if err := rows.Err(); err != nil {
+		return nil, err
+	}
+
+	return tindakans, nil
+}

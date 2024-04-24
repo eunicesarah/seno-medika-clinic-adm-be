@@ -14,7 +14,6 @@ type Nota struct {
 
 type ListTindakan struct {
 	ListTindakanID int `json:"list_tindakan_id"`
-	TindakanID     int `json:"tindakan_id"`
 }
 
 type Tindakan struct {
