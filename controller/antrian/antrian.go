@@ -158,6 +158,36 @@ func GetAntrian(c *gin.Context) {
 		})
 		return
 	}
+	if (findBy == "pasienid") {
+		val, err := strconv.Atoi(target)
+		if err != nil {
+			c.JSON(http.StatusBadRequest, common.Response{
+				Message:    "Invalid target",
+				Status:     "Bad Request",
+				StatusCode: http.StatusBadRequest,
+				Data:       nil,
+			})
+			return
+		}
+		data, err := antrian2.FindAntrianByPasienId(val)
+		if err != nil {
+			c.JSON(http.StatusInternalServerError, common.Response{
+				Message:    err.Error(),
+				Status:     "Internal Server Error",
+				StatusCode: http.StatusInternalServerError,
+				Data:       nil,
+			})
+			return
+		}
+
+		c.JSON(http.StatusOK, common.Response{
+			Message:    "Successfully get antrian",
+			Status:     "ok",
+			StatusCode: http.StatusOK,
+			Data:       data,
+		})
+		return
+	}
 
 	if (findBy == "doktername") {
 		data, err := antrian3.FindAntrianByDoctorName(target)
@@ -395,4 +425,26 @@ func PatchAntrian(c *gin.Context) {
 			return
 		}
 	}
+}
+
+func GetAntrianForNurse(c *gin.Context) {
+	data, err := antrian3.ListAntrianNurse()
+
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, common.Response{
+			Message:    err.Error(),
+			Status:     "Internal Server Error",
+			StatusCode: http.StatusInternalServerError,
+			Data:       nil,
+		})
+		return
+	}
+
+	c.JSON(http.StatusOK, common.Response{
+		Message:    "Successfully get antrian",
+		Status:     "ok",
+		StatusCode: http.StatusOK,
+		Data:       data,
+	})
+	return
 }

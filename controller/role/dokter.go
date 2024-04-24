@@ -73,7 +73,7 @@ func AddDokter(c *gin.Context) {
 		return
 	}
 	dokterVar.UserUUID = uuid.New()
-	dokterVar.Role = "Dokter"
+	dokterVar.Role = "dokter"
 
 	errChan := make(chan error, 3)
 	wg.Add(3)

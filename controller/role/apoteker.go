@@ -103,7 +103,7 @@ func AddApoteker(c *gin.Context) {
 	}
 
 	apotekerVar.UserUUID = uuid.New()
-	apotekerVar.Role = "Apoteker"
+	apotekerVar.Role = "apoteker"
 	pass, err := bcrypt.GenerateFromPassword([]byte(apotekerVar.Password), bcrypt.DefaultCost)
 	if err != nil {
 		c.JSON(http.StatusBadRequest, common.Response{

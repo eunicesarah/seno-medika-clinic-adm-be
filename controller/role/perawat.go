@@ -102,7 +102,7 @@ func AddPerawat(c *gin.Context) {
 	}
 
 	perawatVar.UserUUID = uuid.New()
-	perawatVar.Role = "Perawat"
+	perawatVar.Role = "perawat"
 	pass, err := bcrypt.GenerateFromPassword([]byte(perawatVar.Password), bcrypt.DefaultCost)
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, common.Response{
