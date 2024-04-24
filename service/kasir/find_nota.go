@@ -13,6 +13,7 @@ func FindNotaById(id int) (cashierstation.Nota, error) {
 		&notaVar.PasienID,
 		&notaVar.DokterID,
 		&notaVar.ResepID,
+		&notaVar.ListTindakanID,
 		&notaVar.TotalBiaya,
 		&notaVar.MetodePembayaran,
 	)
@@ -38,6 +39,7 @@ func FindNotaAll() ([]cashierstation.Nota, error) {
 			&eachNota.PasienID,
 			&eachNota.DokterID,
 			&eachNota.ResepID,
+			&eachNota.ListTindakanID,
 			&eachNota.TotalBiaya,
 			&eachNota.MetodePembayaran,
 		)
@@ -65,6 +67,7 @@ func FindNotaByPasienID(id int) ([]cashierstation.Nota, error) {
 			&eachNota.PasienID,
 			&eachNota.DokterID,
 			&eachNota.ResepID,
+			&eachNota.ListTindakanID,
 			&eachNota.TotalBiaya,
 			&eachNota.MetodePembayaran,
 		)
@@ -92,6 +95,7 @@ func FindNotaByResepId(id int) ([]cashierstation.Nota, error) {
 			&eachNota.PasienID,
 			&eachNota.DokterID,
 			&eachNota.ResepID,
+			&eachNota.ListTindakanID,
 			&eachNota.TotalBiaya,
 			&eachNota.MetodePembayaran,
 		)
@@ -119,6 +123,7 @@ func FindNotaByMetodePembayaran(metode_pembayaran string) ([]cashierstation.Nota
 			&eachNota.PasienID,
 			&eachNota.DokterID,
 			&eachNota.ResepID,
+			&eachNota.ListTindakanID,
 			&eachNota.TotalBiaya,
 			&eachNota.MetodePembayaran,
 		)
