@@ -14,6 +14,21 @@ func FindAntrianById(id int) (antrian.Antrian, error) {
 	}
 	return antrianO, nil
 }
+func FindAntrianByPasienId(id int) (antrian.Antrian, error) {
+	var antrianO antrian.Antrian
+	var nik string
+	err := db.DB.QueryRow("SELECT nik FROM pasien WHERE id = $1", id).
+		Scan(nik)
+	if err != nil {
+		return antrian.Antrian{}, err
+	}
+	err = db.DB.QueryRow("SELECT * FROM antrian WHERE nik = $1", nik).
+		Scan(&antrianO.AntrianID, &antrianO.PasienID, &antrianO.NomorAntrian, &antrianO.Status, &antrianO.Poli, &antrianO.Instalasi, &antrianO.CreatedAt)
+	if err != nil {
+		return antrian.Antrian{}, err
+	}
+	return antrianO, nil
+}
 
 func FindAntrianAll() ([]antrian.Antrian, error) {
 	var antrianO []antrian.Antrian
