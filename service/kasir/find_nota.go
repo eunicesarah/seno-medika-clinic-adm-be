@@ -1,6 +1,7 @@
 package kasir
 
 import (
+	"errors"
 	"seno-medika.com/config/db"
 	"seno-medika.com/model/cashierstation"
 )
@@ -8,7 +9,12 @@ import (
 func FindNotaById(id int) (cashierstation.Nota, error) {
 	var notaVar cashierstation.Nota
 
-	err := db.DB.QueryRow("SELECT * FROM nota WHERE nota_id = $1", id).Scan(
+	err := db.DB.QueryRow("SELECT * FROM nota WHERE nota_id = $1", id).Scan(id)
+	if err != nil {
+		return cashierstation.Nota{}, err
+	}
+
+	err = db.DB.QueryRow("SELECT * FROM nota WHERE nota_id = $1", id).Scan(
 		&notaVar.NotaID,
 		&notaVar.PasienID,
 		&notaVar.DokterID,
@@ -17,6 +23,7 @@ func FindNotaById(id int) (cashierstation.Nota, error) {
 		&notaVar.TotalBiaya,
 		&notaVar.MetodePembayaran,
 	)
+	
 	if err != nil {
 		return cashierstation.Nota{}, err
 	}
@@ -78,6 +85,10 @@ func FindNotaByPasienID(id int) ([]cashierstation.Nota, error) {
 		notaVar = append(notaVar, eachNota)
 	}
 
+	if len(notaVar) == 0 {
+        return nil, errors.New("pasien_id not found")
+    }
+
 	return notaVar, nil
 }
 
@@ -105,6 +116,9 @@ func FindNotaByResepId(id int) ([]cashierstation.Nota, error) {
 		}
 		notaVar = append(notaVar, eachNota)
 	}
+	if len(notaVar) == 0 {
+        return nil, errors.New("resep_id not found")
+    }
 
 	return notaVar, nil
 }
@@ -133,6 +147,9 @@ func FindNotaByMetodePembayaran(metode_pembayaran string) ([]cashierstation.Nota
 		}
 		notaVar = append(notaVar, eachNota)
 	}
+	if len(notaVar) == 0 {
+        return nil, errors.New("metode_pembayaran not found")
+    }
 
 	return notaVar, nil
 }

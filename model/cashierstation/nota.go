@@ -35,3 +35,9 @@ type DetailNota struct {
 	Jumlah               int    `json:"jumlah"`
 	Dosis                string `json:"dosis"`
 }
+
+type DetailTindakan struct {
+	NamaTindakan  string `json:"nama_tindakan"`
+	Deskripsi     string `json:"deskripsi"`
+	HargaTindakan int    `json:"harga_tindakan"`
+}

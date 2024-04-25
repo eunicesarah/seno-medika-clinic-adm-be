@@ -9,5 +9,5 @@ func KasirRouter(r *gin.Engine) {
 	r.POST("/kasir", kasir.AddNota)
 	r.GET("/kasir", kasir.GetNota)
 	// r.DELETE("/kasir", kasir.DeleteKasir)
-	// r.PATCH("/kasir", kasir.PatchKasir)
+	r.PATCH("/kasir", kasir.PatchNota)
 }
