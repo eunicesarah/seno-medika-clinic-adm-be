@@ -95,7 +95,7 @@ func GetNota(c *gin.Context){
 		})
 		return
 
-	case "detail":
+	case "detail_resep":
 		val, _ := strconv.Atoi(target)
 		nota, err := kasir.FindDetailByResepId(val)
 		if err != nil {
@@ -109,6 +109,26 @@ func GetNota(c *gin.Context){
 		}
 		c.JSON(http.StatusOK, common.Response{
 			Message:    "Successfully get detail nota",
+			Status:     "ok",
+			StatusCode: http.StatusOK,
+			Data:       nota,
+		})
+		return
+
+	case "detail_tindakan":
+		val, _ := strconv.Atoi(target)
+		nota, err := kasir.FindTindakanByNotaId(val)
+		if err != nil {
+			c.JSON(http.StatusInternalServerError, common.Response{
+				Message:    err.Error(),
+				Status:     "Internal Server Error",
+				StatusCode: http.StatusInternalServerError,
+				Data:       nil,
+			})
+			return
+		}
+		c.JSON(http.StatusOK, common.Response{
+			Message:    "Successfully get detail tindakan",
 			Status:     "ok",
 			StatusCode: http.StatusOK,
 			Data:       nota,
@@ -149,10 +169,11 @@ func AddNota(c *gin.Context){
 		return
 	}
 
-	_, err := db.DB.Exec(`INSERT INTO nota (pasien_id, dokter_id, resep_id, total_biaya, metode_pembayaran) VALUES ($1, $2, $3, $4, $5)`,
+	_, err := db.DB.Exec(`INSERT INTO nota (pasien_id, dokter_id, resep_id, list_tindakan_id, total_biaya, metode_pembayaran)  VALUES ($1, $2, $3, $4, $5, $6)`,
 		notaVar.PasienID,
 		notaVar.DokterID,
 		notaVar.ResepID,
+		notaVar.ListTindakanID,
 		notaVar.TotalBiaya,
 		notaVar.MetodePembayaran,
 	)
@@ -175,3 +196,79 @@ func AddNota(c *gin.Context){
 	})
 }
 
+func PatchNota(c *gin.Context){
+	changeType := c.Query("change_type")
+	target := c.Query("target")
+	var notaVar cashierstation.Nota
+
+	if err := c.ShouldBindJSON(&notaVar); err != nil {
+		c.JSON(http.StatusBadRequest, common.Response{
+			Message:    err.Error(),
+			Status:     "Bad Request",
+			StatusCode: http.StatusBadRequest,
+			Data:       nil,
+		})
+		return
+	}
+
+	switch changeType {
+	case "metode_pembayaran":
+		val, err := strconv.Atoi(target)
+		if err != nil {
+			c.JSON(http.StatusBadRequest, common.Response{
+				Message:    "Invalid target",
+				Status:     "Bad Request",
+				StatusCode: http.StatusBadRequest,
+				Data:       nil,
+			})
+			return
+		}
+		err = kasir.UpdateMetodePembayaran(val, notaVar.MetodePembayaran)
+		if err != nil {
+			c.JSON(http.StatusInternalServerError, common.Response{
+				Message:    err.Error(),
+				Status:     "Internal Server Error",
+				StatusCode: http.StatusInternalServerError,
+				Data:       nil,
+			})
+			return
+		}
+	case "total_biaya":
+		val, err := strconv.Atoi(target)
+		if err != nil {
+			c.JSON(http.StatusBadRequest, common.Response{
+				Message:    "Invalid target",
+				Status:     "Bad Request",
+				StatusCode: http.StatusBadRequest,
+				Data:       nil,
+			})
+			return
+		}
+
+		err = kasir.UpdateTotalBiaya(val, notaVar.TotalBiaya)
+		if err != nil {
+			c.JSON(http.StatusInternalServerError, common.Response{
+				Message:    err.Error(),
+				Status:     "Internal Server Error",
+				StatusCode: http.StatusInternalServerError,
+				Data:       nil,
+			})
+			return
+		}
+	default:
+		c.JSON(http.StatusBadRequest, common.Response{
+			Message:    "Invalid update by",
+			Status:     "Bad Request",
+			StatusCode: http.StatusBadRequest,
+			Data:       nil,
+		})
+		return
+	}	
+	c.JSON(http.StatusOK, common.Response{
+		Message:    "Successfully update nota",
+		Status:     "ok",
+		StatusCode: http.StatusOK,
+		Data:       nil,
+	})
+	
+}

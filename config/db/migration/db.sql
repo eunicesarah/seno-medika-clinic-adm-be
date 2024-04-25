@@ -265,8 +265,7 @@ CREATE TABLE public.diagnosa (
 );
 
 CREATE TABLE public.list_tindakan (
-                                list_tindakan_id SERIAL NOT NULL,
-                                tindakan_id integer NOT NULL
+                                list_tindakan_id SERIAL NOT NULL
 );
 
 CREATE TABLE public.tindakan (

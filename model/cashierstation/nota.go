@@ -14,7 +14,6 @@ type Nota struct {
 
 type ListTindakan struct {
 	ListTindakanID int `json:"list_tindakan_id"`
-	TindakanID     int `json:"tindakan_id"`
 }
 
 type Tindakan struct {
@@ -35,4 +34,10 @@ type DetailNota struct {
 	Harga                int    `json:"harga"`
 	Jumlah               int    `json:"jumlah"`
 	Dosis                string `json:"dosis"`
+}
+
+type DetailTindakan struct {
+	NamaTindakan  string `json:"nama_tindakan"`
+	Deskripsi     string `json:"deskripsi"`
+	HargaTindakan int    `json:"harga_tindakan"`
 }
