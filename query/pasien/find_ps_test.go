@@ -27,14 +27,14 @@ func TestFindPasienById_Fail(t *testing.T) {
 }
 
 func TestFindPasienById_Success(t *testing.T) {
+	var pasienId int
 	_db := db.DB
 	defer func() {
-		_db.Exec("DELETE FROM pasien WHERE pasien_id = 8911")
+		_db.Exec("DELETE FROM pasien WHERE pasien_id = $1", pasienId)
 		db.DB = _db
 	}()
 
-	_db.Query(`INSERT INTO pasien (
-		pasien_id,
+	if err := _db.QueryRow(`INSERT INTO pasien (
 		no_erm,
 		pasien_uuid,
 		no_rm_lama,
@@ -67,19 +67,19 @@ func TestFindPasienById_Success(t *testing.T) {
 		created_by,
 		updated_at,
 		updated_by
-	   ) VALUES (
-		8911, '123333', $1, '123', '123', 'BPJS', '123', '330102', '124212',
-		'testNama123', 'sumedang', $2, '12345', 'perempuan', 'E', '086123',
-		'123@test.go', 'jawa bali', 'jatinangor', 'sayang', 'cikeruh', 'jalan-jalan no 12', 'jokoTest', '0857123',
-		'dokter','islam	', 'WNA', 'SMA', 'belum-kawin', $3, '123test', $4, '123test'
-	   )
-	   `, uuid.New(), time.Now().Local().Format("2006-02-01"), time.Now().Local().String(), time.Now().Local().String())
+	   ) VALUES ( '123', $1, '123', '123', 'BPJS', '123', '330102', '124212',
+		'testNamadfb123', 'sumedfbdfbdang', $2, '123dfbdfb45', 'perempuan', 'E', '086123',
+		'123@tesst.go', 'jawa bali', 'jatinandfbdfbgor', 'saydfbdfbang', 'cikedfbdfbruh', 'jalan-jaldfbdfban no 12', 'jokoTesdfbdfbt', '0852345237123',
+		'dokter','islam	', 'WNA', 'SMA', 'belum-dfbdfbkawin', $3, '123test', $4, '123test'
+	   ) RETURNING pasien_id
+	   `, uuid.New(), time.Now().Local().Format("2006-01-02"), time.Now().Local().String(), time.Now().Local().String()).Scan(&pasienId); err != nil {
+		t.Error(err)
+		return
+	}
 
-	val, err := FindPasienById(8911)
-	t.Log(val)
+	_, err := FindPasienById(pasienId)
+	t.Log(pasienId)
 	require.NoError(t, err)
-	_db.Exec("DELETE FROM pasien WHERE pasien_id = 8911")
-	db.DB = _db
 }
 
 func TestFindPasienByUuid_Fail(t *testing.T) {
@@ -147,7 +147,7 @@ func TestFindPasienByUuid_Success(t *testing.T) {
 		'123@test.go', 'jawa bali', 'jatinangor', 'sayang', 'cikeruh', 'jalan-jalan no 12', 'jokoTest', '0857123',
 		'dokter','islam	', 'WNA', 'SMA', 'belum-kawin', $3, '123test', $4, '123test'
 	   )
-	   `, uid, time.Now().Local().Format("2006-02-01"), time.Now().Local().String(), time.Now().Local().String())
+	   `, uid, time.Now().Local().Format("2006-01-02"), time.Now().Local().String(), time.Now().Local().String())
 
 	val, err := FindPasienByUuid(uid.String())
 	require.NoError(t, err)
@@ -205,7 +205,7 @@ func TestFindPasienAll_Success(t *testing.T) {
 		'123@test.go', 'jawa bali', 'jatinangor', 'sayang', 'cikeruh', 'jalan-jalan no 12', 'jokoTest', '0857123',
 		'dokter','islam	', 'WNA', 'SMA', 'belum-kawin', $3, '123test', $4, '123test'
 	   )
-	   `, uid, time.Now().Local().Format("2006-02-01"), time.Now().Local().String(), time.Now().Local().String())
+	   `, uid, time.Now().Local().Format("2006-01-02"), time.Now().Local().String(), time.Now().Local().String())
 
 	vals, _ := _db.Exec("SELECT * FROM pasien")
 
@@ -278,7 +278,7 @@ func TestFindPasienByNIK_Sucsess(t *testing.T) {
 	'123@test.go', 'jawa bali', 'jatinangor', 'sayang', 'cikeruh', 'jalan-jalan no 12', 'jokoTest', '0857123',
 	'dokter','islam ', 'WNA', 'SMA', 'belum-kawin', $3, '123test', $4, '123test'
 	)
-	`, uid.String(), time.Now().Local().Format("2006-02-01"), time.Now().Local().String(), time.Now().Local().String())
+	`, uid.String(), time.Now().Local().Format("2006-01-02"), time.Now().Local().String(), time.Now().Local().String())
 
 	val, err := FindPasienByNIK("330102")
 	t.Log(val)

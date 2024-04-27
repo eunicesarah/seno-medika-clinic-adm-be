@@ -1,9 +1,9 @@
 package pasien
 
 import (
+	"errors"
 	"seno-medika.com/config/db"
 	"seno-medika.com/model/person"
-	"errors"
 )
 
 func UpdatePasienByUuid(uid string, pasien person.Pasien) error {

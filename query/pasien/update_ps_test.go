@@ -55,7 +55,7 @@ func TestUpdatePasienById_Success(t *testing.T) {
 		'123@test.go', 'jawa bali', 'jatinangor', 'sayang', 'cikeruh', 'jalan-jalan no 12', 'jokoTest', '0857123',
 		'dokter','islam	', 'WNA', 'SMA', 'belum-kawin', $3, '123test', $4, '123test'
 	   )
-	   `, uuid.New(), time.Now().Local().Format("2006-02-01"), time.Now().Local().String(), time.Now().Local().String())
+	   `, uuid.New(), time.Now().Local().Format("2006-01-02"), time.Now().Local().String(), time.Now().Local().String())
 
 	err := UpdatePasienById(8911, person.Pasien{
 		NoERM:              "31222",
@@ -67,7 +67,7 @@ func TestUpdatePasienById_Success(t *testing.T) {
 		NoKK:               "312645",
 		Nama:               "Joko Doe",
 		TempatLahir:        "Indonesia",
-		TanggalLahir:       time.Now().Local().Format("2006-02-01"),
+		TanggalLahir:       time.Now().Local().Format("2006-01-02"),
 		NoIHS:              "31dd2",
 		JenisKelamin:       "Perempuan",
 		GolonganDarah:      "AB",
@@ -109,7 +109,7 @@ func TestUpdatePasienById_Fail(t *testing.T) {
 		NoKK:               "312645",
 		Nama:               "Joko Doe",
 		TempatLahir:        "Indonesia",
-		TanggalLahir:       time.Now().Local().Format("2006-02-01"),
+		TanggalLahir:       time.Now().Local().Format("2006-01-02"),
 		NoIHS:              "31dd2",
 		JenisKelamin:       "Perempuan",
 		GolonganDarah:      "AB",
@@ -154,7 +154,7 @@ func TestUpdatePasienById_Fail(t *testing.T) {
 		NoKK:               "312645",
 		Nama:               "Joko Doe",
 		TempatLahir:        "Indonesia",
-		TanggalLahir:       time.Now().Local().Format("2006-02-01"),
+		TanggalLahir:       time.Now().Local().Format("2006-01-02"),
 		NoIHS:              "31dd2",
 		JenisKelamin:       "Perempuan",
 		GolonganDarah:      "AB",
@@ -229,7 +229,7 @@ func TestUpdatePasienByUuid_Success(t *testing.T) {
 		'123@test.go', 'jawa bali', 'jatinangor', 'sayang', 'cikeruh', 'jalan-jalan no 12', 'jokoTest', '0857123',
 		'dokter','islam	', 'WNA', 'SMA', 'belum-kawin', $3, '123test', $4, '123test'
 	   )
-	   `, uid.String(), time.Now().Local().Format("2006-02-01"), time.Now().Local().String(), time.Now().Local().String())
+	   `, uid.String(), time.Now().Local().Format("2006-01-02"), time.Now().Local().String(), time.Now().Local().String())
 
 	err := UpdatePasienByUuid(uid.String(), person.Pasien{
 		NoERM:              "31222",
@@ -241,7 +241,7 @@ func TestUpdatePasienByUuid_Success(t *testing.T) {
 		NoKK:               "312645",
 		Nama:               "Joko Doe",
 		TempatLahir:        "Indonesia",
-		TanggalLahir:       time.Now().Local().Format("2006-02-01"),
+		TanggalLahir:       time.Now().Local().Format("2006-01-02"),
 		NoIHS:              "31dd2",
 		JenisKelamin:       "Perempuan",
 		GolonganDarah:      "AB",
@@ -283,7 +283,7 @@ func TestUpdatePasienByUuid_Fail(t *testing.T) {
 		NoKK:               "312645",
 		Nama:               "Joko Doe",
 		TempatLahir:        "Indonesia",
-		TanggalLahir:       time.Now().Local().Format("2006-02-01"),
+		TanggalLahir:       time.Now().Local().Format("2006-01-02"),
 		NoIHS:              "31dd2",
 		JenisKelamin:       "Perempuan",
 		GolonganDarah:      "AB",
@@ -328,7 +328,7 @@ func TestUpdatePasienByUuid_Fail(t *testing.T) {
 		NoKK:               "312645",
 		Nama:               "Joko Doe",
 		TempatLahir:        "Indonesia",
-		TanggalLahir:       time.Now().Local().Format("2006-02-01"),
+		TanggalLahir:       time.Now().Local().Format("2006-01-02"),
 		NoIHS:              "31dd2",
 		JenisKelamin:       "Perempuan",
 		GolonganDarah:      "AB",

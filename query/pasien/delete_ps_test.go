@@ -10,13 +10,13 @@ import (
 
 func TestDeletePasienById_Success(t *testing.T) {
 	_db := db.DB
+	var pasienId int
 
 	defer func() {
 		db.DB = _db
 	}()
 
-	_db.Query(`INSERT INTO pasien (
-		pasien_id,
+	_db.QueryRow(`INSERT INTO pasien (
 		no_erm,
 		pasien_uuid,
 		no_rm_lama,
@@ -49,14 +49,13 @@ func TestDeletePasienById_Success(t *testing.T) {
 		created_by,
 		updated_at,
 		updated_by
-	   ) VALUES (
-		123, '123', $1, '123', '123', 'BPJS', '123', '330102', '124212',
+	   ) VALUES ( '123', $1, '123', '123', 'BPJS', '123', '330102', '124212',
 		'testNama123', 'sumedang', $2, '12345', 'perempuan', 'E', '086123',
 		'123@test.go', 'jawa bali', 'jatinangor', 'sayang', 'cikeruh', 'jalan-jalan no 12', 'jokoTest', '0857123',
 		'dokter','islam	', 'WNA', 'SMA', 'belum-kawin', $3, '123test', $4, '123test'
-	   )
-	   `, uuid.New(), time.Now().Local().Format("2006-02-01"), time.Now().Local().String(), time.Now().Local().String())
-	err := DeletePasienById(123)
+	   ) RETURNING pasien_id
+	   `, uuid.New(), time.Now().Local().Format("2006-01-02"), time.Now().Local().String(), time.Now().Local().String()).Scan(&pasienId)
+	err := DeletePasienById(pasienId)
 	if err != nil {
 		t.Errorf("Expected no error, got %v", err)
 	}
@@ -125,7 +124,7 @@ func TestDeletePasienByUuid_Success(t *testing.T) {
 		'123@test.go', 'jawa bali', 'jatinangor', 'sayang', 'cikeruh', 'jalan-jalan no 12', 'jokoTest', '0857123',
 		'dokter','islam	', 'WNA', 'SMA', 'belum-kawin', $3, '123test', $4, '123test'
 	   )
-	   `, uid, time.Now().Local().Format("2006-02-01"), time.Now().Local().String(), time.Now().Local().String())
+	   `, uid, time.Now().Local().Format("2006-01-02"), time.Now().Local().String(), time.Now().Local().String())
 	err := DeletePasienByUuid(uid.String())
 	if err != nil {
 		t.Errorf("Expected no error, got %v", err)
