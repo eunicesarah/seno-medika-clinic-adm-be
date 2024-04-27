@@ -1,4 +1,4 @@
-package kasir 
+package kasir
 
 import (
 	"net/http"
@@ -6,12 +6,12 @@ import (
 
 	"github.com/gin-gonic/gin"
 	"seno-medika.com/config/db"
-	"seno-medika.com/model/common"
 	"seno-medika.com/model/cashierstation"
-	"seno-medika.com/service/kasir"
+	"seno-medika.com/model/common"
+	"seno-medika.com/query/kasir"
 )
 
-func GetNota(c *gin.Context){
+func GetNota(c *gin.Context) {
 	find_by := c.Query("find_by")
 	target := c.Query("target")
 
@@ -136,7 +136,7 @@ func GetNota(c *gin.Context){
 	}
 }
 
-func AddNota(c *gin.Context){
+func AddNota(c *gin.Context) {
 	var notaVar cashierstation.Nota
 
 	if err := c.ShouldBindJSON(&notaVar); err != nil {
@@ -174,4 +174,3 @@ func AddNota(c *gin.Context){
 		Data:       nil,
 	})
 }
-

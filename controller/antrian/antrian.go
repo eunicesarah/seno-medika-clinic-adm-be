@@ -9,8 +9,8 @@ import (
 	"seno-medika.com/config/db"
 	"seno-medika.com/model/antrian"
 	"seno-medika.com/model/common"
-	antrian2 "seno-medika.com/service/antrian"
-	antrian3 "seno-medika.com/service/nurse"
+	antrian2 "seno-medika.com/query/antrian"
+	antrian3 "seno-medika.com/query/nurse"
 )
 
 func AddAntrian(c *gin.Context) {
@@ -128,7 +128,7 @@ func GetAntrian(c *gin.Context) {
 	var target = c.Query("target")
 	var findBy = c.Query("find_by")
 
-	if (findBy == "id") {
+	if findBy == "id" {
 		val, err := strconv.Atoi(target)
 		if err != nil {
 			c.JSON(http.StatusBadRequest, common.Response{
@@ -159,10 +159,9 @@ func GetAntrian(c *gin.Context) {
 		return
 	}
 
-	if (findBy == "doktername") {
+	if findBy == "doktername" {
 		data, err := antrian3.FindAntrianByDoctorName(target)
 
-		
 		if err != nil {
 			c.JSON(http.StatusInternalServerError, common.Response{
 				Message:    err.Error(),
@@ -182,7 +181,7 @@ func GetAntrian(c *gin.Context) {
 		return
 	}
 
-	if (findBy == "dokterpoli") {
+	if findBy == "dokterpoli" {
 		data, err := antrian3.FindAntrianByDoctorPoli(target)
 		if err != nil {
 			c.JSON(http.StatusInternalServerError, common.Response{
@@ -203,7 +202,7 @@ func GetAntrian(c *gin.Context) {
 		return
 	}
 
-	if (findBy == "poli") {
+	if findBy == "poli" {
 		data, err := antrian3.FindAntrianByPoli(target)
 		if err != nil {
 			c.JSON(http.StatusInternalServerError, common.Response{
@@ -224,7 +223,7 @@ func GetAntrian(c *gin.Context) {
 		return
 	}
 
-	if (findBy == "shift") {
+	if findBy == "shift" {
 		val, err := strconv.Atoi(target)
 		if err != nil {
 			c.JSON(http.StatusBadRequest, common.Response{
@@ -235,7 +234,7 @@ func GetAntrian(c *gin.Context) {
 			})
 			return
 		}
-		
+
 		data, err := antrian3.FindAntrianByDoctorShift(val)
 
 		if err != nil {
@@ -260,7 +259,6 @@ func GetAntrian(c *gin.Context) {
 	// if (findBy == "day") {
 	// 	data, err := antrian3.FindAntrianToday()
 
-		
 	// 	if err != nil {
 	// 		c.JSON(http.StatusInternalServerError, common.Response{
 	// 			Message:    err.Error(),

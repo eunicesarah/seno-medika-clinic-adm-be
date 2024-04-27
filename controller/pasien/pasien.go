@@ -2,7 +2,7 @@ package pasien
 
 import (
 	"net/http"
-	pasien3 "seno-medika.com/service/pasien"
+	pasien3 "seno-medika.com/query/pasien"
 	"strconv"
 	"time"
 

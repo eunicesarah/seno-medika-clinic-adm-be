@@ -1,16 +1,15 @@
 package login
 
 import (
+	"github.com/gin-gonic/gin"
 	"net/http"
 	"seno-medika.com/model/common"
-	"github.com/gin-gonic/gin"
-	"seno-medika.com/service/login"
+	"seno-medika.com/query/login"
 )
 
 type loginInput struct {
-	Email string `json:"email" binding:"required"`
+	Email    string `json:"email" binding:"required"`
 	Password string `json:"password" binding:"required"`
-
 }
 
 func Login(r *gin.Context) {
@@ -18,10 +17,10 @@ func Login(r *gin.Context) {
 
 	if err := r.ShouldBindJSON(&userInput); err != nil {
 		r.JSON(http.StatusBadRequest, common.Response{
-			Message: err.Error(),
-			Status : "Bad Request",
+			Message:    err.Error(),
+			Status:     "Bad Request",
 			StatusCode: http.StatusBadRequest,
-			Data: nil,
+			Data:       nil,
 		})
 		return
 	}
@@ -34,12 +33,12 @@ func Login(r *gin.Context) {
 	}
 
 	r.SetSameSite(http.SameSiteLaxMode)
-	r.SetCookie("token", token, 3600 * 24, "", "", false, true)
+	r.SetCookie("token", token, 3600*24, "", "", false, true)
 
 	r.JSON(http.StatusOK, gin.H{"token": token})
 }
 
-func Validate (r *gin.Context) {
+func Validate(r *gin.Context) {
 	user, _ := r.Get("user")
 	r.JSON(http.StatusOK, gin.H{"message": user})
 }
