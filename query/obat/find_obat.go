@@ -13,6 +13,8 @@ func FindObatById(id int) (pharmacystation.Obat, error) {
 		&obatVar.NamaObat,
 		&obatVar.JenisAsuransi,
 		&obatVar.Harga,
+		&obatVar.Stock,
+		&obatVar.Satuan,
 	)
 	if err != nil {
 		return pharmacystation.Obat{}, err
@@ -28,6 +30,8 @@ func FindObatByName(name string) (pharmacystation.Obat, error) {
 		&obatVar.NamaObat,
 		&obatVar.JenisAsuransi,
 		&obatVar.Harga,
+		&obatVar.Stock,
+		&obatVar.Satuan,
 	)
 	if err != nil {
 		return pharmacystation.Obat{}, err
@@ -49,6 +53,8 @@ func FindObatAll() ([]pharmacystation.Obat, error) {
 			&eachObat.NamaObat,
 			&eachObat.JenisAsuransi,
 			&eachObat.Harga,
+			&eachObat.Stock,
+			&eachObat.Satuan,
 		)
 
 		if err != nil {

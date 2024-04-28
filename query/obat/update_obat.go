@@ -11,12 +11,16 @@ func UpdateObatById(id int, obat pharmacystation.Obat) error {
 		`UPDATE obat SET
 			nama_obat = $1,
 			jenis_asuransi = $2,
-			harga = $3
-		WHERE obat_id = $4
+			harga = $3,
+			stock = $4,
+			satuan = $5
+		WHERE obat_id = $6
 		`,
 		obat.NamaObat,
 		obat.JenisAsuransi,
 		obat.Harga,
+		obat.Stock,
+		obat.Satuan,
 		id)
 
 	if err != nil {
@@ -35,12 +39,16 @@ func UpdateObatByName(nama string, obat pharmacystation.Obat) error {
 		`UPDATE obat SET
 			obat_id = $1,
 			jenis_asuransi = $2,
-			harga = $3
-		WHERE nama_obat = $4
+			harga = $3,
+			stock = $4,
+			satuan = $5
+		WHERE nama_obat = $6
 		`,
 		obat.ObatID,
 		obat.JenisAsuransi,
 		obat.Harga,
+		obat.Stock,
+		obat.Satuan,
 		nama)
 
 	if err != nil {
