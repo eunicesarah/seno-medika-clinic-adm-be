@@ -8,7 +8,7 @@ import (
 	"seno-medika.com/config/db"
 	"seno-medika.com/model/common"
 	"seno-medika.com/model/cashierstation"
-	"seno-medika.com/service/kasir"
+	"seno-medika.com/query/kasir"
 )
 
 func GetNota(c *gin.Context){
