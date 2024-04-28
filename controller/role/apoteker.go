@@ -89,6 +89,7 @@ func AddApoteker(c *gin.Context) {
 	}()
 
 	wg.Wait()
+	close(errChan)
 
 	for val := range errChan {
 		if val != nil {
