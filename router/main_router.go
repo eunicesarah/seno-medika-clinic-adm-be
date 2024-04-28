@@ -10,6 +10,7 @@ import (
 	"seno-medika.com/router/user"
 	"seno-medika.com/router/obat"
 	"seno-medika.com/router/kasir"
+	"seno-medika.com/router/apotek"
 )
 
 func MainRouter(r *gin.Engine) {
@@ -23,4 +24,5 @@ func MainRouter(r *gin.Engine) {
 	ttv.TTVRouter(r)
 	obat.ObatRouter(r)
 	kasir.KasirRouter(r)
+	apotek.ApotekRouter(r)
 }
