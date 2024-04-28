@@ -31,9 +31,11 @@ func TestFindObatById_Success(t *testing.T) {
 		obat_id,
 		nama_obat,
 		jenis_asuransi,
-		harga
+		harga,
+		stock,
+		satuan
 	) VALUES (
-		8911, 'testNama123', 'BPJS', 12345
+		8911, 'testNama123', 'BPJS', 12345, 10, 'testSatuan'
 	)
 	`)
 	val, err := FindObatById(8911)
@@ -64,9 +66,11 @@ func TestFindObatByName_Success(t *testing.T) {
 		obat_id,
 		nama_obat,
 		jenis_asuransi,
-		harga
+		harga,
+		stock,
+		satuan
 	) VALUES (
-		8911, 'testNama123', 'BPJS', 12345
+		8911, 'testNama123', 'BPJS', 12345, 10, 'testSatuan'
 	)
 	`)
 	val, err := FindObatByName("testNama123")
@@ -99,9 +103,11 @@ func TestFindObatAll_Success(t *testing.T) {
 		obat_id,
 		nama_obat,
 		jenis_asuransi,
-		harga
+		harga,
+		stock,
+		satuan
 	) VALUES (
-		8911, 'testNama123', 'BPJS', 12345
+		8911, 'testNama123', 'BPJS', 12345, 10, 'testSatuan'
 	)
 	`)
 	val, err := FindObatAll()

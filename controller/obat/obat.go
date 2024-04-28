@@ -53,14 +53,18 @@ func AddObat(c *gin.Context) {
 		`INSERT INTO obat (
 			nama_obat,
 			jenis_asuransi,
-			harga
+			harga,
+			stock,
+			satuan
 		) VALUES (
-			$1, $2, $3
+			$1, $2, $3, $4, $5
 		)
 		`,
 		obatVar.NamaObat,
 		obatVar.JenisAsuransi,
-		obatVar.Harga)
+		obatVar.Harga,
+		obatVar.Stock,
+		obatVar.Satuan)
 
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, common.Response{
@@ -266,4 +270,105 @@ func GetObat(c *gin.Context) {
 		})
 		return
 	}
+}
+
+
+func PatchObat(c *gin.Context) {
+
+	updateBy := c.Query("update_by")
+	target := c.Query("target")
+	var obatVar pharmacystation.Obat
+
+	if err := c.ShouldBind(&obatVar); err != nil {
+		c.JSON(http.StatusBadRequest, common.Response{
+			Message:    err.Error(),
+			Status:     "Bad Request",
+			StatusCode: http.StatusBadRequest,
+			Data:       nil,
+		})
+		return
+	}
+
+	switch updateBy {
+	case "id_harga":
+		val, err := strconv.Atoi(target)
+		if err != nil {
+			c.JSON(http.StatusBadRequest, common.Response{
+				Message:    "Invalid target",
+				Status:     "Bad Request",
+				StatusCode: http.StatusBadRequest,
+				Data:       nil,
+			})
+			return
+		}
+		err = obat.PatchHargaObatById(val, obatVar.Harga)
+		if err != nil {
+			c.JSON(http.StatusInternalServerError, common.Response{
+				Message:    err.Error(),
+				Status:     "Internal Server Error",
+				StatusCode: http.StatusInternalServerError,
+				Data:       nil,
+			})
+			return
+		}
+	case "name_harga":
+		err := obat.PatchHargaObatByName(target, obatVar.Harga)
+		if err != nil {
+			c.JSON(http.StatusInternalServerError, common.Response{
+				Message:    err.Error(),
+				Status:     "Internal Server Error",
+				StatusCode: http.StatusInternalServerError,
+				Data:       nil,
+			})
+			return
+		}
+	case "id_stock":
+		val, err := strconv.Atoi(target)
+		if err != nil {
+			c.JSON(http.StatusBadRequest, common.Response{
+				Message:    "Invalid target",
+				Status:     "Bad Request",
+				StatusCode: http.StatusBadRequest,
+				Data:       nil,
+			})
+			return
+		}
+		err = obat.PatchStockObatById(val, obatVar.Stock)
+		if err != nil {
+			c.JSON(http.StatusInternalServerError, common.Response{
+				Message:    err.Error(),
+				Status:     "Internal Server Error",
+				StatusCode: http.StatusInternalServerError,
+				Data:       nil,
+			})
+			return
+		}
+	case "name_stock":
+		err := obat.PatchStockObatByName(target, obatVar.Stock)
+		if err != nil {
+			c.JSON(http.StatusInternalServerError, common.Response{
+				Message:    err.Error(),
+				Status:     "Internal Server Error",
+				StatusCode: http.StatusInternalServerError,
+				Data:       nil,
+			})
+			return
+		}
+	default:
+		c.JSON(http.StatusBadRequest, common.Response{
+			Message:    "Invalid update by",
+			Status:     "Bad Request",
+			StatusCode: http.StatusBadRequest,
+		})
+		return
+	}
+
+	c.JSON(http.StatusOK, common.Response{
+		Message:    "Successfully update obat",
+		Status:     "ok",
+		StatusCode: http.StatusOK,
+		Data:       nil,
+	})
+	return
+
 }

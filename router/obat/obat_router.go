@@ -10,4 +10,5 @@ func ObatRouter(r *gin.Engine) {
 	r.GET("/obat", obat.GetObat)
 	r.PUT("/obat", obat.UpdateObat)
 	r.DELETE("/obat", obat.DeleteObat)
+	r.PATCH("/obat", obat.PatchObat)
 }

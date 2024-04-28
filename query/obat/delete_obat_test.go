@@ -18,9 +18,11 @@ func TestDeleteObatById_Success(t *testing.T) {
 		obat_id,
 		nama_obat,
 		jenis_asuransi,
-		harga
+		harga,
+		stock,
+		satuan
 	) VALUES (
-		8911, 'testNama123', 'BPJS', 12345
+		8911, 'testNama123', 'BPJS', 12345, 10, 'testSatuan'
 	)
 	`)
 	err := DeleteObatById(8911)
@@ -57,9 +59,11 @@ func TestDeleteObatByName_Success(t *testing.T) {
 		obat_id,
 		nama_obat,
 		jenis_asuransi,
-		harga
+		harga,
+		stock,
+		satuan
 	) VALUES (
-		8911, 'testNama123', 'BPJS', 12345
+		8911, 'testNama123', 'BPJS', 12345, 10, 'testSatuan'
 	)
 	`)
 	err := DeleteObatByName("testNama123")
