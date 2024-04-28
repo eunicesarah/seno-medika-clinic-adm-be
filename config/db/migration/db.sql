@@ -99,7 +99,9 @@ CREATE TABLE public.list_obat (
                                 obat_id SERIAL NOT NULL,
                                 resep_id SERIAL NOT NULL,
                                 jumlah integer NOT NULL,
-                                dosis character varying(50) NOT NULL
+                                dosis character varying(50) NOT NULL,
+                                keterangan character varying(50) NOT NULL,
+                                tanggal_kadaluarsa date NOT NULL
 );
 
 CREATE TABLE public.nota (
@@ -116,7 +118,9 @@ CREATE TABLE public.obat (
                                 obat_id SERIAL NOT NULL,
                                 nama_obat character varying(50) NOT NULL,
                                 jenis_asuransi character varying(50) NOT NULL,
-                                harga integer NOT NULL
+                                harga integer NOT NULL,
+                                stock integer NOT NULL,
+                                satuan character varying(20) NOT NULL
 );
 
 CREATE TABLE public.perawat (
@@ -136,7 +140,10 @@ CREATE TABLE public.rekam_medis (
 
 CREATE TABLE public.resep (
                                 resep_id SERIAL NOT NULL,
-                                deskripsi character varying(500) NOT NULL
+                                pemeriksaan_dokter_id integer NOT NULL,
+                                deskripsi character varying(500) NOT NULL,
+                                ruang_tujuan character varying(500) NOT NULL,
+                                status_obat character varying(500) NOT NULL
 );
 
 CREATE TABLE public.riwayat_penyakit (
@@ -206,12 +213,13 @@ CREATE TABLE public.pemeriksaan_dokter (
                                 pemeriksaan_dokter_id SERIAL NOT NULL,
                                 pasien_id integer NOT NULL,
                                 pemeriksaan_fisik_id integer NOT NULL,
-                                list_riwayat_pemeriksaan_id integer NOT NULL,
+                                riwayat_pemeriksaan_id integer NOT NULL,
                                 keadaan_fisik_id integer NOT NULL,
                                 riwayat_penyakit_id integer NOT NULL,
                                 diagnosa_id integer NOT NULL,
                                 dokter_id integer NOT NULL,
-                                perawat_id integer NOT NULL
+                                perawat_id integer NOT NULL,
+                                anatomi_id integer NOT NULL
 );
 
 CREATE TABLE public.pemeriksaan_fisik (
@@ -225,14 +233,10 @@ CREATE TABLE public.pemeriksaan_fisik (
                                 kurang_sayur boolean
 );
 
-CREATE TABLE public.list_riwayat_pemeriksaan (
-                                list_riwayat_pemeriksaan_id SERIAL NOT NULL,
-                                riwayat_pemeriksaan_id integer NOT NULL,
-                                pasien_id integer NOT NULL
-);
-
 CREATE TABLE public.riwayat_pemeriksaan (
                                 riwayat_pemeriksaan_id SERIAL NOT NULL,
+                                pemeriksaan_dokter_id integer NOT NULL,
+                                pasien_id integer NOT NULL,
                                 tanggal date NOT NULL,
                                 pemeriksaan character varying(255),
                                 keterangan character varying(255)
@@ -278,6 +282,14 @@ CREATE TABLE public.tindakan (
 CREATE TABLE public.penanganan (
                                 tindakan_id integer NOT NULL,
                                 list_tindakan_id integer NOT NULL
+);
+
+CREATE TABLE public.anatomi (
+                                anatomi_id SERIAL NOT NULL,
+                                pasien_id integer NOT NULL,
+                                pemeriksaan_dokter_id integer NOT NULL,
+                                bagian_tubuh character varying(255) NOT NULL,
+                                keterangan character varying(255) NOT NULL
 );
 
 ALTER TABLE ONLY public.antrian
@@ -349,20 +361,20 @@ ALTER TABLE ONLY public.pemeriksaan_dokter
 ALTER TABLE ONLY public.riwayat_pemeriksaan
     ADD CONSTRAINT riwayat_pemeriksaan_riwayat_pemeriksaan_id_pkey PRIMARY KEY (riwayat_pemeriksaan_id);
 
-ALTER TABLE ONLY public.list_riwayat_pemeriksaan
-    ADD CONSTRAINT list_riwayat_pemeriksaan_list_riwayat_pemeriksaan_id_pkey PRIMARY KEY (list_riwayat_pemeriksaan_id);
-
 ALTER TABLE ONLY public.keadaan_fisik
     ADD CONSTRAINT keadaan_fisik_keadaan_fisik_id_pkey PRIMARY KEY (keadaan_fisik_id);
 
 ALTER TABLE ONLY public.diagnosa
     ADD CONSTRAINT diagnosa_diagnosa_id_pkey PRIMARY KEY (diagnosa_id);
 
+ALTER TABLE ONLY public.tindakan
+    ADD CONSTRAINT tindakan_tindakan_id_pkey PRIMARY KEY (tindakan_id);
+
 ALTER TABLE ONLY public.list_tindakan
     ADD CONSTRAINT list_tindakan_list_tindakan_id_pkey PRIMARY KEY (list_tindakan_id);
 
-ALTER TABLE ONLY public.tindakan
-    ADD CONSTRAINT tindakan_tindakan_id_pkey PRIMARY KEY (tindakan_id);
+ALTER TABLE ONLY public.anatomi
+    ADD CONSTRAINT anatomi_anatomi_id_pkey PRIMARY KEY (anatomi_id);
 
 ALTER TABLE ONLY public.anamnesis
     ADD CONSTRAINT anamnesis_alergi_id_fkey FOREIGN KEY (alergi_id) REFERENCES public.alergi(alergi_id) ON UPDATE CASCADE ON DELETE CASCADE;
@@ -443,7 +455,7 @@ ALTER TABLE ONLY public.pemeriksaan_dokter
     ADD CONSTRAINT pemeriksaan_dokter_pemeriksaan_fisik_id_fkey FOREIGN KEY (pemeriksaan_fisik_id) REFERENCES public.pemeriksaan_fisik(pemeriksaan_fisik_id) ON UPDATE CASCADE ON DELETE CASCADE;
 
 ALTER TABLE ONLY public.pemeriksaan_dokter
-    ADD CONSTRAINT pemeriksaan_dokter_list_riwayat_pemeriksaan_id_fkey FOREIGN KEY (list_riwayat_pemeriksaan_id) REFERENCES public.list_riwayat_pemeriksaan(list_riwayat_pemeriksaan_id) ON UPDATE CASCADE ON DELETE CASCADE;
+    ADD CONSTRAINT pemeriksaan_dokter_riwayat_pemeriksaan_id_fkey FOREIGN KEY (riwayat_pemeriksaan_id) REFERENCES public.riwayat_pemeriksaan(riwayat_pemeriksaan_id) ON UPDATE CASCADE ON DELETE CASCADE;
 
 ALTER TABLE ONLY public.pemeriksaan_dokter
     ADD CONSTRAINT pemeriksaan_dokter_keadaan_fisik_id_fkey FOREIGN KEY (keadaan_fisik_id) REFERENCES public.keadaan_fisik(keadaan_fisik_id) ON UPDATE CASCADE ON DELETE CASCADE;
@@ -460,17 +472,26 @@ ALTER TABLE ONLY public.pemeriksaan_dokter
 ALTER TABLE ONLY public.pemeriksaan_dokter
     ADD CONSTRAINT pemeriksaan_dokter_perawat_id_fkey FOREIGN KEY (perawat_id) REFERENCES public.perawat(perawat_id) ON UPDATE CASCADE ON DELETE CASCADE;
 
-ALTER TABLE ONLY public.list_riwayat_pemeriksaan
-    ADD CONSTRAINT list_riwayat_pemeriksaan_riwayat_pemeriksaan_id_fkey FOREIGN KEY (riwayat_pemeriksaan_id) REFERENCES public.riwayat_pemeriksaan(riwayat_pemeriksaan_id) ON UPDATE CASCADE ON DELETE CASCADE;
+ALTER TABLE ONLY public.pemeriksaan_dokter
+    ADD CONSTRAINT pemeriksaan_dokter_anatomi_id_fkey FOREIGN KEY (anatomi_id) REFERENCES public.anatomi(anatomi_id) ON UPDATE CASCADE ON DELETE CASCADE;
 
-ALTER TABLE ONLY public.list_riwayat_pemeriksaan
-    ADD CONSTRAINT list_riwayat_pemeriksaan_pasien_id_fkey FOREIGN KEY (pasien_id) REFERENCES public.pasien(pasien_id) ON UPDATE CASCADE ON DELETE CASCADE;
+ALTER TABLE ONLY public.riwayat_pemeriksaan
+    ADD CONSTRAINT riwayat_pemeriksaan_pemeriksaan_dokter_id_fkey FOREIGN KEY (pemeriksaan_dokter_id) REFERENCES public.pemeriksaan_dokter(pemeriksaan_dokter_id) ON UPDATE CASCADE ON DELETE CASCADE;
 
-ALTER TABLE ONLY public.list_tindakan
-    ADD CONSTRAINT list_tindakan_tindakan_id_fkey FOREIGN KEY (tindakan_id) REFERENCES public.tindakan(tindakan_id) ON UPDATE CASCADE ON DELETE CASCADE;
+ALTER TABLE ONLY public.riwayat_pemeriksaan
+    ADD CONSTRAINT riwayat_pemeriksaan_pasien_id_fkey FOREIGN KEY (pasien_id) REFERENCES public.pasien(pasien_id) ON UPDATE CASCADE ON DELETE CASCADE;
 
 ALTER TABLE ONLY public.penanganan
     ADD CONSTRAINT penanganan_tindakan_id_fkey FOREIGN KEY (tindakan_id) REFERENCES public.tindakan(tindakan_id) ON UPDATE CASCADE ON DELETE CASCADE;
 
 ALTER TABLE ONLY public.penanganan
     ADD CONSTRAINT penanganan_list_tindakan_id_fkey FOREIGN KEY (list_tindakan_id) REFERENCES public.list_tindakan(list_tindakan_id) ON UPDATE CASCADE ON DELETE CASCADE;
+
+ALTER TABLE ONLY public.anatomi
+    ADD CONSTRAINT anatomi_pasien_id_fkey FOREIGN KEY (pasien_id) REFERENCES public.pasien(pasien_id) ON UPDATE CASCADE ON DELETE CASCADE;
+
+ALTER TABLE ONLY public.anatomi
+    ADD CONSTRAINT anatomi_pemeriksaan_dokter_id_fkey FOREIGN KEY (pemeriksaan_dokter_id) REFERENCES public.pemeriksaan_dokter(pemeriksaan_dokter_id) ON UPDATE CASCADE ON DELETE CASCADE;
+
+ALTER TABLE ONLY public.resep
+    ADD CONSTRAINT resep_pemeriksaan_dokter_id_fkey FOREIGN KEY (pemeriksaan_dokter_id) REFERENCES public.pemeriksaan_dokter(pemeriksaan_dokter_id) ON UPDATE CASCADE ON DELETE CASCADE;
