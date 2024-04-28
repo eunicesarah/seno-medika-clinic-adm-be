@@ -19,7 +19,7 @@ type PemeriksaanDokter struct {
 	PemeriksaanDokterId int `json:"pemeriksaan_dokter_id"`
 	PasienId           int `json:"pasien_id"`
 	PemeriksaanFisikId  int `json:"pemeriksaan_fisik_id"`
-	ListRiwayatPemeriksaanId int `json:"list_riwayat_pemeriksaan_id"`
+	RiwayatPemeriksaanId int `json:"riwayat_pemeriksaan_id"`
 	KeadaanFisikId      int `json:"keadaan_fisik_id"`
 	RiwayatPenyakitId   int `json:"riwayat_penyakit_id"`
 	DiagnosaId          int `json:"diagnosa_id"`
@@ -38,14 +38,10 @@ type PemeriksaanFisik struct {
 	KurangSayur bool `json:"kurang_sayur"`
 }
 
-type ListRiwayatPemeriksaan struct {
-	ListRiwayatPemeriksaanId int `json:"list_riwayat_pemeriksaan_id"`
-	RiwayatPemeriksaanId int `json:"riwayat_pemeriksaan_id"`
-	PasienId int `json:"pasien_id"`
-}
-
 type RiwayatPemeriksaan struct {
 	RiwayatPemeriksaanId int `json:"riwayat_pemeriksaan_id"`
+	PemeriksaanDokterId int `json:"pemeriksaan_dokter_id"`
+	PasienId int `json:"pasien_id"`
 	Tanggal string `json:"tanggal"`
 	Pemeriksaan string `json:"pemeriksaan"`
 	Keterangan string `json:"keterangan"`

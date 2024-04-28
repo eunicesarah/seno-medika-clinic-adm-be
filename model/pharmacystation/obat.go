@@ -5,6 +5,8 @@ type Obat struct {
 	NamaObat      string `json:"nama_obat"`
 	JenisAsuransi string `json:"jenis_asuransi"`
 	Harga         int    `json:"harga"`
+	Stock         int    `json:"stock"`
+	Satuan        string `json:"satuan"`
 }
 
 type ListObat struct {
@@ -12,6 +14,8 @@ type ListObat struct {
 	ResepID int    `json:"resep_id"`
 	Jumlah  int    `json:"jumlah"`
 	Dosis   string `json:"dosis"`
+	Keterangan string `json:"keterangan"`
+	TanggalKadaluarsa string `json:"tanggal_kadaluarsa"`
 }
 
 type DetailObat struct {
