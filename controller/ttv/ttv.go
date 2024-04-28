@@ -7,7 +7,7 @@ import (
 	"seno-medika.com/model/common"
 	"seno-medika.com/model/doctorstation"
 	"seno-medika.com/model/nursestation"
-	"seno-medika.com/service/ttv"
+	"seno-medika.com/query/ttv"
 	"sync"
 )
 

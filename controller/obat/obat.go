@@ -1,15 +1,14 @@
 package obat
 
-
 import (
 	"net/http"
 	"strconv"
-	
+
 	"github.com/gin-gonic/gin"
 	"seno-medika.com/config/db"
 	"seno-medika.com/model/common"
 	"seno-medika.com/model/pharmacystation"
-	"seno-medika.com/service/obat"
+	"seno-medika.com/query/obat"
 )
 
 func AddObat(c *gin.Context) {
@@ -61,7 +60,7 @@ func AddObat(c *gin.Context) {
 		`,
 		obatVar.NamaObat,
 		obatVar.JenisAsuransi,
-		obatVar.Harga,)
+		obatVar.Harga)
 
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, common.Response{
@@ -247,7 +246,6 @@ func GetObat(c *gin.Context) {
 			Data:       obat,
 		})
 		return
-
 
 	default:
 		obat, err := obat.FindObatAll()

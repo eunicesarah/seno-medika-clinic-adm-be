@@ -9,7 +9,7 @@ import (
 	"seno-medika.com/helper"
 	"seno-medika.com/model/common"
 	"seno-medika.com/model/person"
-	"seno-medika.com/service/apoteker"
+	"seno-medika.com/query/apoteker"
 	"sync"
 )
 
