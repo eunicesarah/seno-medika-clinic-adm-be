@@ -28,7 +28,7 @@ func AddAntrian(c *gin.Context) {
 
 	var count int
 
-	check := db.DB.QueryRow("SELECT pasien_id FROM pasien WHERE nik = $1 and nama = $2", antr.NIK, antr.Nama).Scan(&antr.PasienID)
+	check := db.DB.QueryRow("SELECT pasien_id FROM pasien WHERE no_erm = $1 and nama = $2", antr.NoERM, antr.Nama).Scan(&antr.PasienID)
 	if check != nil {
 		c.JSON(http.StatusBadRequest, common.Response{
 			Message:    "Pasien tidak ditemukan",
