@@ -919,9 +919,29 @@ func TestFindNotaByPasienID_Fail(t *testing.T) {
 	require.Equal(t, []cashierstation.Nota(nil), val)
 }
 
-// func TestFindNotaAll_Success(t *testing.T) {
+func TestFindNotaAll_Success(t *testing.T) {
+	_db := db.DB
+	defer func() {
+		_db = db.Conn()
+		db.DB = _db
+	}()
 
-// }
+	_, err := FindNotaAll()
+	require.NoError(t, err)
+	_db.Close()
+
+}
 // func TestFindNotaAll_Fail(t *testing.T) {
+	// _db := db.DB
+	// defer func() {
+	// 	_db = db.Conn()
+	// 	db.DB = _db
+	// }()
 
+	// val, _ := FindNotaAll()
+	// require.Equal(t, []cashierstation.Nota(nil), val)
+
+	// _db.Close()
+	// val, _ = FindNotaAll()
+	// require.Equal(t, []cashierstation.Nota(nil), val)
 // }
