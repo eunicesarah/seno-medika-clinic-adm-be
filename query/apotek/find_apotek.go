@@ -12,7 +12,7 @@ func FindAllAntrianApotekToday() ([]pharmacystation.DashboardApotek, error) {
 	var apotekVars []pharmacystation.DashboardApotek
 	todayDate := time.Now().Format("2006-01-02")
 
-	rows, err := db.DB.Query("SELECT a.nomor_antrian, a.poli, p.no_erm, p.nik, p.nama, p.jenis_kelamin, p.tempat_lahir, p.tanggal_lahir, p.penjamin, r.status_obat FROM antrian a, pasien p, nota n, resep r WHERE a.pasien_id = p.pasien_id AND a.pasien_id=n.pasien_id AND n.resep_id = r.resep_id  AND a.created_at = $1", todayDate)
+	rows, err := db.DB.Query("SELECT a.nomor_antrian, a.poli, p.no_erm, a.created_at, p.nik, p.nama, p.jenis_kelamin, p.tempat_lahir, p.tanggal_lahir, n.metode_pembayaran, r.status_obat FROM antrian a, pasien p, nota n, resep r WHERE a.pasien_id = p.pasien_id AND a.pasien_id=n.pasien_id AND n.resep_id = r.resep_id  AND a.created_at = $1", todayDate)
 	if err != nil {
 		return nil, err
 	}
@@ -20,7 +20,7 @@ func FindAllAntrianApotekToday() ([]pharmacystation.DashboardApotek, error) {
 
 	for rows.Next() {
 		var apotekVar pharmacystation.DashboardApotek
-		if err := rows.Scan(&apotekVar.NomorAntrian, &apotekVar.Poli, &apotekVar.NoERM, &apotekVar.NIK, &apotekVar.Nama, &apotekVar.JenisKelamin, &apotekVar.TempatLahir, &apotekVar.TanggalLahir, &apotekVar.Penjamin, &apotekVar.Status); err != nil {
+		if err := rows.Scan(&apotekVar.NomorAntrian, &apotekVar.Poli, &apotekVar.NoERM, &apotekVar.CreatedAt, &apotekVar.NIK, &apotekVar.Nama, &apotekVar.JenisKelamin, &apotekVar.TempatLahir, &apotekVar.TanggalLahir, &apotekVar.MetodePembayaran, &apotekVar.Status); err != nil {
 			return nil, err
 		}
 		apotekVars = append(apotekVars, apotekVar)
@@ -32,7 +32,7 @@ func FindAllAntrianApotek() ([]pharmacystation.DashboardApotek, error) {
 
 	var apotekVars []pharmacystation.DashboardApotek
 
-	rows, err := db.DB.Query("SELECT a.nomor_antrian, a.poli, p.no_erm, p.nik, p.nama, p.jenis_kelamin, p.tempat_lahir, p.tanggal_lahir, p.penjamin, r.status_obat FROM antrian a, pasien p, nota n, resep r WHERE a.pasien_id = p.pasien_id AND a.pasien_id=n.pasien_id AND n.resep_id = r.resep_id")
+	rows, err := db.DB.Query("SELECT a.nomor_antrian, a.poli, p.no_erm, a.created_at, p.nik, p.nama, p.jenis_kelamin, p.tempat_lahir, p.tanggal_lahir, n.metode_pembayaran, r.status_obat FROM antrian a, pasien p, nota n, resep r WHERE a.pasien_id = p.pasien_id AND a.pasien_id=n.pasien_id AND n.resep_id = r.resep_id")
 	if err != nil {
 		return nil, err
 	}
@@ -40,7 +40,7 @@ func FindAllAntrianApotek() ([]pharmacystation.DashboardApotek, error) {
 
 	for rows.Next() {
 		var apotekVar pharmacystation.DashboardApotek
-		if err := rows.Scan(&apotekVar.NomorAntrian, &apotekVar.Poli, &apotekVar.NoERM, &apotekVar.NIK, &apotekVar.Nama, &apotekVar.JenisKelamin, &apotekVar.TempatLahir, &apotekVar.TanggalLahir, &apotekVar.Penjamin, &apotekVar.Status); err != nil {
+		if err := rows.Scan(&apotekVar.NomorAntrian, &apotekVar.Poli, &apotekVar.NoERM, &apotekVar.CreatedAt, &apotekVar.NIK, &apotekVar.Nama, &apotekVar.JenisKelamin, &apotekVar.TempatLahir, &apotekVar.TanggalLahir, &apotekVar.MetodePembayaran, &apotekVar.Status); err != nil {
 			return nil, err
 		}
 		apotekVars = append(apotekVars, apotekVar)
@@ -51,7 +51,7 @@ func FindAllAntrianApotek() ([]pharmacystation.DashboardApotek, error) {
 func FindAllAntrianApotekByDate(date string) ([]pharmacystation.DashboardApotek, error) {
 	var apotekVars []pharmacystation.DashboardApotek
 
-	rows, err := db.DB.Query("SELECT a.nomor_antrian, a.poli, p.no_erm, p.nik, p.nama, p.jenis_kelamin, p.tempat_lahir, p.tanggal_lahir, p.penjamin, r.status_obat FROM antrian a, pasien p, nota n, resep r WHERE a.pasien_id = p.pasien_id AND a.pasien_id=n.pasien_id AND n.resep_id = r.resep_id  AND a.created_at = $1", date)
+	rows, err := db.DB.Query("SELECT a.nomor_antrian, a.poli, p.no_erm, a.created_at, p.nik, p.nama, p.jenis_kelamin, p.tempat_lahir, p.tanggal_lahir, n.metode_pembayaran, r.status_obat FROM antrian a, pasien p, nota n, resep r WHERE a.pasien_id = p.pasien_id AND a.pasien_id=n.pasien_id AND n.resep_id = r.resep_id  AND a.created_at = $1", date)
 	if err != nil {
 		return nil, err
 	}
@@ -59,7 +59,7 @@ func FindAllAntrianApotekByDate(date string) ([]pharmacystation.DashboardApotek,
 
 	for rows.Next() {
 		var apotekVar pharmacystation.DashboardApotek
-		if err := rows.Scan(&apotekVar.NomorAntrian, &apotekVar.Poli, &apotekVar.NoERM, &apotekVar.NIK, &apotekVar.Nama, &apotekVar.JenisKelamin, &apotekVar.TempatLahir, &apotekVar.TanggalLahir, &apotekVar.Penjamin, &apotekVar.Status); err != nil {
+		if err := rows.Scan(&apotekVar.NomorAntrian, &apotekVar.Poli, &apotekVar.NoERM, &apotekVar.CreatedAt, &apotekVar.NIK, &apotekVar.Nama, &apotekVar.JenisKelamin, &apotekVar.TempatLahir, &apotekVar.TanggalLahir, &apotekVar.MetodePembayaran, &apotekVar.Status); err != nil {
 			return nil, err
 		}
 		apotekVars = append(apotekVars, apotekVar)
