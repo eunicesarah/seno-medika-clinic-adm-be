@@ -34,6 +34,15 @@ func GetApotek(c *gin.Context){
 		})
 		return
 	case "date":
+		if(target == "") {
+			c.JSON(http.StatusBadRequest, common.Response{
+				Message:    "Please provide date",
+				Status:     "Bad Request",
+				StatusCode: http.StatusBadRequest,
+				Data:       nil,
+			})
+			return
+		}
 		apotek, err := apotek.FindAllAntrianApotekByDate(target)
 		if err != nil {
 			c.JSON(http.StatusInternalServerError, common.Response{
@@ -52,6 +61,15 @@ func GetApotek(c *gin.Context){
 		})
 		return
 	case "detail_antrian":
+		if target == "" {
+			c.JSON(http.StatusBadRequest, common.Response{
+				Message:    "Please provide nomor antrian",
+				Status:     "Bad Request",
+				StatusCode: http.StatusBadRequest,
+				Data:       nil,
+			})
+			return
+		}
 		val, _ := strconv.Atoi(target)
 		apotek, err := apotek.FindDetailResepByNoAntrian(val)
 		if err != nil {
