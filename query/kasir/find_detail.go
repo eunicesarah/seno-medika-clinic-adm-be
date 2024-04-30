@@ -47,7 +47,7 @@ func FindDetailByResepId(nota_id int) ([]pharmacystation.DetailObat, error) {
 func FindTindakanByNotaId(nota_id int) ([]cashierstation.Tindakan, error) {
 	var tindakans []cashierstation.Tindakan
 
-	rows, err := db.DB.Query("SELECT t.tindakan_id, t.nama_tindakan, t.deskripsi, t.harga_tindakan FROM penanganan p "+
+	rows, err := db.DB.Query("SELECT t.tindakan_id, t.jenis_tindakan, t.keterangan, t.harga_tindakan FROM penanganan p "+
 		"INNER JOIN list_tindakan lt ON p.list_tindakan_id = lt.list_tindakan_id "+
 		"INNER JOIN tindakan t ON p.tindakan_id = t.tindakan_id "+
 		"INNER JOIN nota n ON n.list_tindakan_id = lt.list_tindakan_id "+
@@ -59,7 +59,7 @@ func FindTindakanByNotaId(nota_id int) ([]cashierstation.Tindakan, error) {
 
 	for rows.Next() {
 		var tindakan cashierstation.Tindakan
-		err := rows.Scan(&tindakan.TindakanID, &tindakan.NamaTindakan, &tindakan.Deskripsi, &tindakan.HargaTindakan)
+		err := rows.Scan(&tindakan.TindakanID, &tindakan.JenisTindakan, &tindakan.Keterangan, &tindakan.HargaTindakan)
 		if err != nil {
 			return nil, err
 		}
