@@ -46,7 +46,7 @@ func PatchStockObatByName(nama string, stock int) error {
 }
 
 
-func PatchHargaObatById(id int, harga int) error {
+func PatchHargaObatById(id int, harga int64) error {
 	val, err := db.DB.Exec(
 		`UPDATE obat SET
 			harga = $1
@@ -66,7 +66,7 @@ func PatchHargaObatById(id int, harga int) error {
 	return nil
 }
 
-func PatchHargaObatByName(nama string, harga int) error {
+func PatchHargaObatByName(nama string, harga int64) error {
 	val, err := db.DB.Exec(
 		`UPDATE obat SET
 			harga = $1
