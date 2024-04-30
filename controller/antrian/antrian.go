@@ -128,6 +128,46 @@ func GetAntrian(c *gin.Context) {
 	var target = c.Query("target")
 	var findBy = c.Query("find_by")
 
+	if findBy == "dashboard" {
+		poli := c.Query("poli")
+		limit := c.Query("limit")
+		page := c.Query("page")
+		date := c.Query("date")
+		search := c.Query("search")
+
+		if limit == "" {
+			limit = "10"
+		}
+
+		if page == "" {
+			page = "1"
+		}
+
+		if date == "" {
+			date = time.Now().Local().Format("2006-01-02")
+		}
+
+		data, err := antrian2.FindAntrianFilter(search, page, limit, date, poli)
+
+		if err != nil {
+			c.JSON(http.StatusInternalServerError, common.Response{
+				Message:    err.Error(),
+				Status:     "Internal Server Error",
+				StatusCode: http.StatusInternalServerError,
+				Data:       nil,
+			})
+			return
+		}
+
+		c.JSON(http.StatusOK, common.Response{
+			Message:    "Successfully get antrian",
+			Status:     "ok",
+			StatusCode: http.StatusOK,
+			Data:       data,
+		})
+		return
+	}
+
 	if findBy == "id" {
 		val, err := strconv.Atoi(target)
 		if err != nil {
@@ -158,7 +198,7 @@ func GetAntrian(c *gin.Context) {
 		})
 		return
 	}
-	if (findBy == "pasienid") {
+	if findBy == "pasienid" {
 		val, err := strconv.Atoi(target)
 		if err != nil {
 			c.JSON(http.StatusBadRequest, common.Response{
