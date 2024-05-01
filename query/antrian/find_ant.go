@@ -52,8 +52,8 @@ func FindAntrianFilter(search string, page string, limit string, date string, po
 
 	if search != "" {
 		if poli != "" {
-			rows, err := db.DB.Query("SELECT * FROM antrian a JOIN pasien p ON p.pasien_id = a.pasien_id"+
-				" WHERE p.nama LIKE $1 AND a.poli = $2 AND created_at = $3 LIMIT $4 OFFSET $5 ORDER BY a.nomor_antrian ASC", search, poli, date, limit, page)
+			rows, err := db.DB.Query("SELECT a.antrian_id, a.nomor_antrian, a.poli, a.created_at, p.pasien_id, p.no_erm, p.nik, p.nama, p.jenis_kelamin, p.tempat_lahir, p.tanggal_lahir, p.penjamin FROM antrian a JOIN pasien p ON p.pasien_id = a.pasien_id"+
+				" WHERE p.nama ILIKE $1 AND a.poli = $2 AND a.created_at = $3 ORDER BY a.nomor_antrian ASC LIMIT $4 OFFSET $5", "%"+search+"%", poli, date, limit, page)
 
 			if err != nil {
 				return nil, err
@@ -71,8 +71,8 @@ func FindAntrianFilter(search string, page string, limit string, date string, po
 			return antrianO, nil
 		}
 
-		rows, err := db.DB.Query("SELECT * FROM antrian a JOIN pasien p ON p.pasien_id = a.pasien_id"+
-			" WHERE p.nama LIKE $1 AND created_at = $2 LIMIT $3 OFFSET $4 ORDER BY a.nomor_antrian ASC", search, date, limit, page)
+		rows, err := db.DB.Query("SELECT a.antrian_id, a.nomor_antrian, a.poli, a.created_at, p.pasien_id, p.no_erm, p.nik, p.nama, p.jenis_kelamin, p.tempat_lahir, p.tanggal_lahir, p.penjamin FROM antrian a JOIN pasien p ON p.pasien_id = a.pasien_id"+
+			" WHERE p.nama ILIKE $1 AND a.created_at = $2 ORDER BY a.nomor_antrian ASC LIMIT $3 OFFSET $4", "%"+search+"%", date, limit, page)
 
 		if err != nil {
 			return nil, err
@@ -92,8 +92,8 @@ func FindAntrianFilter(search string, page string, limit string, date string, po
 	}
 
 	if poli != "" {
-		rows, err := db.DB.Query("SELECT * FROM antrian a JOIN pasien p ON p.pasien_id = a.pasien_id"+
-			" WHERE a.poli = $1 AND created_at = $2 LIMIT $3 OFFSET $4 ORDER BY a.nomor_antrian ASC", poli, date, limit, page)
+		rows, err := db.DB.Query("SELECT a.antrian_id, a.nomor_antrian, a.poli, a.created_at, p.pasien_id, p.no_erm, p.nik, p.nama, p.jenis_kelamin, p.tempat_lahir, p.tanggal_lahir, p.penjamin FROM antrian a JOIN pasien p ON p.pasien_id = a.pasien_id"+
+			" WHERE a.poli LIKE $1 AND a.created_at = $2 ORDER BY a.nomor_antrian ASC LIMIT $3 OFFSET $4", poli, date, limit, page)
 
 		if err != nil {
 			return nil, err
@@ -111,8 +111,8 @@ func FindAntrianFilter(search string, page string, limit string, date string, po
 		return antrianO, nil
 	}
 
-	rows, err := db.DB.Query("SELECT * FROM antrian a JOIN pasien p ON p.pasien_id = a.pasien_id"+
-		" WHERE created_at = $1 LIMIT $2 OFFSET $3 ORDER BY a.nomor_antrian ASC", date, limit, page)
+	rows, err := db.DB.Query("SELECT a.antrian_id, a.nomor_antrian, a.poli, a.created_at, p.pasien_id, p.no_erm, p.nik, p.nama, p.jenis_kelamin, p.tempat_lahir, p.tanggal_lahir, p.penjamin FROM antrian a JOIN pasien p ON p.pasien_id = a.pasien_id"+
+		" WHERE a.created_at = $1 ORDER BY a.nomor_antrian ASC LIMIT $2 OFFSET $3", date, limit, page)
 
 	if err != nil {
 		return nil, err

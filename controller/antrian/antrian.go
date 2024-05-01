@@ -140,7 +140,7 @@ func GetAntrian(c *gin.Context) {
 		}
 
 		if page == "" {
-			page = "1"
+			page = "0"
 		}
 
 		if date == "" {
