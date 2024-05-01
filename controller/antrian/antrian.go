@@ -13,6 +13,11 @@ import (
 	antrian3 "seno-medika.com/query/nurse"
 )
 
+type filterResponse struct {
+	Antrian []antrian.AntrianNurse `json:"antrian"`
+	Size    int                    `json:"size"`
+}
+
 func AddAntrian(c *gin.Context) {
 	var antr antrian.PendaftaranAntrian
 
@@ -141,13 +146,17 @@ func GetAntrian(c *gin.Context) {
 
 		if page == "" {
 			page = "0"
+		} else {
+			val, _ := strconv.Atoi(page)
+			lim, _ := strconv.Atoi(limit)
+			page = strconv.Itoa(val*lim - lim)
 		}
 
 		if date == "" {
 			date = time.Now().Local().Format("2006-01-02")
 		}
 
-		data, err := antrian2.FindAntrianFilter(search, page, limit, date, poli)
+		data, size, err := antrian2.FindAntrianFilter(search, page, limit, date, poli)
 
 		if err != nil {
 			c.JSON(http.StatusInternalServerError, common.Response{
@@ -163,7 +172,10 @@ func GetAntrian(c *gin.Context) {
 			Message:    "Successfully get antrian",
 			Status:     "ok",
 			StatusCode: http.StatusOK,
-			Data:       data,
+			Data: filterResponse{
+				Antrian: data,
+				Size:    size,
+			},
 		})
 		return
 	}
