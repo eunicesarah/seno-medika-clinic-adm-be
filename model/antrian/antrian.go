@@ -11,8 +11,8 @@ type Antrian struct {
 }
 
 type PendaftaranAntrian struct {
-	NIK 		 string `json:"nik"`
-	Nama		 string `json:"nama"`
+	NoERM        string `json:"no_erm"`
+	Nama         string `json:"nama"`
 	AntrianID    int    `json:"antrian_id"`
 	PasienID     int    `json:"pasien_id"`
 	NomorAntrian int    `json:"nomor_antrian"`
@@ -23,6 +23,7 @@ type PendaftaranAntrian struct {
 }
 
 type AntrianNurse struct {
+	AntrianID    int    `json:"antrian_id"`
 	NomorAntrian int    `json:"nomor_antrian"`
 	Poli         string `json:"poli"`
 	CreatedAt    string `json:"created_at"`
