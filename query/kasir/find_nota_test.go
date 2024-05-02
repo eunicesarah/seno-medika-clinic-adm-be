@@ -41,12 +41,6 @@ func TestFindNotaByMetodePembayaran_Success(t *testing.T) {
 	var ResepId int
 	var ListTindakanId int
 	var NotaId int
-	var PemeriksaanFisikId int
-	var RiwayatPemeriksaanId int
-	var KeadaanFisikId int
-	var RiwayatPenyakitId int
-	var DiagnosaId int
-	var AnatomiId int
 	var PerawatId int
 	var PemeriksaanDokterId int
 
@@ -155,90 +149,13 @@ func TestFindNotaByMetodePembayaran_Success(t *testing.T) {
 		return
 	}
 
-	if err := _db.QueryRow(`INSERT INTO pemeriksaan_fisik (
-		terapi_yg_sdh_dilakukan,
-		rencana_tindakan,
-		tindakan_keperawatan,
-		observasi,
-		merokok,
-		konsumsi_alkohol,
-		kurang_sayur
-	) VALUES ('terapi_yg_sdh_dilakukan', 'rencana_tindakan', 'tindakan_keperawatan', 'observasi', $1, $2, $3) RETURNING pemeriksaan_fisik_id
-	`, true, true, false).Scan(&PemeriksaanFisikId); err != nil {
-		t.Error(err)
-		return
-	}
-
-	if err := _db.QueryRow(`INSERT INTO riwayat_pemeriksaan (
-		pasien_id,
-		tanggal,
-		pemeriksaan,
-		keterangan
-	) VALUES ($1, '2021-01-01', 'pemeriksaan', 'keterangan') RETURNING riwayat_pemeriksaan_id
-	`, pasienId).Scan(&RiwayatPemeriksaanId); err != nil {
-		t.Error(err)
-		return
-	}
-
-	if err := _db.QueryRow(`INSERT INTO keadaan_fisik (
-		pemeriksaan_kulit,
-		pemeriksaan_kuku,
-		pemeriksaan_kepala,
-		pemeriksaan_mata,
-		pemeriksaan_telinga,
-		pemeriksaan_hidung_sinus,
-		pemeriksaan_mulut_bibir,
-		pemeriksaan_leher,
-		pemeriksaan_dada_punggung,
-		pemeriksaan_kardiovaskuler,
-		pemeriksaan_abdomen_perut,
-		pemeriksaan_ekstremitas_atas,
-		pemeriksaan_ekstremitas_bawah,
-		pemeriksaan_genitalia_pria
-	) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14) RETURNING keadaan_fisik_id
-	`, true, true, true, true, true, true, true, true, true, true, true, true, true, true).Scan(&KeadaanFisikId); err != nil {
-		t.Error(err)
-		return
-	}
-
-	if err := _db.QueryRow(`INSERT INTO riwayat_penyakit (
-		rps,rpd,rpk
-	) VALUES ('rps', 'rpd', 'rpk') RETURNING riwayat_penyakit_id
-	`).Scan(&RiwayatPenyakitId); err != nil {
-		t.Error(err)
-		return
-	}
-
-	if err := _db.QueryRow(`INSERT INTO diagnosa (
-		diagnosa, jenis, kasus, status_diagnosis
-	) VALUES ('diagnosa', 'jenis', 'kasus', 'status_diagnosis') RETURNING diagnosa_id
-	`).Scan(&DiagnosaId); err != nil {
-		t.Error(err)
-		return
-	}
-
-	if err := _db.QueryRow(`INSERT INTO anatomi (
-		pasien_id,
-		bagian_tubuh, 
-		keterangan
-	) VALUES ($1,'kepala', 'sakit kepala') RETURNING anatomi_id
-	`, pasienId).Scan(&AnatomiId); err != nil {
-		t.Error(err)
-		return
-	}
 
 	if err := _db.QueryRow(`INSERT INTO pemeriksaan_dokter (
 		pasien_id,
-		pemeriksaan_fisik_id,
-		riwayat_pemeriksaan_id,
-		keadaan_fisik_id,
-		riwayat_penyakit_id,
-		diagnosa_id,
 		dokter_id,
-		perawat_id,
-		anatomi_id
-	) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9) RETURNING pemeriksaan_dokter_id
-	`, pasienId, PemeriksaanFisikId, RiwayatPemeriksaanId, KeadaanFisikId, RiwayatPenyakitId, DiagnosaId, dokterId, PerawatId, AnatomiId).Scan(&PemeriksaanDokterId); err != nil {
+		perawat_id
+	) VALUES ($1, $2, $3) RETURNING pemeriksaan_dokter_id
+	`, pasienId, dokterId, PerawatId).Scan(&PemeriksaanDokterId); err != nil {
 		t.Error(err)
 		return
 	}
@@ -295,12 +212,6 @@ func TestFindNotaByMetodePembayaran_Success(t *testing.T) {
 	_db.Exec("DELETE FROM users WHERE user_id = $1", dokterId)
 	_db.Exec("DELETE FROM pasien WHERE pasien_id = $1", pasienId)
 	_db.Exec("DELETE FROM obat WHERE obat_id = $1", obatId)
-	_db.Exec("DELETE FROM pemeriksaan_fisik WHERE pemeriksaan_fisik_id = $1", PemeriksaanFisikId)
-	_db.Exec("DELETE FROM riwayat_pemeriksaan WHERE riwayat_pemeriksaan_id = $1", RiwayatPemeriksaanId)
-	_db.Exec("DELETE FROM keadaan_fisik WHERE keadaan_fisik_id = $1", KeadaanFisikId)
-	_db.Exec("DELETE FROM riwayat_penyakit WHERE riwayat_penyakit_id = $1", RiwayatPenyakitId)
-	_db.Exec("DELETE FROM diagnosa WHERE diagnosa_id = $1", DiagnosaId)
-	_db.Exec("DELETE FROM anatomi WHERE anatomi_id = $1", AnatomiId)
 	_db.Exec("DELETE FROM pemeriksaan_dokter WHERE pemeriksaan_dokter_id = $1", PemeriksaanDokterId)
 
 	_db.Close()
@@ -337,12 +248,6 @@ func TestFindNotaByResepId_Success(t *testing.T) {
 	var ResepId int
 	var ListTindakanId int
 	var NotaId int
-	var PemeriksaanFisikId int
-	var RiwayatPemeriksaanId int
-	var KeadaanFisikId int
-	var RiwayatPenyakitId int
-	var DiagnosaId int
-	var AnatomiId int
 	var PerawatId int
 	var PemeriksaanDokterId int
 
@@ -451,90 +356,12 @@ func TestFindNotaByResepId_Success(t *testing.T) {
 		return
 	}
 
-	if err := _db.QueryRow(`INSERT INTO pemeriksaan_fisik (
-		terapi_yg_sdh_dilakukan,
-		rencana_tindakan,
-		tindakan_keperawatan,
-		observasi,
-		merokok,
-		konsumsi_alkohol,
-		kurang_sayur
-	) VALUES ('terapi_yg_sdh_dilakukan', 'rencana_tindakan', 'tindakan_keperawatan', 'observasi', $1, $2, $3) RETURNING pemeriksaan_fisik_id
-	`, true, true, false).Scan(&PemeriksaanFisikId); err != nil {
-		t.Error(err)
-		return
-	}
-
-	if err := _db.QueryRow(`INSERT INTO riwayat_pemeriksaan (
-		pasien_id,
-		tanggal,
-		pemeriksaan,
-		keterangan
-	) VALUES ($1, '2021-01-01', 'pemeriksaan', 'keterangan') RETURNING riwayat_pemeriksaan_id
-	`, pasienId).Scan(&RiwayatPemeriksaanId); err != nil {
-		t.Error(err)
-		return
-	}
-
-	if err := _db.QueryRow(`INSERT INTO keadaan_fisik (
-		pemeriksaan_kulit,
-		pemeriksaan_kuku,
-		pemeriksaan_kepala,
-		pemeriksaan_mata,
-		pemeriksaan_telinga,
-		pemeriksaan_hidung_sinus,
-		pemeriksaan_mulut_bibir,
-		pemeriksaan_leher,
-		pemeriksaan_dada_punggung,
-		pemeriksaan_kardiovaskuler,
-		pemeriksaan_abdomen_perut,
-		pemeriksaan_ekstremitas_atas,
-		pemeriksaan_ekstremitas_bawah,
-		pemeriksaan_genitalia_pria
-	) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14) RETURNING keadaan_fisik_id
-	`, true, true, true, true, true, true, true, true, true, true, true, true, true, true).Scan(&KeadaanFisikId); err != nil {
-		t.Error(err)
-		return
-	}
-
-	if err := _db.QueryRow(`INSERT INTO riwayat_penyakit (
-		rps,rpd,rpk
-	) VALUES ('rps', 'rpd', 'rpk') RETURNING riwayat_penyakit_id
-	`).Scan(&RiwayatPenyakitId); err != nil {
-		t.Error(err)
-		return
-	}
-
-	if err := _db.QueryRow(`INSERT INTO diagnosa (
-		diagnosa, jenis, kasus, status_diagnosis
-	) VALUES ('diagnosa', 'jenis', 'kasus', 'status_diagnosis') RETURNING diagnosa_id
-	`).Scan(&DiagnosaId); err != nil {
-		t.Error(err)
-		return
-	}
-
-	if err := _db.QueryRow(`INSERT INTO anatomi (
-		pasien_id,
-		bagian_tubuh, 
-		keterangan
-	) VALUES ($1,'kepala', 'sakit kepala') RETURNING anatomi_id
-	`, pasienId).Scan(&AnatomiId); err != nil {
-		t.Error(err)
-		return
-	}
-
 	if err := _db.QueryRow(`INSERT INTO pemeriksaan_dokter (
 		pasien_id,
-		pemeriksaan_fisik_id,
-		riwayat_pemeriksaan_id,
-		keadaan_fisik_id,
-		riwayat_penyakit_id,
-		diagnosa_id,
 		dokter_id,
-		perawat_id,
-		anatomi_id
-	) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9) RETURNING pemeriksaan_dokter_id
-	`, pasienId, PemeriksaanFisikId, RiwayatPemeriksaanId, KeadaanFisikId, RiwayatPenyakitId, DiagnosaId, dokterId, PerawatId, AnatomiId).Scan(&PemeriksaanDokterId); err != nil {
+		perawat_id
+	) VALUES ($1, $2, $3) RETURNING pemeriksaan_dokter_id
+	`, pasienId, dokterId, PerawatId).Scan(&PemeriksaanDokterId); err != nil {
 		t.Error(err)
 		return
 	}
@@ -591,12 +418,6 @@ func TestFindNotaByResepId_Success(t *testing.T) {
 	_db.Exec("DELETE FROM users WHERE user_id = $1", dokterId)
 	_db.Exec("DELETE FROM pasien WHERE pasien_id = $1", pasienId)
 	_db.Exec("DELETE FROM obat WHERE obat_id = $1", obatId)
-	_db.Exec("DELETE FROM pemeriksaan_fisik WHERE pemeriksaan_fisik_id = $1", PemeriksaanFisikId)
-	_db.Exec("DELETE FROM riwayat_pemeriksaan WHERE riwayat_pemeriksaan_id = $1", RiwayatPemeriksaanId)
-	_db.Exec("DELETE FROM keadaan_fisik WHERE keadaan_fisik_id = $1", KeadaanFisikId)
-	_db.Exec("DELETE FROM riwayat_penyakit WHERE riwayat_penyakit_id = $1", RiwayatPenyakitId)
-	_db.Exec("DELETE FROM diagnosa WHERE diagnosa_id = $1", DiagnosaId)
-	_db.Exec("DELETE FROM anatomi WHERE anatomi_id = $1", AnatomiId)
 	_db.Exec("DELETE FROM pemeriksaan_dokter WHERE pemeriksaan_dokter_id = $1", PemeriksaanDokterId)
 
 	_db.Close()
@@ -634,12 +455,6 @@ func TestFindNotaByPasienID_Success(t *testing.T) {
 	var ResepId int
 	var ListTindakanId int
 	var NotaId int
-	var PemeriksaanFisikId int
-	var RiwayatPemeriksaanId int
-	var KeadaanFisikId int
-	var RiwayatPenyakitId int
-	var DiagnosaId int
-	var AnatomiId int
 	var PerawatId int
 	var PemeriksaanDokterId int
 
@@ -747,91 +562,12 @@ func TestFindNotaByPasienID_Success(t *testing.T) {
 		t.Error(err)
 		return
 	}
-
-	if err := _db.QueryRow(`INSERT INTO pemeriksaan_fisik (
-		terapi_yg_sdh_dilakukan,
-		rencana_tindakan,
-		tindakan_keperawatan,
-		observasi,
-		merokok,
-		konsumsi_alkohol,
-		kurang_sayur
-	) VALUES ('terapi_yg_sdh_dilakukan', 'rencana_tindakan', 'tindakan_keperawatan', 'observasi', $1, $2, $3) RETURNING pemeriksaan_fisik_id
-	`, true, true, false).Scan(&PemeriksaanFisikId); err != nil {
-		t.Error(err)
-		return
-	}
-
-	if err := _db.QueryRow(`INSERT INTO riwayat_pemeriksaan (
-		pasien_id,
-		tanggal,
-		pemeriksaan,
-		keterangan
-	) VALUES ($1, '2021-01-01', 'pemeriksaan', 'keterangan') RETURNING riwayat_pemeriksaan_id
-	`, pasienId).Scan(&RiwayatPemeriksaanId); err != nil {
-		t.Error(err)
-		return
-	}
-
-	if err := _db.QueryRow(`INSERT INTO keadaan_fisik (
-		pemeriksaan_kulit,
-		pemeriksaan_kuku,
-		pemeriksaan_kepala,
-		pemeriksaan_mata,
-		pemeriksaan_telinga,
-		pemeriksaan_hidung_sinus,
-		pemeriksaan_mulut_bibir,
-		pemeriksaan_leher,
-		pemeriksaan_dada_punggung,
-		pemeriksaan_kardiovaskuler,
-		pemeriksaan_abdomen_perut,
-		pemeriksaan_ekstremitas_atas,
-		pemeriksaan_ekstremitas_bawah,
-		pemeriksaan_genitalia_pria
-	) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14) RETURNING keadaan_fisik_id
-	`, true, true, true, true, true, true, true, true, true, true, true, true, true, true).Scan(&KeadaanFisikId); err != nil {
-		t.Error(err)
-		return
-	}
-
-	if err := _db.QueryRow(`INSERT INTO riwayat_penyakit (
-		rps,rpd,rpk
-	) VALUES ('rps', 'rpd', 'rpk') RETURNING riwayat_penyakit_id
-	`).Scan(&RiwayatPenyakitId); err != nil {
-		t.Error(err)
-		return
-	}
-
-	if err := _db.QueryRow(`INSERT INTO diagnosa (
-		diagnosa, jenis, kasus, status_diagnosis
-	) VALUES ('diagnosa', 'jenis', 'kasus', 'status_diagnosis') RETURNING diagnosa_id
-	`).Scan(&DiagnosaId); err != nil {
-		t.Error(err)
-		return
-	}
-
-	if err := _db.QueryRow(`INSERT INTO anatomi (
-		pasien_id,
-		bagian_tubuh, 
-		keterangan
-	) VALUES ($1,'kepala', 'sakit kepala') RETURNING anatomi_id
-	`, pasienId).Scan(&AnatomiId); err != nil {
-		t.Error(err)
-		return
-	}
-
 	if err := _db.QueryRow(`INSERT INTO pemeriksaan_dokter (
 		pasien_id,
-		pemeriksaan_fisik_id,
-		riwayat_pemeriksaan_id,
-		keadaan_fisik_id,
-		riwayat_penyakit_id,
-		diagnosa_id,
 		dokter_id,
-		perawat_id,
-		anatomi_id
-	) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9) RETURNING pemeriksaan_dokter_id
-	`, pasienId, PemeriksaanFisikId, RiwayatPemeriksaanId, KeadaanFisikId, RiwayatPenyakitId, DiagnosaId, dokterId, PerawatId, AnatomiId).Scan(&PemeriksaanDokterId); err != nil {
+		perawat_id
+	) VALUES ($1, $2, $3) RETURNING pemeriksaan_dokter_id
+	`, pasienId, dokterId, PerawatId).Scan(&PemeriksaanDokterId); err != nil {
 		t.Error(err)
 		return
 	}
@@ -888,12 +624,6 @@ func TestFindNotaByPasienID_Success(t *testing.T) {
 	_db.Exec("DELETE FROM users WHERE user_id = $1", dokterId)
 	_db.Exec("DELETE FROM pasien WHERE pasien_id = $1", pasienId)
 	_db.Exec("DELETE FROM obat WHERE obat_id = $1", obatId)
-	_db.Exec("DELETE FROM pemeriksaan_fisik WHERE pemeriksaan_fisik_id = $1", PemeriksaanFisikId)
-	_db.Exec("DELETE FROM riwayat_pemeriksaan WHERE riwayat_pemeriksaan_id = $1", RiwayatPemeriksaanId)
-	_db.Exec("DELETE FROM keadaan_fisik WHERE keadaan_fisik_id = $1", KeadaanFisikId)
-	_db.Exec("DELETE FROM riwayat_penyakit WHERE riwayat_penyakit_id = $1", RiwayatPenyakitId)
-	_db.Exec("DELETE FROM diagnosa WHERE diagnosa_id = $1", DiagnosaId)
-	_db.Exec("DELETE FROM anatomi WHERE anatomi_id = $1", AnatomiId)
 	_db.Exec("DELETE FROM pemeriksaan_dokter WHERE pemeriksaan_dokter_id = $1", PemeriksaanDokterId)
 
 	_db.Close()
