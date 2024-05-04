@@ -300,6 +300,10 @@ CREATE TABLE public.anatomi (
 ALTER TABLE ONLY public.antrian
     ADD CONSTRAINT "PK_Antrian" PRIMARY KEY (antrian_id);
 
+ALTER TABLE ONLY public.antrian
+    ALTER COLUMN status SET DEFAULT 'pemeriksaan_ttv';
+
+
 ALTER TABLE ONLY public.pasien
     ADD CONSTRAINT "PK_pasien" PRIMARY KEY (pasien_id, no_erm);
 
