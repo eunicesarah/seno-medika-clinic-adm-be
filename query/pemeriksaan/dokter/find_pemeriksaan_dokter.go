@@ -1,1 +1,5 @@
 package dokter
+
+func FindPemeriksaanDokterById() {
+
+}

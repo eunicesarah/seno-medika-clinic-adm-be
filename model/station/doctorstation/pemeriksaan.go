@@ -1,5 +1,14 @@
 package doctorstation
 
+type PemeriksaanDokterMerge struct {
+	PemeriksaanDokter  PemeriksaanDokter  `json:"pemeriksaan"`
+	PemeriksaanFisik   PemeriksaanFisik   `json:"pemeriksaan_fisik"`
+	RiwayatPemeriksaan RiwayatPemeriksaan `json:"riwayat_pemeriksaan"`
+	KeadaanFisik       KeadaanFisik       `json:"keadaan_fisik"`
+	Diagnosa           Diagnosa           `json:"diagnosa"`
+	Anatomi            Anatomi            `json:"anatomi"`
+}
+
 type ListCppt struct {
 	PasienId int `json:"pasien_id"`
 	NoErm    int `json:"no_erm"`
