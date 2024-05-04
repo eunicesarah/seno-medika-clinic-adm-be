@@ -1,4 +1,4 @@
-package ttv
+package pemeriksaan
 
 import (
 	"github.com/gin-gonic/gin"

@@ -7,8 +7,8 @@ import (
 	"seno-medika.com/router/login"
 	"seno-medika.com/router/obat"
 	"seno-medika.com/router/pasien"
+	"seno-medika.com/router/pemeriksaan"
 	"seno-medika.com/router/role"
-	"seno-medika.com/router/ttv"
 )
 
 func MainRouter(r *gin.Engine) {
@@ -19,8 +19,9 @@ func MainRouter(r *gin.Engine) {
 	role.PerawatRouter(r)
 	role.DokterRouter(r)
 	role.ApotekerRouter(r)
-	ttv.TTVRouter(r)
+	pemeriksaan.TTVRouter(r)
 	obat.ObatRouter(r)
 	role.KasirRouter(r)
 	apotek.ApotekRouter(r)
+	pemeriksaan.PemeriksaanDokterRouter(r)
 }
