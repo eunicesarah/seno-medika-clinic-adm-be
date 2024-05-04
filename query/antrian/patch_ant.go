@@ -4,7 +4,7 @@ import (
 	"seno-medika.com/config/db"
 )
 
-func ChangeStatusAntrianById(antrianID int, status string) error {
+func ChangeStatusAntrianById(antrianID string, status string) error {
 	_, err := db.DB.Exec(
 		`UPDATE antrian
         SET status = $1
