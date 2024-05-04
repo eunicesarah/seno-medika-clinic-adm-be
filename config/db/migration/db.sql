@@ -141,9 +141,9 @@ CREATE TABLE public.rekam_medis (
 CREATE TABLE public.resep (
                                 resep_id SERIAL NOT NULL,
                                 pemeriksaan_dokter_id integer NOT NULL,
-                                deskripsi character varying(500) NOT NULL,
-                                ruang_tujuan character varying(500) NOT NULL,
-                                status_obat character varying(500) NOT NULL
+                                deskripsi character varying(500),
+                                ruang_tujuan character varying(500),
+                                status_obat character varying(500)
 );
 
 CREATE TABLE public.riwayat_penyakit (
@@ -259,10 +259,10 @@ CREATE TABLE public.keadaan_fisik (
 CREATE TABLE public.diagnosa (
                                 diagnosa_id SERIAL NOT NULL,
                                 pemeriksaan_dokter_id integer NOT NULL,
-                                diagnosa character varying(255) NOT NULL,
-                                jenis character varying(255) NOT NULL,
-                                kasus character varying(255) NOT NULL,
-                                status_diagnosis character varying(255) NOT NULL
+                                diagnosa character varying(255),
+                                jenis character varying(255),
+                                kasus character varying(255),
+                                status_diagnosis character varying(255)
 );
 
 CREATE TABLE public.list_tindakan (
@@ -293,8 +293,8 @@ CREATE TABLE public.anatomi (
                                 anatomi_id SERIAL NOT NULL,
                                 pasien_id integer NOT NULL,
                                 pemeriksaan_dokter_id integer NOT NULL,
-                                bagian_tubuh character varying(255) NOT NULL,
-                                keterangan character varying(255) NOT NULL
+                                bagian_tubuh character varying(255),
+                                keterangan character varying(255)
 );
 
 ALTER TABLE ONLY public.antrian
