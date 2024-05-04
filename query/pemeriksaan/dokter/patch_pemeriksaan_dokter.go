@@ -6,7 +6,7 @@ import (
 	"time"
 )
 
-func PatchPemeriksaanFisik(antrianId int, pemeriksaanFisik doctorstation.PemeriksaanFisik) error {
+func PatchPemeriksaanFisik(antrianId string, pemeriksaanFisik doctorstation.PemeriksaanFisik) error {
 	var (
 		pemeriksaanDokterId int
 	)
@@ -23,7 +23,7 @@ func PatchPemeriksaanFisik(antrianId int, pemeriksaanFisik doctorstation.Pemerik
 	return nil
 }
 
-func PatchRiwayatPemeriksaan(antrianId int, riwayatPemeriksaan doctorstation.RiwayatPemeriksaan) error {
+func PatchRiwayatPemeriksaan(antrianId string, riwayatPemeriksaan doctorstation.RiwayatPemeriksaan) error {
 	var (
 		pemeriksaanDokterId int
 	)
@@ -40,7 +40,7 @@ func PatchRiwayatPemeriksaan(antrianId int, riwayatPemeriksaan doctorstation.Riw
 	return nil
 }
 
-func PatchKeadaanFisik(antrianId int, keadaanFisik doctorstation.KeadaanFisik) error {
+func PatchKeadaanFisik(antrianId string, keadaanFisik doctorstation.KeadaanFisik) error {
 	var (
 		pemeriksaanDokterId int
 	)
@@ -57,7 +57,7 @@ func PatchKeadaanFisik(antrianId int, keadaanFisik doctorstation.KeadaanFisik) e
 	return nil
 }
 
-func PatchDiagnosa(antrianId int, diagnosa doctorstation.Diagnosa) error {
+func PatchDiagnosa(antrianId string, diagnosa doctorstation.Diagnosa) error {
 	var (
 		pemeriksaanDokterId int
 	)
@@ -75,7 +75,7 @@ func PatchDiagnosa(antrianId int, diagnosa doctorstation.Diagnosa) error {
 
 }
 
-func PatchAnatomi(antrianId int, anatomi doctorstation.Anatomi) error {
+func PatchAnatomi(antrianId string, anatomi doctorstation.Anatomi) error {
 	var (
 		pemeriksaanDokterId int
 	)

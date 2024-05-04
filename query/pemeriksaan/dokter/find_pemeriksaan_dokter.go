@@ -75,7 +75,7 @@ func FindPemeriksaanDokterById(pemeriksaanId string) (doctorstation.PemeriksaanD
 	return pemeriksaan, nil
 }
 
-func FindPemeriksaanDokterByAntrianId(antrianId int) (doctorstation.PemeriksaanDokterMerge, error) {
+func FindPemeriksaanDokterByAntrianId(antrianId string) (doctorstation.PemeriksaanDokterMerge, error) {
 	var (
 		pemeriksaanId string
 		pemeriksaan   doctorstation.PemeriksaanDokterMerge

@@ -216,7 +216,7 @@ func UpdatePasien(c *gin.Context) {
 }
 
 func DeletePasien(c *gin.Context) {
-	updateBy := c.Query("update_by")
+	updateBy := c.Query("delete_by")
 	target := c.Query("target")
 
 	switch updateBy {
