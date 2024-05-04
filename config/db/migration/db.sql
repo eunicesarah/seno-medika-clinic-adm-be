@@ -2,7 +2,7 @@ CREATE TABLE public.antrian (
                                 antrian_id SERIAL NOT NULL,
                                 pasien_id SERIAL NOT NULL,
                                 nomor_antrian integer NOT NULL,
-                                status boolean NOT NULL,
+                                status character varying(50) NOT NULL,
                                 poli character varying(20) NOT NULL,
                                 instalasi character varying(20) NOT NULL,
                                 created_at character varying(225) NOT NULL
@@ -101,7 +101,7 @@ CREATE TABLE public.list_obat (
                                 jumlah integer NOT NULL,
                                 dosis character varying(50) NOT NULL,
                                 aturan_pakai character varying(50) NOT NULL,
-                                keterangan character varying(50) NOT NULL,
+                                keterangan character varying(50) NOT NULL
 );
 
 CREATE TABLE public.nota (
@@ -211,7 +211,7 @@ CREATE TABLE public.cppt (
 
 CREATE TABLE public.pemeriksaan_dokter (
                                 pemeriksaan_dokter_id SERIAL NOT NULL,
-                                pasien_id integer NOT NULL,
+                                antrian_id integer NOT NULL,
                                 dokter_id integer NOT NULL,
                                 perawat_id integer NOT NULL
 );
@@ -299,6 +299,9 @@ CREATE TABLE public.anatomi (
 
 ALTER TABLE ONLY public.antrian
     ADD CONSTRAINT "PK_Antrian" PRIMARY KEY (antrian_id);
+
+ALTER TABLE ONLY public.antrian
+    ALTER COLUMN status SET DEFAULT 'pemeriksaan_ttv';
 
 ALTER TABLE ONLY public.pasien
     ADD CONSTRAINT "PK_pasien" PRIMARY KEY (pasien_id, no_erm);
@@ -454,7 +457,7 @@ ALTER TABLE ONLY public.list_cppt
     ADD CONSTRAINT list_cppt_no_erm_fkey FOREIGN KEY (no_erm) REFERENCES public.pasien(no_erm) ON UPDATE CASCADE ON DELETE CASCADE;
 
 ALTER TABLE ONLY public.pemeriksaan_dokter
-    ADD CONSTRAINT pemeriksaan_dokter_pasien_id_fkey FOREIGN KEY (pasien_id) REFERENCES public.pasien(pasien_id) ON UPDATE CASCADE ON DELETE CASCADE;
+    ADD CONSTRAINT pemeriksaan_dokter_antrian_id_fkey FOREIGN KEY (antrian_id) REFERENCES public.antrian(antrian_id) ON UPDATE CASCADE ON DELETE CASCADE;
 
 ALTER TABLE ONLY public.pemeriksaan_dokter
     ADD CONSTRAINT pemeriksaan_dokter_dokter_id_fkey FOREIGN KEY (dokter_id) REFERENCES public.dokter(dokter_id) ON UPDATE CASCADE ON DELETE CASCADE;

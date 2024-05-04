@@ -2,6 +2,7 @@ package antrian
 
 import (
 	"net/http"
+	antrian3 "seno-medika.com/query/role/nurse"
 	"strconv"
 	"time"
 
@@ -10,8 +11,12 @@ import (
 	"seno-medika.com/model/antrian"
 	"seno-medika.com/model/common"
 	antrian2 "seno-medika.com/query/antrian"
-	antrian3 "seno-medika.com/query/nurse"
 )
+
+type filterResponse struct {
+	Antrian []antrian.AntrianNurse `json:"antrian"`
+	Size    int                    `json:"size"`
+}
 
 func AddAntrian(c *gin.Context) {
 	var antr antrian.PendaftaranAntrian
@@ -76,9 +81,9 @@ func AddAntrian(c *gin.Context) {
 
 	antr.NomorAntrian = jumlahAntrian + 1
 	antr.CreatedAt = time.Now().Local().Format("2006-01-02")
-	antr.Status = false
+	// antr.Status = "false"
 
-	_, err = db.DB.Exec("INSERT INTO antrian (pasien_id, nomor_antrian, status, poli, instalasi, created_at) VALUES ($1, $2, $3, $4, $5, $6)", antr.PasienID, antr.NomorAntrian, antr.Status, antr.Poli, antr.Instalasi, antr.CreatedAt)
+	_, err = db.DB.Exec("INSERT INTO antrian (pasien_id, nomor_antrian, poli, instalasi, created_at) VALUES ($1, $2, $3, $4, $5)", antr.PasienID, antr.NomorAntrian, antr.Poli, antr.Instalasi, antr.CreatedAt)
 
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, common.Response{
@@ -128,6 +133,63 @@ func GetAntrian(c *gin.Context) {
 	var target = c.Query("target")
 	var findBy = c.Query("find_by")
 
+	if findBy == "pemeriksaan_ttv" || findBy == "pemeriksaan_dokter" || findBy == "dashboard" {
+		poli := c.Query("poli")
+		limit := c.Query("limit")
+		page := c.Query("page")
+		date := c.Query("date")
+		search := c.Query("search")
+
+		if limit == "" {
+			limit = "10"
+		}
+
+		if page == "" {
+			page = "0"
+		} else {
+			val, _ := strconv.Atoi(page)
+			lim, _ := strconv.Atoi(limit)
+			page = strconv.Itoa(val*lim - lim)
+		}
+
+		if date == "" {
+			date = time.Now().Local().Format("2006-01-02")
+		}
+
+		var (
+			data []antrian.AntrianNurse
+			size int
+			err  error
+		)
+
+		if findBy == "dashboard" {
+			data, size, err = antrian2.FindAntrianFilter(search, page, limit, date, poli)
+		} else {
+			data, size, err = antrian2.FindAntrianFilterPemeriksaan(search, page, limit, date, poli, findBy)
+		}
+
+		if err != nil {
+			c.JSON(http.StatusInternalServerError, common.Response{
+				Message:    err.Error(),
+				Status:     "Internal Server Error",
+				StatusCode: http.StatusInternalServerError,
+				Data:       nil,
+			})
+			return
+		}
+
+		c.JSON(http.StatusOK, common.Response{
+			Message:    "Successfully get antrian",
+			Status:     "ok",
+			StatusCode: http.StatusOK,
+			Data: filterResponse{
+				Antrian: data,
+				Size:    size,
+			},
+		})
+		return
+	}
+
 	if findBy == "id" {
 		val, err := strconv.Atoi(target)
 		if err != nil {
@@ -158,7 +220,7 @@ func GetAntrian(c *gin.Context) {
 		})
 		return
 	}
-	if (findBy == "pasienid") {
+	if findBy == "pasienid" {
 		val, err := strconv.Atoi(target)
 		if err != nil {
 			c.JSON(http.StatusBadRequest, common.Response{
@@ -351,7 +413,7 @@ func PatchAntrian(c *gin.Context) {
 
 		switch changeBy {
 		case "id":
-			err := antrian2.ChangeStatusAntrianById(patchInput.Key.(int), patchInput.Value.(bool))
+			err := antrian2.ChangeStatusAntrianById(patchInput.Key.(string), patchInput.Value.(string))
 
 			if err != nil {
 				c.JSON(http.StatusInternalServerError, common.Response{
@@ -372,7 +434,7 @@ func PatchAntrian(c *gin.Context) {
 			return
 
 		case "poli":
-			err := antrian2.ChangeStatusByPoli(patchInput.Key.(string), patchInput.Value.(bool))
+			err := antrian2.ChangeStatusByPoli(patchInput.Key.(string), patchInput.Value.(string))
 
 			if err != nil {
 				c.JSON(http.StatusInternalServerError, common.Response{
@@ -393,7 +455,7 @@ func PatchAntrian(c *gin.Context) {
 			return
 
 		case "instalasi":
-			err := antrian2.ChangeStatusByInstalasi(patchInput.Key.(string), patchInput.Value.(bool))
+			err := antrian2.ChangeStatusByInstalasi(patchInput.Key.(string), patchInput.Value.(string))
 
 			if err != nil {
 				c.JSON(http.StatusInternalServerError, common.Response{
@@ -423,26 +485,4 @@ func PatchAntrian(c *gin.Context) {
 			return
 		}
 	}
-}
-
-func GetAntrianForNurse(c *gin.Context) {
-	data, err := antrian3.ListAntrianNurse()
-
-	if err != nil {
-		c.JSON(http.StatusInternalServerError, common.Response{
-			Message:    err.Error(),
-			Status:     "Internal Server Error",
-			StatusCode: http.StatusInternalServerError,
-			Data:       nil,
-		})
-		return
-	}
-
-	c.JSON(http.StatusOK, common.Response{
-		Message:    "Successfully get antrian",
-		Status:     "ok",
-		StatusCode: http.StatusOK,
-		Data:       data,
-	})
-	return
 }

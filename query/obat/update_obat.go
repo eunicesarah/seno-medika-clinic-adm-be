@@ -3,7 +3,7 @@ package obat
 import (
 	"errors"
 	"seno-medika.com/config/db"
-	"seno-medika.com/model/pharmacystation"
+	"seno-medika.com/model/station/pharmacystation"
 )
 
 func UpdateObatById(id int, obat pharmacystation.Obat) error {

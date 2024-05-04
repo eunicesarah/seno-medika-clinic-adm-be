@@ -4,25 +4,26 @@ type Antrian struct {
 	AntrianID    int    `json:"antrian_id"`
 	PasienID     int    `json:"pasien_id"`
 	NomorAntrian int    `json:"nomor_antrian"`
-	Status       bool   `json:"status"`
+	Status       string `json:"status"`
 	Poli         string `json:"poli"`
 	Instalasi    string `json:"instalasi"`
 	CreatedAt    string `json:"created_at"`
 }
 
 type PendaftaranAntrian struct {
-	NoERM 		 string `json:"no_erm"`
-	Nama		 string `json:"nama"`
+	NoERM        string `json:"no_erm"`
+	Nama         string `json:"nama"`
 	AntrianID    int    `json:"antrian_id"`
 	PasienID     int    `json:"pasien_id"`
 	NomorAntrian int    `json:"nomor_antrian"`
-	Status       bool   `json:"status"`
+	Status       string `json:"status"`
 	Poli         string `json:"poli"`
 	Instalasi    string `json:"instalasi"`
 	CreatedAt    string `json:"created_at"`
 }
 
 type AntrianNurse struct {
+	AntrianID    int    `json:"antrian_id"`
 	NomorAntrian int    `json:"nomor_antrian"`
 	Poli         string `json:"poli"`
 	CreatedAt    string `json:"created_at"`

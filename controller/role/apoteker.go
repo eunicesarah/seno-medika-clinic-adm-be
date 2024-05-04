@@ -9,7 +9,7 @@ import (
 	"seno-medika.com/helper"
 	"seno-medika.com/model/common"
 	"seno-medika.com/model/person"
-	"seno-medika.com/query/apoteker"
+	"seno-medika.com/query/role/apoteker"
 	"sync"
 )
 
@@ -164,7 +164,7 @@ func PatchApoteker(c *gin.Context) {
 	var apotekerVar person.ApotekerData
 	target := c.Query("target")
 
-	val, err := db.DB.Exec("UPDATE FROM apoteker SET nomor_lisensi = $1 WHERE apoteker_id = $2", apotekerVar.NomorLisensi, target)
+	val, err := db.DB.Exec("UPDATE apoteker SET nomor_lisensi = $1 WHERE apoteker_id = $2", apotekerVar.NomorLisensi, target)
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, common.Response{
 			Message:    err.Error(),

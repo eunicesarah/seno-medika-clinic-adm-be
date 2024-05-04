@@ -3,7 +3,7 @@ package obat
 import (
 	"github.com/stretchr/testify/require"
 	"seno-medika.com/config/db"
-	"seno-medika.com/model/pharmacystation"
+	"seno-medika.com/model/station/pharmacystation"
 	"testing"
 )
 
