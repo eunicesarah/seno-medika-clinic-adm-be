@@ -23,7 +23,7 @@ func FindNotaById(id int) (cashierstation.Nota, error) {
 		&notaVar.TotalBiaya,
 		&notaVar.MetodePembayaran,
 	)
-	
+
 	if err != nil {
 		return cashierstation.Nota{}, err
 	}
@@ -85,8 +85,8 @@ func FindNotaByPasienID(id int) ([]cashierstation.Nota, error) {
 	}
 
 	if len(notaVar) == 0 {
-        return nil, errors.New("pasien_id not found")
-    }
+		return nil, errors.New("pasien_id not found")
+	}
 
 	return notaVar, nil
 }
@@ -116,8 +116,8 @@ func FindNotaByResepId(id int) ([]cashierstation.Nota, error) {
 		notaVar = append(notaVar, eachNota)
 	}
 	if len(notaVar) == 0 {
-        return nil, errors.New("resep_id not found")
-    }
+		return nil, errors.New("resep_id not found")
+	}
 
 	return notaVar, nil
 }
@@ -147,8 +147,8 @@ func FindNotaByMetodePembayaran(metode_pembayaran string) ([]cashierstation.Nota
 		notaVar = append(notaVar, eachNota)
 	}
 	if len(notaVar) == 0 {
-        return nil, errors.New("metode_pembayaran not found")
-    }
+		return nil, errors.New("metode_pembayaran not found")
+	}
 
 	return notaVar, nil
 }

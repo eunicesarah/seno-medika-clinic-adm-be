@@ -1,4 +1,4 @@
-package apotek 
+package role
 
 import (
 	"net/http"
@@ -10,7 +10,7 @@ import (
 	"seno-medika.com/query/apotek"
 )
 
-func GetApotek(c *gin.Context){
+func GetApotek(c *gin.Context) {
 	find_by := c.Query("find_by")
 	target := c.Query("target")
 
@@ -34,7 +34,7 @@ func GetApotek(c *gin.Context){
 		})
 		return
 	case "date":
-		if(target == "") {
+		if target == "" {
 			c.JSON(http.StatusBadRequest, common.Response{
 				Message:    "Please provide date",
 				Status:     "Bad Request",

@@ -2,6 +2,7 @@ package antrian
 
 import (
 	"net/http"
+	antrian3 "seno-medika.com/query/role/nurse"
 	"strconv"
 	"time"
 
@@ -10,7 +11,6 @@ import (
 	"seno-medika.com/model/antrian"
 	"seno-medika.com/model/common"
 	antrian2 "seno-medika.com/query/antrian"
-	antrian3 "seno-medika.com/query/nurse"
 )
 
 type filterResponse struct {

@@ -1,0 +1,5 @@
+package pemeriksaan
+
+func AddPemeriksaanDokter() {
+
+}

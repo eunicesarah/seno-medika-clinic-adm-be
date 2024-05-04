@@ -1,4 +1,4 @@
-package ttv
+package pemeriksaan
 
 import (
 	"github.com/gin-gonic/gin"
@@ -7,7 +7,7 @@ import (
 	"seno-medika.com/model/common"
 	"seno-medika.com/model/doctorstation"
 	"seno-medika.com/model/nursestation"
-	"seno-medika.com/query/ttv"
+	ttv2 "seno-medika.com/query/pemeriksaan/ttv"
 	"sync"
 )
 
@@ -134,7 +134,7 @@ func DeleteTTV(c *gin.Context) {
 	case "skrining_awal":
 		switch changeBy {
 		case "id":
-			err := ttv.DeleteSkriningAwalById(target)
+			err := ttv2.DeleteSkriningAwalById(target)
 			if err != nil {
 				c.JSON(http.StatusInternalServerError, common.Response{
 					Message:    err.Error(),
@@ -148,7 +148,7 @@ func DeleteTTV(c *gin.Context) {
 	case "skrining_gizi":
 		switch changeBy {
 		case "id":
-			err := ttv.DeleteSkriningGiziById(target)
+			err := ttv2.DeleteSkriningGiziById(target)
 			if err != nil {
 				c.JSON(http.StatusInternalServerError, common.Response{
 					Message:    err.Error(),
@@ -162,7 +162,7 @@ func DeleteTTV(c *gin.Context) {
 	case "skrining_penyakit":
 		switch changeBy {
 		case "id":
-			err := ttv.DeleteSkriningPenyakitById(target)
+			err := ttv2.DeleteSkriningPenyakitById(target)
 			if err != nil {
 				c.JSON(http.StatusInternalServerError, common.Response{
 					Message:    err.Error(),
@@ -176,7 +176,7 @@ func DeleteTTV(c *gin.Context) {
 	case "ttv":
 		switch changeBy {
 		case "id":
-			err := ttv.DeleteTTVById(target)
+			err := ttv2.DeleteTTVById(target)
 			if err != nil {
 				c.JSON(http.StatusInternalServerError, common.Response{
 					Message:    err.Error(),
@@ -191,7 +191,7 @@ func DeleteTTV(c *gin.Context) {
 	case "anamnesis":
 		switch changeBy {
 		case "id":
-			err := ttv.DeleteAnamnesisById(target)
+			err := ttv2.DeleteAnamnesisById(target)
 			if err != nil {
 				c.JSON(http.StatusInternalServerError, common.Response{
 					Message:    err.Error(),
@@ -205,7 +205,7 @@ func DeleteTTV(c *gin.Context) {
 	case "alergi":
 		switch changeBy {
 		case "id":
-			err := ttv.DeleteAlergiById(target)
+			err := ttv2.DeleteAlergiById(target)
 			if err != nil {
 				c.JSON(http.StatusInternalServerError, common.Response{
 					Message:    err.Error(),
@@ -220,7 +220,7 @@ func DeleteTTV(c *gin.Context) {
 	case "riwayat_penyakit":
 		switch changeBy {
 		case "id":
-			err := ttv.DeleteRiwayatPenyakitById(target)
+			err := ttv2.DeleteRiwayatPenyakitById(target)
 			if err != nil {
 				c.JSON(http.StatusInternalServerError, common.Response{
 					Message:    err.Error(),
@@ -256,7 +256,7 @@ func FindTTV(c *gin.Context) {
 
 	switch findBy {
 	case "id":
-		ttvVar, err := ttv.FindNurseStationById(target)
+		ttvVar, err := ttv2.FindNurseStationById(target)
 		if err != nil {
 			c.JSON(http.StatusInternalServerError, common.Response{
 				Message:    err.Error(),
@@ -276,7 +276,7 @@ func FindTTV(c *gin.Context) {
 		return
 
 	default:
-		ttvVars, err := ttv.FindAllNurseStation()
+		ttvVars, err := ttv2.FindAllNurseStation()
 		if err != nil {
 			c.JSON(http.StatusInternalServerError, common.Response{
 				Message:    err.Error(),
@@ -327,7 +327,7 @@ func PatchTTV(c *gin.Context) {
 				return
 			}
 
-			err := ttv.ChangeSkriningAwalById(target, skriningAwal)
+			err := ttv2.ChangeSkriningAwalById(target, skriningAwal)
 			if err != nil {
 				c.JSON(http.StatusInternalServerError, common.Response{
 					Message:    err.Error(),
@@ -353,7 +353,7 @@ func PatchTTV(c *gin.Context) {
 				return
 			}
 
-			err := ttv.ChangeSkriningGiziById(target, skriningGizi)
+			err := ttv2.ChangeSkriningGiziById(target, skriningGizi)
 			if err != nil {
 				c.JSON(http.StatusInternalServerError, common.Response{
 					Message:    err.Error(),
@@ -379,7 +379,7 @@ func PatchTTV(c *gin.Context) {
 				return
 			}
 
-			err := ttv.ChangeTTVById(target, ttvVar)
+			err := ttv2.ChangeTTVById(target, ttvVar)
 			if err != nil {
 				c.JSON(http.StatusInternalServerError, common.Response{
 					Message:    err.Error(),
@@ -405,7 +405,7 @@ func PatchTTV(c *gin.Context) {
 				return
 			}
 
-			err := ttv.ChangeAnamnesisById(target, anamnesis)
+			err := ttv2.ChangeAnamnesisById(target, anamnesis)
 			if err != nil {
 				c.JSON(http.StatusInternalServerError, common.Response{
 					Message:    err.Error(),
@@ -431,7 +431,7 @@ func PatchTTV(c *gin.Context) {
 				return
 			}
 
-			err := ttv.ChangeAlergiById(target, alergi)
+			err := ttv2.ChangeAlergiById(target, alergi)
 			if err != nil {
 				c.JSON(http.StatusInternalServerError, common.Response{
 					Message:    err.Error(),
@@ -457,7 +457,7 @@ func PatchTTV(c *gin.Context) {
 				return
 			}
 
-			err := ttv.ChangeRiwayatPenyakitById(target, riwayatPenyakit)
+			err := ttv2.ChangeRiwayatPenyakitById(target, riwayatPenyakit)
 			if err != nil {
 				c.JSON(http.StatusInternalServerError, common.Response{
 					Message:    err.Error(),

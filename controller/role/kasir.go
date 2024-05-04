@@ -1,24 +1,24 @@
-package kasir 
+package role
 
 import (
 	"net/http"
+	kasir2 "seno-medika.com/query/role/kasir"
 	"strconv"
 
 	"github.com/gin-gonic/gin"
 	"seno-medika.com/config/db"
-	"seno-medika.com/model/common"
 	"seno-medika.com/model/cashierstation"
-	"seno-medika.com/query/kasir"
+	"seno-medika.com/model/common"
 )
 
-func GetNota(c *gin.Context){
+func GetNota(c *gin.Context) {
 	find_by := c.Query("find_by")
 	target := c.Query("target")
 
 	switch find_by {
 	case "id":
 		val, _ := strconv.Atoi(target)
-		nota, err := kasir.FindNotaById(val)
+		nota, err := kasir2.FindNotaById(val)
 		if err != nil {
 			c.JSON(http.StatusBadRequest, common.Response{
 				Message:    "Invalid target",
@@ -38,7 +38,7 @@ func GetNota(c *gin.Context){
 
 	case "pasien_id":
 		val, _ := strconv.Atoi(target)
-		nota, err := kasir.FindNotaByPasienID(val)
+		nota, err := kasir2.FindNotaByPasienID(val)
 		if err != nil {
 			c.JSON(http.StatusBadRequest, common.Response{
 				Message:    "Invalid target",
@@ -58,7 +58,7 @@ func GetNota(c *gin.Context){
 
 	case "resep_id":
 		val, _ := strconv.Atoi(target)
-		nota, err := kasir.FindNotaByResepId(val)
+		nota, err := kasir2.FindNotaByResepId(val)
 		if err != nil {
 			c.JSON(http.StatusBadRequest, common.Response{
 				Message:    "Invalid target",
@@ -77,7 +77,7 @@ func GetNota(c *gin.Context){
 		return
 
 	case "metode_pembayaran":
-		nota, err := kasir.FindNotaByMetodePembayaran(target)
+		nota, err := kasir2.FindNotaByMetodePembayaran(target)
 		if err != nil {
 			c.JSON(http.StatusBadRequest, common.Response{
 				Message:    "Invalid target",
@@ -97,7 +97,7 @@ func GetNota(c *gin.Context){
 
 	case "detail_resep":
 		val, _ := strconv.Atoi(target)
-		nota, err := kasir.FindDetailByResepId(val)
+		nota, err := kasir2.FindDetailByResepId(val)
 		if err != nil {
 			c.JSON(http.StatusInternalServerError, common.Response{
 				Message:    err.Error(),
@@ -117,7 +117,7 @@ func GetNota(c *gin.Context){
 
 	case "detail_tindakan":
 		val, _ := strconv.Atoi(target)
-		nota, err := kasir.FindTindakanByNotaId(val)
+		nota, err := kasir2.FindTindakanByNotaId(val)
 		if err != nil {
 			c.JSON(http.StatusInternalServerError, common.Response{
 				Message:    err.Error(),
@@ -136,7 +136,7 @@ func GetNota(c *gin.Context){
 		return
 
 	default:
-		nota, err := kasir.FindNotaAll()
+		nota, err := kasir2.FindNotaAll()
 		if err != nil {
 			c.JSON(http.StatusInternalServerError, common.Response{
 				Message:    err.Error(),
@@ -156,7 +156,7 @@ func GetNota(c *gin.Context){
 	}
 }
 
-func AddNota(c *gin.Context){
+func AddNota(c *gin.Context) {
 	var notaVar cashierstation.Nota
 
 	if err := c.ShouldBindJSON(&notaVar); err != nil {
@@ -196,7 +196,7 @@ func AddNota(c *gin.Context){
 	})
 }
 
-func PatchNota(c *gin.Context){
+func PatchNota(c *gin.Context) {
 	changeType := c.Query("change_type")
 	target := c.Query("target")
 	var notaVar cashierstation.Nota
@@ -223,7 +223,7 @@ func PatchNota(c *gin.Context){
 			})
 			return
 		}
-		err = kasir.UpdateMetodePembayaran(val, notaVar.MetodePembayaran)
+		err = kasir2.UpdateMetodePembayaran(val, notaVar.MetodePembayaran)
 		if err != nil {
 			c.JSON(http.StatusInternalServerError, common.Response{
 				Message:    err.Error(),
@@ -245,7 +245,7 @@ func PatchNota(c *gin.Context){
 			return
 		}
 
-		err = kasir.UpdateTotalBiaya(val, notaVar.TotalBiaya)
+		err = kasir2.UpdateTotalBiaya(val, notaVar.TotalBiaya)
 		if err != nil {
 			c.JSON(http.StatusInternalServerError, common.Response{
 				Message:    err.Error(),
@@ -263,12 +263,12 @@ func PatchNota(c *gin.Context){
 			Data:       nil,
 		})
 		return
-	}	
+	}
 	c.JSON(http.StatusOK, common.Response{
 		Message:    "Successfully update nota",
 		Status:     "ok",
 		StatusCode: http.StatusOK,
 		Data:       nil,
 	})
-	
+
 }

@@ -9,7 +9,7 @@ import (
 	"seno-medika.com/helper"
 	"seno-medika.com/model/common"
 	"seno-medika.com/model/person"
-	"seno-medika.com/query/dokter"
+	dokter2 "seno-medika.com/query/role/dokter"
 	"sync"
 )
 
@@ -19,7 +19,7 @@ func GetDokter(c *gin.Context) {
 
 	switch findBy {
 	case "id":
-		dokterVar, err := dokter.FindDokterByID(target)
+		dokterVar, err := dokter2.FindDokterByID(target)
 		if err != nil {
 			c.JSON(http.StatusInternalServerError, common.Response{
 				Message:    err.Error(),
@@ -38,7 +38,7 @@ func GetDokter(c *gin.Context) {
 		})
 		return
 	default:
-		dokterVars, err := dokter.FindAllDokter()
+		dokterVars, err := dokter2.FindAllDokter()
 		if err != nil {
 			c.JSON(http.StatusInternalServerError, common.Response{
 				Message:    err.Error(),
@@ -118,8 +118,7 @@ func AddDokter(c *gin.Context) {
 
 	var dokterId string
 	if _, err := db.DB.Query(
-		"INSERT INTO users(user_uuid, nama, password, email, role)"+
-			" VALUES($1,$2,$3,$4,$5)", dokterVar.UserUUID, dokterVar.Nama, dokterVar.Password,
+		"INSERT INTO users(user_uuid, nama, password, email, role) VALUES($1,$2,$3,$4,$5)", dokterVar.UserUUID, dokterVar.Nama, dokterVar.Password,
 		dokterVar.Email, dokterVar.Role); err != nil {
 		c.JSON(http.StatusInternalServerError, common.Response{
 			Message:    err.Error(),
@@ -181,7 +180,7 @@ func DeleteDokter(c *gin.Context) {
 
 	switch changeType {
 	case "dokter":
-		if err := dokter.DeleteDokterById(target); err != nil {
+		if err := dokter2.DeleteDokterById(target); err != nil {
 			c.JSON(http.StatusInternalServerError, common.Response{
 				Message:    err.Error(),
 				Status:     "Internal Server Error",
@@ -191,7 +190,7 @@ func DeleteDokter(c *gin.Context) {
 			return
 		}
 	case "jadwal":
-		if err := dokter.DeleteListJadwalById(target); err != nil {
+		if err := dokter2.DeleteListJadwalById(target); err != nil {
 			c.JSON(http.StatusInternalServerError, common.Response{
 				Message:    err.Error(),
 				Status:     "Internal Server Error",
@@ -236,7 +235,7 @@ func PatchDokter(c *gin.Context) {
 			return
 		}
 
-		if err := dokter.ChangeDokterById(target, dokterVar); err != nil {
+		if err := dokter2.ChangeDokterById(target, dokterVar); err != nil {
 			c.JSON(http.StatusInternalServerError, common.Response{
 				Message:    err.Error(),
 				Status:     "Internal Server Error",
@@ -257,7 +256,7 @@ func PatchDokter(c *gin.Context) {
 			return
 		}
 
-		if err := dokter.ChangeListJadwalById(target, dokterVar); err != nil {
+		if err := dokter2.ChangeListJadwalById(target, dokterVar); err != nil {
 			c.JSON(http.StatusInternalServerError, common.Response{
 				Message:    err.Error(),
 				Status:     "Internal Server Error",

@@ -1,4 +1,4 @@
-package superadmin
+package role
 
 import (
 	"fmt"
@@ -10,7 +10,7 @@ import (
 	"seno-medika.com/helper"
 	"seno-medika.com/model/common"
 	"seno-medika.com/model/person"
-	"seno-medika.com/query/superadmin"
+	superadmin2 "seno-medika.com/query/role/superadmin"
 	"strconv"
 	"sync"
 )
@@ -72,8 +72,7 @@ func AddUser(c *gin.Context) {
 	userInput.Password = string(hashPass)
 
 	_, err = db.DB.Query(
-		"INSERT INTO users(user_uuid, nama, password, email, role)"+
-			" VALUES($1,$2,$3,$4,$5)", userInput.UserUUID, userInput.Nama, userInput.Password,
+		"INSERT INTO users(user_uuid, nama, password, email, role) VALUES($1,$2,$3,$4,$5)", userInput.UserUUID, userInput.Nama, userInput.Password,
 		userInput.Email, userInput.Role)
 
 	if err != nil {
@@ -112,7 +111,7 @@ func DeleteUser(c *gin.Context) {
 	switch deleteBy {
 	case "id":
 		val, _ := strconv.Atoi(target)
-		err := superadmin.DeleteUserById(val)
+		err := superadmin2.DeleteUserById(val)
 		if err != nil {
 			c.JSON(http.StatusBadRequest, common.Response{
 				Message:    err.Error(),
@@ -124,7 +123,7 @@ func DeleteUser(c *gin.Context) {
 		}
 
 	case "uuid":
-		err := superadmin.DeleteUserByUuid(target)
+		err := superadmin2.DeleteUserByUuid(target)
 		if err != nil {
 			c.JSON(http.StatusBadRequest, common.Response{
 				Message:    err.Error(),
@@ -136,7 +135,7 @@ func DeleteUser(c *gin.Context) {
 		}
 
 	case "nama":
-		err := superadmin.DeleteUserByName(target)
+		err := superadmin2.DeleteUserByName(target)
 		if err != nil {
 			c.JSON(http.StatusBadRequest, common.Response{
 				Message:    err.Error(),
@@ -148,7 +147,7 @@ func DeleteUser(c *gin.Context) {
 		}
 
 	case "email":
-		err := superadmin.DeleteUserByEmail(target)
+		err := superadmin2.DeleteUserByEmail(target)
 		if err != nil {
 			c.JSON(http.StatusBadRequest, common.Response{
 				Message:    err.Error(),
@@ -160,7 +159,7 @@ func DeleteUser(c *gin.Context) {
 		}
 
 	case "role":
-		err := superadmin.DeleteUserByRole(target)
+		err := superadmin2.DeleteUserByRole(target)
 		if err != nil {
 			c.JSON(http.StatusBadRequest, common.Response{
 				Message:    err.Error(),
@@ -210,7 +209,7 @@ func PutUser(c *gin.Context) {
 	switch updateBy {
 	case "id":
 		val, _ := strconv.Atoi(target)
-		err := superadmin.UpdateUserById(val, userInput)
+		err := superadmin2.UpdateUserById(val, userInput)
 		if err != nil {
 			c.JSON(http.StatusBadRequest, common.Response{
 				Message:    err.Error(),
@@ -222,7 +221,7 @@ func PutUser(c *gin.Context) {
 		}
 
 	case "uuid":
-		err := superadmin.UpdateUserByUuid(target, userInput)
+		err := superadmin2.UpdateUserByUuid(target, userInput)
 		if err != nil {
 			c.JSON(http.StatusBadRequest, common.Response{
 				Message:    err.Error(),
@@ -271,7 +270,7 @@ func PatchUser(c *gin.Context) {
 				return
 			}
 
-			err := superadmin.ChangeNameByUuid(putInput.Key.(string), putInput.Value.(string))
+			err := superadmin2.ChangeNameByUuid(putInput.Key.(string), putInput.Value.(string))
 			if err != nil {
 				c.JSON(http.StatusBadRequest, common.Response{
 					Message:    err.Error(),
@@ -301,7 +300,7 @@ func PatchUser(c *gin.Context) {
 			}
 
 			id := putInput.Key.(int)
-			err := superadmin.ChangeNameById(id, putInput.Value.(string))
+			err := superadmin2.ChangeNameById(id, putInput.Value.(string))
 			if err != nil {
 				c.JSON(http.StatusBadRequest, common.Response{
 					Message:    err.Error(),
@@ -337,7 +336,7 @@ func PatchUser(c *gin.Context) {
 				return
 			}
 
-			err := superadmin.ChangeEmailByUuid(putInput.Key.(string), putInput.Value.(string))
+			err := superadmin2.ChangeEmailByUuid(putInput.Key.(string), putInput.Value.(string))
 			if err != nil {
 				c.JSON(http.StatusBadRequest, common.Response{
 					Message:    err.Error(),
@@ -367,7 +366,7 @@ func PatchUser(c *gin.Context) {
 			}
 
 			id := putInput.Key.(int)
-			err := superadmin.ChangeEmailById(strconv.Itoa(id), putInput.Value.(string))
+			err := superadmin2.ChangeEmailById(strconv.Itoa(id), putInput.Value.(string))
 			if err != nil {
 				c.JSON(http.StatusBadRequest, common.Response{
 					Message:    err.Error(),
@@ -404,7 +403,7 @@ func PatchUser(c *gin.Context) {
 				return
 			}
 
-			err := superadmin.ChangePasswordByUuid(putInput.Key.(string), putInput.Value.(string))
+			err := superadmin2.ChangePasswordByUuid(putInput.Key.(string), putInput.Value.(string))
 			if err != nil {
 				c.JSON(http.StatusBadRequest, common.Response{
 					Message:    err.Error(),
@@ -434,7 +433,7 @@ func PatchUser(c *gin.Context) {
 			}
 
 			id := putInput.Key.(int)
-			err := superadmin.ChangePasswordById(id, putInput.Value.(string))
+			err := superadmin2.ChangePasswordById(id, putInput.Value.(string))
 			if err != nil {
 				c.JSON(http.StatusBadRequest, common.Response{
 					Message:    err.Error(),
@@ -470,7 +469,7 @@ func PatchUser(c *gin.Context) {
 				return
 			}
 
-			err := superadmin.ChangeRoleByUuid(putInput.Key.(string), putInput.Value.(string))
+			err := superadmin2.ChangeRoleByUuid(putInput.Key.(string), putInput.Value.(string))
 			if err != nil {
 				c.JSON(http.StatusBadRequest, common.Response{
 					Message:    err.Error(),
@@ -500,7 +499,7 @@ func PatchUser(c *gin.Context) {
 			}
 
 			id := putInput.Key.(int)
-			err := superadmin.ChangeRoleById(id, putInput.Value.(string))
+			err := superadmin2.ChangeRoleById(id, putInput.Value.(string))
 			if err != nil {
 				c.JSON(http.StatusBadRequest, common.Response{
 					Message:    err.Error(),
@@ -544,7 +543,7 @@ func GetUser(c *gin.Context) {
 	switch findBy {
 	case "id":
 		val, _ := strconv.Atoi(target)
-		user, err := superadmin.FindById(val)
+		user, err := superadmin2.FindById(val)
 		if err != nil {
 			c.JSON(http.StatusBadRequest, common.Response{
 				Message:    err.Error(),
@@ -563,7 +562,7 @@ func GetUser(c *gin.Context) {
 		})
 		return
 	case "uuid":
-		user, err := superadmin.FindByUuid(target)
+		user, err := superadmin2.FindByUuid(target)
 		if err != nil {
 			c.JSON(http.StatusBadRequest, common.Response{
 				Message:    err.Error(),
@@ -582,7 +581,7 @@ func GetUser(c *gin.Context) {
 		})
 		return
 	case "nama":
-		user, err := superadmin.FindByName(target)
+		user, err := superadmin2.FindByName(target)
 		if err != nil {
 			c.JSON(http.StatusBadRequest, common.Response{
 				Message:    err.Error(),
@@ -601,7 +600,7 @@ func GetUser(c *gin.Context) {
 		})
 		return
 	case "email":
-		user, err := superadmin.FindByEmail(target)
+		user, err := superadmin2.FindByEmail(target)
 		if err != nil {
 			c.JSON(http.StatusBadRequest, common.Response{
 				Message:    err.Error(),
@@ -620,7 +619,7 @@ func GetUser(c *gin.Context) {
 		})
 		return
 	case "role":
-		user, err := superadmin.FindByRole(target)
+		user, err := superadmin2.FindByRole(target)
 		if err != nil {
 			c.JSON(http.StatusBadRequest, common.Response{
 				Message:    err.Error(),
@@ -639,7 +638,7 @@ func GetUser(c *gin.Context) {
 		})
 		return
 	default:
-		user, err := superadmin.FindAll()
+		user, err := superadmin2.FindAll()
 		if err != nil {
 			c.JSON(http.StatusBadRequest, common.Response{
 				Message:    err.Error(),

@@ -1,10 +1,10 @@
 package kasir
 
 import (
-	"testing"
+	"github.com/google/uuid"
 	"github.com/stretchr/testify/require"
 	"seno-medika.com/config/db"
-	"github.com/google/uuid"
+	"testing"
 	"time"
 	// "seno-medika.com/model/cashierstation"
 )
@@ -181,10 +181,8 @@ func TestUpdateMetodePembayaran_Success(t *testing.T) {
 		return
 	}
 
-	
 	err := UpdateMetodePembayaran(NotaId, "ovo")
 	require.NoError(t, err)
-
 
 	_db.Exec("DELETE FROM nota WHERE nota_id = $1", NotaId)
 	_db.Exec("DELETE FROM list_tindakan WHERE list_tindakan_id = $1", ListTindakanId)
@@ -195,7 +193,7 @@ func TestUpdateMetodePembayaran_Success(t *testing.T) {
 	_db.Exec("DELETE FROM obat WHERE obat_id = $1", obatId)
 	_db.Exec("DELETE FROM pemeriksaan_dokter WHERE pemeriksaan_dokter_id = $1", PemeriksaanDokterId)
 	_db.Close()
-	
+
 }
 func TestUpdateMetodePembayaran_Fail(t *testing.T) {
 	_db := db.DB
@@ -217,7 +215,7 @@ func TestUpdateTotalBiaya_Success(t *testing.T) {
 		_db = db.Conn()
 		db.DB = _db
 	}()
-	
+
 	var obatId int
 	var pasienId int
 	var dokterId int
@@ -384,10 +382,8 @@ func TestUpdateTotalBiaya_Success(t *testing.T) {
 		return
 	}
 
-	
 	err := UpdateTotalBiaya(NotaId, 10000000)
 	require.NoError(t, err)
-	
 
 	_db.Exec("DELETE FROM nota WHERE nota_id = $1", NotaId)
 	_db.Exec("DELETE FROM list_tindakan WHERE list_tindakan_id = $1", ListTindakanId)

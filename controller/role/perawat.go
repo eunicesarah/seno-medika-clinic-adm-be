@@ -9,7 +9,7 @@ import (
 	"seno-medika.com/helper"
 	"seno-medika.com/model/common"
 	"seno-medika.com/model/person"
-	"seno-medika.com/query/perawat"
+	"seno-medika.com/query/role/perawat"
 	"sync"
 )
 

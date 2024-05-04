@@ -149,7 +149,6 @@ func TestFindNotaByMetodePembayaran_Success(t *testing.T) {
 		return
 	}
 
-
 	if err := _db.QueryRow(`INSERT INTO pemeriksaan_dokter (
 		pasien_id,
 		dokter_id,
@@ -661,17 +660,18 @@ func TestFindNotaAll_Success(t *testing.T) {
 	_db.Close()
 
 }
+
 // func TestFindNotaAll_Fail(t *testing.T) {
-	// _db := db.DB
-	// defer func() {
-	// 	_db = db.Conn()
-	// 	db.DB = _db
-	// }()
+// _db := db.DB
+// defer func() {
+// 	_db = db.Conn()
+// 	db.DB = _db
+// }()
 
-	// val, _ := FindNotaAll()
-	// require.Equal(t, []cashierstation.Nota(nil), val)
+// val, _ := FindNotaAll()
+// require.Equal(t, []cashierstation.Nota(nil), val)
 
-	// _db.Close()
-	// val, _ = FindNotaAll()
-	// require.Equal(t, []cashierstation.Nota(nil), val)
+// _db.Close()
+// val, _ = FindNotaAll()
+// require.Equal(t, []cashierstation.Nota(nil), val)
 // }
