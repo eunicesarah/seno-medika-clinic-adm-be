@@ -133,7 +133,7 @@ func GetAntrian(c *gin.Context) {
 	var target = c.Query("target")
 	var findBy = c.Query("find_by")
 
-	if findBy == "dashboard" {
+	if findBy == "pemeriksaan_ttv" || findBy == "pemeriksaan_dokter" || findBy == "dashboard" {
 		poli := c.Query("poli")
 		limit := c.Query("limit")
 		page := c.Query("page")
@@ -156,7 +156,17 @@ func GetAntrian(c *gin.Context) {
 			date = time.Now().Local().Format("2006-01-02")
 		}
 
-		data, size, err := antrian2.FindAntrianFilter(search, page, limit, date, poli)
+		var (
+			data []antrian.AntrianNurse
+			size int
+			err  error
+		)
+
+		if findBy == "dashboard" {
+			data, size, err = antrian2.FindAntrianFilter(search, page, limit, date, poli)
+		} else {
+			data, size, err = antrian2.FindAntrianFilterPemeriksaan(search, page, limit, date, poli, findBy)
+		}
 
 		if err != nil {
 			c.JSON(http.StatusInternalServerError, common.Response{
