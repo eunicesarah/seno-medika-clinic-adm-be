@@ -403,7 +403,7 @@ func PatchAntrian(c *gin.Context) {
 
 		switch changeBy {
 		case "id":
-			err := antrian2.ChangeStatusAntrianById(patchInput.Key.(int), patchInput.Value.(bool))
+			err := antrian2.ChangeStatusAntrianById(patchInput.Key.(int), patchInput.Value.(string))
 
 			if err != nil {
 				c.JSON(http.StatusInternalServerError, common.Response{
@@ -424,7 +424,7 @@ func PatchAntrian(c *gin.Context) {
 			return
 
 		case "poli":
-			err := antrian2.ChangeStatusByPoli(patchInput.Key.(string), patchInput.Value.(bool))
+			err := antrian2.ChangeStatusByPoli(patchInput.Key.(string), patchInput.Value.(string))
 
 			if err != nil {
 				c.JSON(http.StatusInternalServerError, common.Response{
@@ -445,7 +445,7 @@ func PatchAntrian(c *gin.Context) {
 			return
 
 		case "instalasi":
-			err := antrian2.ChangeStatusByInstalasi(patchInput.Key.(string), patchInput.Value.(bool))
+			err := antrian2.ChangeStatusByInstalasi(patchInput.Key.(string), patchInput.Value.(string))
 
 			if err != nil {
 				c.JSON(http.StatusInternalServerError, common.Response{

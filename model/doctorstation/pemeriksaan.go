@@ -17,7 +17,7 @@ type Cppt struct {
 
 type PemeriksaanDokter struct {
 	PemeriksaanDokterId int `json:"pemeriksaan_dokter_id"`
-	PasienId            int `json:"pasien_id"`
+	AntrianId           int `json:"antrian_id"`
 	DokterId            int `json:"dokter_id"`
 	PerawatId           int `json:"perawat_id"`
 }
