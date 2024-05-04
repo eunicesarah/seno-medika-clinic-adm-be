@@ -38,7 +38,7 @@ func ChangeSkriningGiziById(id string, skriningGizi nursestation.SkriningGizi) e
 	           penurunan_bb = $1,
 	           tdk_nafsu_makan = $2,
 	           diagnosis_khusus = $3,
-	           nama_penyakit = $4,
+	           nama_penyakit = $4
 	           WHERE skrin_gizi_id = $5`,
 		skriningGizi.PenurunanBB, skriningGizi.TdkNafsuMakan, skriningGizi.DiagnosisKhusus, skriningGizi.NamaPenyakit, id)
 	if err != nil {
