@@ -2,7 +2,7 @@ CREATE TABLE public.antrian (
                                 antrian_id SERIAL NOT NULL,
                                 pasien_id SERIAL NOT NULL,
                                 nomor_antrian integer NOT NULL,
-                                status varying(50) NOT NULL,
+                                status character varying(50) NOT NULL,
                                 poli character varying(20) NOT NULL,
                                 instalasi character varying(20) NOT NULL,
                                 created_at character varying(225) NOT NULL
