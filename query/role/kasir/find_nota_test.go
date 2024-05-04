@@ -1,13 +1,13 @@
 package kasir
 
 import (
+	"seno-medika.com/model/station/cashierstation"
 	"testing"
 	"time"
 
 	"github.com/google/uuid"
 	"github.com/stretchr/testify/require"
 	"seno-medika.com/config/db"
-	"seno-medika.com/model/cashierstation"
 )
 
 // func TestFindNotaById_Success(t *testing.T) {

@@ -5,8 +5,8 @@ import (
 	"net/http"
 	"seno-medika.com/config/db"
 	"seno-medika.com/model/common"
-	"seno-medika.com/model/doctorstation"
-	"seno-medika.com/model/nursestation"
+	doctorstation2 "seno-medika.com/model/station/doctorstation"
+	"seno-medika.com/model/station/nursestation"
 	ttv2 "seno-medika.com/query/pemeriksaan/ttv"
 	"sync"
 )
@@ -394,7 +394,7 @@ func PatchTTV(c *gin.Context) {
 	case "anamnesis":
 		switch changeBy {
 		case "id":
-			var anamnesis doctorstation.Anamnesis
+			var anamnesis doctorstation2.Anamnesis
 			if err := c.ShouldBind(&anamnesis); err != nil {
 				c.JSON(http.StatusBadRequest, common.Response{
 					Message:    err.Error(),
@@ -420,7 +420,7 @@ func PatchTTV(c *gin.Context) {
 	case "alergi":
 		switch changeBy {
 		case "id":
-			var alergi doctorstation.Alergi
+			var alergi doctorstation2.Alergi
 			if err := c.ShouldBind(&alergi); err != nil {
 				c.JSON(http.StatusBadRequest, common.Response{
 					Message:    err.Error(),

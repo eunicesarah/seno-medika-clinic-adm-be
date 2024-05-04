@@ -2,12 +2,12 @@ package role
 
 import (
 	"net/http"
+	"seno-medika.com/model/station/cashierstation"
 	kasir2 "seno-medika.com/query/role/kasir"
 	"strconv"
 
 	"github.com/gin-gonic/gin"
 	"seno-medika.com/config/db"
-	"seno-medika.com/model/cashierstation"
 	"seno-medika.com/model/common"
 )
 

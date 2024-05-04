@@ -2,7 +2,7 @@ package obat
 
 import (
 	"seno-medika.com/config/db"
-	"seno-medika.com/model/pharmacystation"
+	"seno-medika.com/model/station/pharmacystation"
 )
 
 func FindObatById(id int) (pharmacystation.Obat, error) {

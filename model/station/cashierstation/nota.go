@@ -1,6 +1,8 @@
 package cashierstation
 
-import "seno-medika.com/model/pharmacystation"
+import (
+	"seno-medika.com/model/station/pharmacystation"
+)
 
 type Nota struct {
 	NotaID           int    `json:"nota_id"`
@@ -8,7 +10,7 @@ type Nota struct {
 	DokterID         int    `json:"dokter_id"`
 	ResepID          int    `json:"resep_id"`
 	ListTindakanID   int    `json:"list_tindakan_id"`
-	TotalBiaya       int64    `json:"total_biaya"`
+	TotalBiaya       int64  `json:"total_biaya"`
 	MetodePembayaran string `json:"metode_pembayaran"`
 }
 
@@ -18,18 +20,18 @@ type ListTindakan struct {
 }
 
 type Tindakan struct {
-	TindakanID        int    `json:"tindakan_id"`
-	JenisTindakan     string `json:"jenis_tindakan"`
-	ProsedurTindakan  string `json:"prosedur_tindakan"`
-	Jumlah            int    `json:"jumlah"`
-	Keterangan        string `json:"keterangan"`
-	TanggalRencana    string `json:"tanggal_rencana"`
-	HargaTindakan     int64    `json:"harga_tindakan"`
-	IndikasiTindakan  string `json:"indikasi_tindakan"`
-	Tujuan            string `json:"tujuan"`
-	Risiko            string `json:"risiko"`
-	Komplikasi        string `json:"komplikasi"`
-	AlternatifRisiko  string `json:"alternatif_risiko"`
+	TindakanID       int    `json:"tindakan_id"`
+	JenisTindakan    string `json:"jenis_tindakan"`
+	ProsedurTindakan string `json:"prosedur_tindakan"`
+	Jumlah           int    `json:"jumlah"`
+	Keterangan       string `json:"keterangan"`
+	TanggalRencana   string `json:"tanggal_rencana"`
+	HargaTindakan    int64  `json:"harga_tindakan"`
+	IndikasiTindakan string `json:"indikasi_tindakan"`
+	Tujuan           string `json:"tujuan"`
+	Risiko           string `json:"risiko"`
+	Komplikasi       string `json:"komplikasi"`
+	AlternatifRisiko string `json:"alternatif_risiko"`
 }
 
 type Penanganan struct {

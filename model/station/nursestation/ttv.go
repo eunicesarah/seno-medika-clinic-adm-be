@@ -1,14 +1,16 @@
 package nursestation
 
-import "seno-medika.com/model/doctorstation"
+import (
+	doctorstation2 "seno-medika.com/model/station/doctorstation"
+)
 
 type NurseStation struct {
-	SkriningAwal    SkriningAwal            `json:"skrining_awal"`
-	SkriningGizi    SkriningGizi            `json:"skrining_gizi"`
-	TTV             TTV                     `json:"ttv"`
-	RiwayatPenyakit RiwayatPenyakit         `json:"riwayat_penyakit"`
-	Alergi          doctorstation.Alergi    `json:"alergi"`
-	Anamnesis       doctorstation.Anamnesis `json:"anamnesis"`
+	SkriningAwal    SkriningAwal             `json:"skrining_awal"`
+	SkriningGizi    SkriningGizi             `json:"skrining_gizi"`
+	TTV             TTV                      `json:"ttv"`
+	RiwayatPenyakit RiwayatPenyakit          `json:"riwayat_penyakit"`
+	Alergi          doctorstation2.Alergi    `json:"alergi"`
+	Anamnesis       doctorstation2.Anamnesis `json:"anamnesis"`
 }
 
 type SkriningAwal struct {
@@ -22,7 +24,7 @@ type SkriningAwal struct {
 	HasilCaraJalan     string `json:"hasil_cara_jalan"`
 	SkalaNyeri         int    `json:"skala_nyeri"`
 	NyeriBerulang      string `json:"nyeri_berulang"`
-	SifatNyeri		   string `json:"sifat_nyeri"`
+	SifatNyeri         string `json:"sifat_nyeri"`
 }
 
 type SkriningGizi struct {
@@ -58,4 +60,3 @@ type RiwayatPenyakit struct {
 	RPD               string `json:"rpd"`
 	RPK               string `json:"rpk"`
 }
-

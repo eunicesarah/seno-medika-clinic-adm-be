@@ -1,13 +1,13 @@
 package apotek
 
 import (
+	pharmacystation2 "seno-medika.com/model/station/pharmacystation"
 	"testing"
 	// "time"
 
 	// "github.com/google/uuid"
 	"github.com/stretchr/testify/require"
 	"seno-medika.com/config/db"
-	"seno-medika.com/model/pharmacystation"
 )
 
 func TestFindAllAntrianApotekToday_Fail(t *testing.T) {
@@ -19,11 +19,9 @@ func TestFindAllAntrianApotekToday_Fail(t *testing.T) {
 	_db.Close()
 	val, err := FindAllAntrianApotekToday()
 	require.Error(t, err)
-	require.Equal(t, []pharmacystation.DashboardApotek(nil), val)
-
+	require.Equal(t, []pharmacystation2.DashboardApotek(nil), val)
 
 }
-
 
 // func TestFindAllAntrianApotekToday_Success(t *testing.T) {
 // 	_db := db.DB
@@ -134,7 +132,6 @@ func TestFindAllAntrianApotekToday_Fail(t *testing.T) {
 // 		return
 // 	}
 
-
 // 	if err := _db.QueryRow(`INSERT INTO pemeriksaan_dokter (
 // 		pasien_id,
 // 		dokter_id,
@@ -163,7 +160,7 @@ func TestFindAllAntrianApotekToday_Fail(t *testing.T) {
 // 		dosis,
 // 		aturan_pakai,
 // 		keterangan
-		
+
 // 	) VALUES ($1, $2, 100, '1x1', 'wajib malam', 'setelah makan')
 // 	`, obatId, ResepId)
 
@@ -210,7 +207,6 @@ func TestFindAllAntrianApotekToday_Fail(t *testing.T) {
 // 	_db.Close()
 // }
 
-
 func TestFindAllAntrianApotek_Fail(t *testing.T) {
 	_db := db.DB
 	defer func() {
@@ -220,7 +216,7 @@ func TestFindAllAntrianApotek_Fail(t *testing.T) {
 	_db.Close()
 	val, err := FindAllAntrianApotek()
 	require.Error(t, err)
-	require.Equal(t, []pharmacystation.DashboardApotek(nil), val)
+	require.Equal(t, []pharmacystation2.DashboardApotek(nil), val)
 }
 func TestFindAllAntrianApotek_Success(t *testing.T) {
 	_db := db.DB
@@ -255,10 +251,9 @@ func TestFindAllAntrianApotekByDate_Fail(t *testing.T) {
 
 	val, err := FindAllAntrianApotekByDate("2021-01-01")
 	require.Error(t, err)
-	require.Equal(t, []pharmacystation.DashboardApotek(nil), val)
+	require.Equal(t, []pharmacystation2.DashboardApotek(nil), val)
 
 }
-
 
 // func TestFindAllAntrianApotek_Success (t *testing.T) {
 // 	_db := db.DB
@@ -369,7 +364,6 @@ func TestFindAllAntrianApotekByDate_Fail(t *testing.T) {
 // 		return
 // 	}
 
-
 // 	if err := _db.QueryRow(`INSERT INTO pemeriksaan_dokter (
 // 		pasien_id,
 // 		dokter_id,
@@ -398,7 +392,7 @@ func TestFindAllAntrianApotekByDate_Fail(t *testing.T) {
 // 		dosis,
 // 		aturan_pakai,
 // 		keterangan
-		
+
 // 	) VALUES ($1, $2, 100, '1x1', 'wajib malam', 'setelah makan')
 // 	`, obatId, ResepId)
 
@@ -454,7 +448,7 @@ func TestFindDetailResepByNoAntrian_Fail(t *testing.T) {
 
 	val, err := FindDetailResepByNoAntrian(0)
 	require.Error(t, err)
-	require.Equal(t, []pharmacystation.DetailObat(nil), val)
+	require.Equal(t, []pharmacystation2.DetailObat(nil), val)
 	_db.Close()
 	if err == nil {
 		t.Errorf("expecting error, got nil")
@@ -573,7 +567,6 @@ func TestFindDetailResepByNoAntrian_Fail(t *testing.T) {
 // 		return
 // 	}
 
-
 // 	if err := _db.QueryRow(`INSERT INTO pemeriksaan_dokter (
 // 		pasien_id,
 // 		dokter_id,
@@ -602,7 +595,7 @@ func TestFindDetailResepByNoAntrian_Fail(t *testing.T) {
 // 		dosis,
 // 		aturan_pakai,
 // 		keterangan
-		
+
 // 	) VALUES ($1, $2, 100, '1x1', 'wajib malam', 'setelah makan')
 // 	`, obatId, ResepId)
 

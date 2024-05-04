@@ -2,8 +2,8 @@ package ttv
 
 import (
 	"seno-medika.com/config/db"
-	"seno-medika.com/model/doctorstation"
-	"seno-medika.com/model/nursestation"
+	doctorstation2 "seno-medika.com/model/station/doctorstation"
+	"seno-medika.com/model/station/nursestation"
 	"strconv"
 	"sync"
 )
@@ -100,7 +100,7 @@ func FindRiwayatPenyakitById(
 
 func FindAnamnesisById(
 	id string, errorChan *error,
-	riwayatPenyakitRes *doctorstation.Anamnesis,
+	riwayatPenyakitRes *doctorstation2.Anamnesis,
 	wg *sync.WaitGroup,
 ) {
 	defer wg.Done()
@@ -128,7 +128,7 @@ func FindAnamnesisById(
 
 func FindAlergiById(
 	id string, errorChan chan error,
-	wg *sync.WaitGroup, alergiRes *doctorstation.Alergi,
+	wg *sync.WaitGroup, alergiRes *doctorstation2.Alergi,
 ) {
 	defer wg.Done()
 
@@ -144,7 +144,7 @@ func FindAlergiById(
 }
 
 func FindAllNurseStation() (nurseStationRes []nursestation.NurseStation, err error) {
-	var anamnesisRes []doctorstation.Anamnesis
+	var anamnesisRes []doctorstation2.Anamnesis
 	var wg sync.WaitGroup
 	errChan := make(chan error, 1)
 
@@ -160,7 +160,7 @@ func FindAllNurseStation() (nurseStationRes []nursestation.NurseStation, err err
 		defer rows.Close()
 
 		for rows.Next() {
-			var anamnesis doctorstation.Anamnesis
+			var anamnesis doctorstation2.Anamnesis
 			if err := rows.Scan(
 				&anamnesis.AnamnesisID,
 				&anamnesis.PasienID,

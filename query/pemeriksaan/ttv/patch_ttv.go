@@ -2,8 +2,8 @@ package ttv
 
 import (
 	"seno-medika.com/config/db"
-	"seno-medika.com/model/doctorstation"
-	"seno-medika.com/model/nursestation"
+	doctorstation2 "seno-medika.com/model/station/doctorstation"
+	"seno-medika.com/model/station/nursestation"
 )
 
 func ChangeSkriningAwalById(id string, skriningAwal nursestation.SkriningAwal) error {
@@ -102,7 +102,7 @@ func ChangeRiwayatPenyakitById(id string, riwayatPenyakit nursestation.RiwayatPe
 	return nil
 }
 
-func ChangeAlergiById(id string, alergi doctorstation.Alergi) error {
+func ChangeAlergiById(id string, alergi doctorstation2.Alergi) error {
 	val, err := db.DB.Exec(
 		`UPDATE alergi SET
 	           obat = $1,
@@ -121,7 +121,7 @@ func ChangeAlergiById(id string, alergi doctorstation.Alergi) error {
 	return nil
 }
 
-func ChangeAnamnesisById(id string, anamnesis doctorstation.Anamnesis) error {
+func ChangeAnamnesisById(id string, anamnesis doctorstation2.Anamnesis) error {
 	val, err := db.DB.Exec(
 		`UPDATE anamnesis SET
 	           pasien_id = $1,

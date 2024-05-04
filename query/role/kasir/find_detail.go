@@ -2,10 +2,10 @@ package kasir
 
 import (
 	"errors"
+	"seno-medika.com/model/station/cashierstation"
+	"seno-medika.com/model/station/pharmacystation"
 
 	"seno-medika.com/config/db"
-	"seno-medika.com/model/cashierstation"
-	"seno-medika.com/model/pharmacystation"
 )
 
 func FindDetailByResepId(nota_id int) ([]pharmacystation.DetailObat, error) {

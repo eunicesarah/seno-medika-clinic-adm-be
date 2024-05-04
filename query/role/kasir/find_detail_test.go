@@ -1,12 +1,12 @@
 package kasir
 
 import (
+	"seno-medika.com/model/station/cashierstation"
+	"seno-medika.com/model/station/pharmacystation"
 	"testing"
 
 	"github.com/stretchr/testify/require"
 	"seno-medika.com/config/db"
-	"seno-medika.com/model/cashierstation"
-	"seno-medika.com/model/pharmacystation"
 )
 
 func TestFindDetailByResepId_Fail(t *testing.T) {
