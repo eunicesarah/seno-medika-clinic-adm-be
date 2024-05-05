@@ -1,11 +1,12 @@
 package ttv
 
 import (
+	"strconv"
+	"sync"
+
 	"seno-medika.com/config/db"
 	"seno-medika.com/model/doctorstation"
 	"seno-medika.com/model/nursestation"
-	"strconv"
-	"sync"
 )
 
 func FindSkriningAwalById(
@@ -87,7 +88,7 @@ func FindRiwayatPenyakitById(
 ) {
 	defer wg.Done()
 
-	if err := db.DB.QueryRow("SELECT * FROM riwayat_penyakit WHERE rwt_penyakit_id = $1", id).Scan(
+	if err := db.DB.QueryRow("SELECT * FROM riwayat_penyakit WHERE riwayat_penyakit_id = $1", id).Scan(
 		&riwayatPenyakitRes.RiwayatPenyakitID,
 		&riwayatPenyakitRes.RPS,
 		&riwayatPenyakitRes.RPD,
@@ -106,6 +107,34 @@ func FindAnamnesisById(
 	defer wg.Done()
 
 	if err := db.DB.QueryRow("SELECT * FROM anamnesis WHERE anamnesis_id = $1", id).Scan(
+		&riwayatPenyakitRes.AnamnesisID,
+		&riwayatPenyakitRes.PasienID,
+		&riwayatPenyakitRes.SkrinAwalID,
+		&riwayatPenyakitRes.SkrinGiziID,
+		&riwayatPenyakitRes.TTVID,
+		&riwayatPenyakitRes.RiwayatPenyakitID,
+		&riwayatPenyakitRes.AlergiID,
+		&riwayatPenyakitRes.DokterID,
+		&riwayatPenyakitRes.PerawatID,
+		&riwayatPenyakitRes.KeluhanUtama,
+		&riwayatPenyakitRes.KeluhanTambahan,
+		&riwayatPenyakitRes.LamaSakit,
+	); err != nil {
+		*errorChan = err
+		return
+	}
+
+	return
+}
+
+func FindAnamnesisByPasienId(
+	id string, errorChan *error,
+	riwayatPenyakitRes *doctorstation.Anamnesis,
+	wg *sync.WaitGroup,
+) {
+	defer wg.Done()
+
+	if err := db.DB.QueryRow("SELECT * FROM anamnesis WHERE pasien_id = $1", id).Scan(
 		&riwayatPenyakitRes.AnamnesisID,
 		&riwayatPenyakitRes.PasienID,
 		&riwayatPenyakitRes.SkrinAwalID,
@@ -233,6 +262,38 @@ func FindNurseStationById(id string) (nurseStationRes nursestation.NurseStation,
 	go FindSkriningGiziById(id, errorChan, &wg, &nurseStationRes.SkriningGizi)
 	go FindTTVById(id, errorChan, &wg, &nurseStationRes.TTV)
 	go FindRiwayatPenyakitById(id, errorChan, &wg, &nurseStationRes.RiwayatPenyakit)
+
+	wg.Wait()
+	close(errorChan)
+
+	for err := range errorChan {
+		if err != nil {
+			return nursestation.NurseStation{}, err
+		}
+	}
+
+	return nurseStationRes, nil
+}
+func FindNurseStationByPasienId(id string) (nurseStationRes nursestation.NurseStation, err error) {
+	var wg sync.WaitGroup
+	wg.Add(1)
+	var anamnesisID string;
+	go FindAnamnesisByPasienId(id, &err, &nurseStationRes.Anamnesis, &wg)
+	err = db.DB.QueryRow("SELECT anamnesis_id FROM anamnesis WHERE pasien_id = $1", id).Scan(&anamnesisID)
+
+	wg.Wait()
+
+	if err != nil {
+		return nursestation.NurseStation{}, err
+	}
+
+	errorChan := make(chan error, 5)
+	wg.Add(5)
+	go FindAlergiById(anamnesisID, errorChan, &wg, &nurseStationRes.Alergi)
+	go FindSkriningAwalById(anamnesisID, errorChan, &wg, &nurseStationRes.SkriningAwal)
+	go FindSkriningGiziById(anamnesisID, errorChan, &wg, &nurseStationRes.SkriningGizi)
+	go FindTTVById(anamnesisID, errorChan, &wg, &nurseStationRes.TTV)
+	go FindRiwayatPenyakitById(anamnesisID, errorChan, &wg, &nurseStationRes.RiwayatPenyakit)
 
 	wg.Wait()
 	close(errorChan)

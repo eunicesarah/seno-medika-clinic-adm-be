@@ -1,14 +1,15 @@
 package ttv
 
 import (
-	"github.com/gin-gonic/gin"
 	"net/http"
+	"sync"
+
+	"github.com/gin-gonic/gin"
 	"seno-medika.com/config/db"
 	"seno-medika.com/model/common"
 	"seno-medika.com/model/doctorstation"
 	"seno-medika.com/model/nursestation"
 	"seno-medika.com/query/ttv"
-	"sync"
 )
 
 func AddTTV(c *gin.Context) {
@@ -257,6 +258,25 @@ func FindTTV(c *gin.Context) {
 	switch findBy {
 	case "id":
 		ttvVar, err := ttv.FindNurseStationById(target)
+		if err != nil {
+			c.JSON(http.StatusInternalServerError, common.Response{
+				Message:    err.Error(),
+				Status:     "Internal Server Error",
+				StatusCode: http.StatusInternalServerError,
+				Data:       nil,
+			})
+			return
+		}
+
+		c.JSON(http.StatusOK, common.Response{
+			Message:    "Successfully get ttv",
+			Status:     "ok",
+			StatusCode: http.StatusOK,
+			Data:       ttvVar,
+		})
+		return
+	case "pasien_id":
+		ttvVar, err := ttv.FindNurseStationByPasienId(target)
 		if err != nil {
 			c.JSON(http.StatusInternalServerError, common.Response{
 				Message:    err.Error(),
