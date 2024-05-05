@@ -1,8 +1,9 @@
 package apotek
 
 import (
-	pharmacystation2 "seno-medika.com/model/station/pharmacystation"
 	"time"
+
+	pharmacystation2 "seno-medika.com/model/station/pharmacystation"
 
 	"seno-medika.com/config/db"
 )
@@ -77,7 +78,7 @@ func FindDetailResepByNoAntrian(no_antrian int) ([]pharmacystation2.DetailObat, 
 		return nil, err
 	}
 
-	rows, err := db.DB.Query("SELECT o.nama_obat,  o.satuan, lo.jumlah, lo.dosis, lo.keterangan, lo.aturan_pakai FROM nota n "+
+	rows, err := db.DB.Query("SELECT o.nama_obat,  o.satuan, o.stock, lo.jumlah, lo.dosis, lo.keterangan, lo.aturan_pakai FROM nota n "+
 		"INNER JOIN resep r ON n.resep_id = r.resep_id "+
 		"INNER JOIN list_obat lo ON lo.resep_id = r.resep_id "+
 		"INNER JOIN obat o ON lo.obat_id = o.obat_id "+
@@ -89,7 +90,7 @@ func FindDetailResepByNoAntrian(no_antrian int) ([]pharmacystation2.DetailObat, 
 
 	for rows.Next() {
 		var detail pharmacystation2.DetailObat
-		err := rows.Scan(&detail.Obat.NamaObat, &detail.Obat.Satuan, &detail.ListObat.Jumlah, &detail.ListObat.Dosis, &detail.ListObat.Keterangan, &detail.ListObat.AturanPakai)
+		err := rows.Scan(&detail.Obat.NamaObat, &detail.Obat.Satuan, &detail.Obat.Stock, &detail.ListObat.Jumlah, &detail.ListObat.Dosis, &detail.ListObat.Keterangan, &detail.ListObat.AturanPakai)
 		if err != nil {
 			return nil, err
 		}
