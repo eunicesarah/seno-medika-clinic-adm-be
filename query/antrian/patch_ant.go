@@ -4,7 +4,7 @@ import (
 	"seno-medika.com/config/db"
 )
 
-func ChangeStatusAntrianById(antrianID int, status bool) error {
+func ChangeStatusAntrianById(antrianID string, status string) error {
 	_, err := db.DB.Exec(
 		`UPDATE antrian
         SET status = $1
@@ -17,7 +17,7 @@ func ChangeStatusAntrianById(antrianID int, status bool) error {
 	return nil
 }
 
-func ChangeStatusByPoli(poli string, status bool) error {
+func ChangeStatusByPoli(poli string, status string) error {
 	_, err := db.DB.Exec(
 		`UPDATE antrian
 		SET status = $1
@@ -30,7 +30,7 @@ func ChangeStatusByPoli(poli string, status bool) error {
 	return nil
 }
 
-func ChangeStatusByInstalasi(instalasi string, status bool) error {
+func ChangeStatusByInstalasi(instalasi string, status string) error {
 	_, err := db.DB.Exec(
 		`UPDATE antrian
 		SET status = $1

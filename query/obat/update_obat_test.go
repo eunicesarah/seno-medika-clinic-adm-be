@@ -2,7 +2,7 @@ package obat
 
 import (
 	"seno-medika.com/config/db"
-	"seno-medika.com/model/pharmacystation"
+	"seno-medika.com/model/station/pharmacystation"
 	"testing"
 )
 
@@ -27,7 +27,7 @@ func TestUpdateObatById_Success(t *testing.T) {
 		NamaObat:      "testNama123",
 		JenisAsuransi: "BPJS",
 		Harga:         12345,
-		Stock: 	   10,
+		Stock:         10,
 		Satuan:        "testSatuan",
 	})
 	if err != nil {
@@ -47,7 +47,7 @@ func TestUpdateObatById_Failed(t *testing.T) {
 		NamaObat:      "testNama123",
 		JenisAsuransi: "BPJS",
 		Harga:         12345,
-		Stock: 	   10,
+		Stock:         10,
 		Satuan:        "testSatuan",
 	})
 	if err == nil {
@@ -76,7 +76,7 @@ func TestUpdateObatByName_Success(t *testing.T) {
 		ObatID:        8911,
 		JenisAsuransi: "BPJS",
 		Harga:         12345,
-		Stock: 	   10,
+		Stock:         10,
 		Satuan:        "testSatuan",
 	})
 	if err != nil {
@@ -96,7 +96,7 @@ func TestUpdateObatByName_Failed(t *testing.T) {
 		ObatID:        8911,
 		JenisAsuransi: "BPJS",
 		Harga:         12345,
-		Stock: 	   10,
+		Stock:         10,
 		Satuan:        "testSatuan",
 	})
 	if err == nil {

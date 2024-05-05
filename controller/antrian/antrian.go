@@ -2,6 +2,7 @@ package antrian
 
 import (
 	"net/http"
+	antrian3 "seno-medika.com/query/role/nurse"
 	"strconv"
 	"time"
 
@@ -10,7 +11,6 @@ import (
 	"seno-medika.com/model/antrian"
 	"seno-medika.com/model/common"
 	antrian2 "seno-medika.com/query/antrian"
-	antrian3 "seno-medika.com/query/nurse"
 )
 
 type filterResponse struct {
@@ -81,9 +81,9 @@ func AddAntrian(c *gin.Context) {
 
 	antr.NomorAntrian = jumlahAntrian + 1
 	antr.CreatedAt = time.Now().Local().Format("2006-01-02")
-	antr.Status = false
+	// antr.Status = "false"
 
-	_, err = db.DB.Exec("INSERT INTO antrian (pasien_id, nomor_antrian, status, poli, instalasi, created_at) VALUES ($1, $2, $3, $4, $5, $6)", antr.PasienID, antr.NomorAntrian, antr.Status, antr.Poli, antr.Instalasi, antr.CreatedAt)
+	_, err = db.DB.Exec("INSERT INTO antrian (pasien_id, nomor_antrian, poli, instalasi, created_at) VALUES ($1, $2, $3, $4, $5)", antr.PasienID, antr.NomorAntrian, antr.Poli, antr.Instalasi, antr.CreatedAt)
 
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, common.Response{
@@ -133,7 +133,8 @@ func GetAntrian(c *gin.Context) {
 	var target = c.Query("target")
 	var findBy = c.Query("find_by")
 
-	if findBy == "dashboard" {
+	if findBy == "pemeriksaan_ttv" || findBy == "pemeriksaan_dokter" ||
+		findBy == "dashboard" || findBy == "obat_sudah_diberikan" || findBy == "obat_belum_diberikan" {
 		poli := c.Query("poli")
 		limit := c.Query("limit")
 		page := c.Query("page")
@@ -156,7 +157,17 @@ func GetAntrian(c *gin.Context) {
 			date = time.Now().Local().Format("2006-01-02")
 		}
 
-		data, size, err := antrian2.FindAntrianFilter(search, page, limit, date, poli)
+		var (
+			data []antrian.AntrianNurse
+			size int
+			err  error
+		)
+
+		if findBy == "dashboard" {
+			data, size, err = antrian2.FindAntrianFilter(search, page, limit, date, poli)
+		} else {
+			data, size, err = antrian2.FindAntrianFilterPemeriksaan(search, page, limit, date, poli, findBy)
+		}
 
 		if err != nil {
 			c.JSON(http.StatusInternalServerError, common.Response{
@@ -403,7 +414,7 @@ func PatchAntrian(c *gin.Context) {
 
 		switch changeBy {
 		case "id":
-			err := antrian2.ChangeStatusAntrianById(patchInput.Key.(int), patchInput.Value.(bool))
+			err := antrian2.ChangeStatusAntrianById(patchInput.Key.(string), patchInput.Value.(string))
 
 			if err != nil {
 				c.JSON(http.StatusInternalServerError, common.Response{
@@ -424,7 +435,7 @@ func PatchAntrian(c *gin.Context) {
 			return
 
 		case "poli":
-			err := antrian2.ChangeStatusByPoli(patchInput.Key.(string), patchInput.Value.(bool))
+			err := antrian2.ChangeStatusByPoli(patchInput.Key.(string), patchInput.Value.(string))
 
 			if err != nil {
 				c.JSON(http.StatusInternalServerError, common.Response{
@@ -445,7 +456,7 @@ func PatchAntrian(c *gin.Context) {
 			return
 
 		case "instalasi":
-			err := antrian2.ChangeStatusByInstalasi(patchInput.Key.(string), patchInput.Value.(bool))
+			err := antrian2.ChangeStatusByInstalasi(patchInput.Key.(string), patchInput.Value.(string))
 
 			if err != nil {
 				c.JSON(http.StatusInternalServerError, common.Response{

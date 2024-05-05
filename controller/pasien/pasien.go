@@ -2,7 +2,7 @@ package pasien
 
 import (
 	"net/http"
-	pasien3 "seno-medika.com/query/pasien"
+	"seno-medika.com/query/role/pasien"
 	"strconv"
 	"time"
 
@@ -176,7 +176,7 @@ func UpdatePasien(c *gin.Context) {
 			})
 			return
 		}
-		err = pasien3.UpdatePasienById(val, pasienVar)
+		err = pasien.UpdatePasienById(val, pasienVar)
 		if err != nil {
 			c.JSON(http.StatusInternalServerError, common.Response{
 				Message:    err.Error(),
@@ -187,7 +187,7 @@ func UpdatePasien(c *gin.Context) {
 			return
 		}
 	case "uuid":
-		err := pasien3.UpdatePasienByUuid(target, pasienVar)
+		err := pasien.UpdatePasienByUuid(target, pasienVar)
 		if err != nil {
 			c.JSON(http.StatusInternalServerError, common.Response{
 				Message:    err.Error(),
@@ -216,7 +216,7 @@ func UpdatePasien(c *gin.Context) {
 }
 
 func DeletePasien(c *gin.Context) {
-	updateBy := c.Query("update_by")
+	updateBy := c.Query("delete_by")
 	target := c.Query("target")
 
 	switch updateBy {
@@ -232,7 +232,7 @@ func DeletePasien(c *gin.Context) {
 			return
 		}
 
-		err = pasien3.DeletePasienById(val)
+		err = pasien.DeletePasienById(val)
 		if err != nil {
 			c.JSON(http.StatusInternalServerError, common.Response{
 				Message:    err.Error(),
@@ -243,7 +243,7 @@ func DeletePasien(c *gin.Context) {
 			return
 		}
 	case "uuid":
-		err := pasien3.DeletePasienByUuid(target)
+		err := pasien.DeletePasienByUuid(target)
 		if err != nil {
 			c.JSON(http.StatusInternalServerError, common.Response{
 				Message:    err.Error(),
@@ -278,7 +278,7 @@ func GetPasien(c *gin.Context) {
 	switch updateBy {
 	case "id":
 		val, _ := strconv.Atoi(target)
-		pasien, err := pasien3.FindPasienById(val)
+		data, err := pasien.FindPasienById(val)
 		if err != nil {
 			c.JSON(http.StatusBadRequest, common.Response{
 				Message:    "Invalid target",
@@ -292,12 +292,12 @@ func GetPasien(c *gin.Context) {
 			Message:    "Successfully get pasien",
 			Status:     "ok",
 			StatusCode: http.StatusOK,
-			Data:       pasien,
+			Data:       data,
 		})
 		return
 
 	case "uuid":
-		pasien, err := pasien3.FindPasienByUuid(target)
+		data, err := pasien.FindPasienByUuid(target)
 		if err != nil {
 			c.JSON(http.StatusInternalServerError, common.Response{
 				Message:    err.Error(),
@@ -311,12 +311,12 @@ func GetPasien(c *gin.Context) {
 			Message:    "Successfully get pasien",
 			Status:     "ok",
 			StatusCode: http.StatusOK,
-			Data:       pasien,
+			Data:       data,
 		})
 		return
 
 	case "nik":
-		pasien, err := pasien3.FindPasienByNIK(target)
+		data, err := pasien.FindPasienByNIK(target)
 		if err != nil {
 			c.JSON(http.StatusInternalServerError, common.Response{
 				Message:    err.Error(),
@@ -330,13 +330,13 @@ func GetPasien(c *gin.Context) {
 			Message:    "Successfully get pasien",
 			Status:     "ok",
 			StatusCode: http.StatusOK,
-			Data:       pasien,
+			Data:       data,
 		})
 		return
 
 	case "name":
 
-		pasien, err := pasien3.FindPasienByName(target)
+		data, err := pasien.FindPasienByName(target)
 		if err != nil {
 			c.JSON(http.StatusInternalServerError, common.Response{
 				Message:    err.Error(),
@@ -351,11 +351,11 @@ func GetPasien(c *gin.Context) {
 			Message:    "Successfully get pasien",
 			Status:     "ok",
 			StatusCode: http.StatusOK,
-			Data:       pasien,
+			Data:       data,
 		})
 		return
 	default:
-		pasien, err := pasien3.FindPasienAll()
+		data, err := pasien.FindPasienAll()
 		if err != nil {
 			c.JSON(http.StatusInternalServerError, common.Response{
 				Message:    err.Error(),
@@ -369,7 +369,7 @@ func GetPasien(c *gin.Context) {
 			Message:    "Successfully get pasien",
 			Status:     "ok",
 			StatusCode: http.StatusOK,
-			Data:       pasien,
+			Data:       data,
 		})
 		return
 	}

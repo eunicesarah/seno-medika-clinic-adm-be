@@ -2,12 +2,12 @@ package obat
 
 import (
 	"net/http"
+	"seno-medika.com/model/station/pharmacystation"
 	"strconv"
 
 	"github.com/gin-gonic/gin"
 	"seno-medika.com/config/db"
 	"seno-medika.com/model/common"
-	"seno-medika.com/model/pharmacystation"
 	"seno-medika.com/query/obat"
 )
 
@@ -271,7 +271,6 @@ func GetObat(c *gin.Context) {
 		return
 	}
 }
-
 
 func PatchObat(c *gin.Context) {
 
