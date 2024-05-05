@@ -2,7 +2,7 @@ package pasien
 
 import (
 	"net/http"
-	pasien3 "seno-medika.com/service/pasien"
+	pasien3 "seno-medika.com/query/pasien"
 	"strconv"
 	"time"
 
@@ -334,6 +334,26 @@ func GetPasien(c *gin.Context) {
 		})
 		return
 
+	case "name":
+
+		pasien, err := pasien3.FindPasienByName(target)
+		if err != nil {
+			c.JSON(http.StatusInternalServerError, common.Response{
+				Message:    err.Error(),
+				Status:     "Internal Server Error",
+				StatusCode: http.StatusInternalServerError,
+				Data:       nil,
+			})
+			return
+		}
+
+		c.JSON(http.StatusOK, common.Response{
+			Message:    "Successfully get pasien",
+			Status:     "ok",
+			StatusCode: http.StatusOK,
+			Data:       pasien,
+		})
+		return
 	default:
 		pasien, err := pasien3.FindPasienAll()
 		if err != nil {
