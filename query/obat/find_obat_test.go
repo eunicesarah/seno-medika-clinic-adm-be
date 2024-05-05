@@ -13,7 +13,7 @@ func TestFindObatById_Fail(t *testing.T) {
 		_db = db.Conn()
 		db.DB = _db
 	}()
-
+    
 	val, err := FindObatById(998)
 	require.Error(t, err)
 	require.Equal(t, pharmacystation.Obat{}, val)
