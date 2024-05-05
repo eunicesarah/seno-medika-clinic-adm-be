@@ -1,18 +1,14 @@
 package pemeriksaan
 
 import (
-	"net/http"
-	"sync"
-
 	"github.com/gin-gonic/gin"
+	"net/http"
 	"seno-medika.com/config/db"
 	"seno-medika.com/model/common"
 	doctorstation2 "seno-medika.com/model/station/doctorstation"
 	"seno-medika.com/model/station/nursestation"
 	ttv2 "seno-medika.com/query/pemeriksaan/ttv"
-	"seno-medika.com/model/doctorstation"
-	"seno-medika.com/model/nursestation"
-	"seno-medika.com/query/ttv"
+	"sync"
 )
 
 func AddTTV(c *gin.Context) {
@@ -279,7 +275,7 @@ func FindTTV(c *gin.Context) {
 		})
 		return
 	case "pasien_id":
-		ttvVar, err := ttv.FindNurseStationByPasienId(target)
+		ttvVar, err := ttv2.FindNurseStationByPasienId(target)
 		if err != nil {
 			c.JSON(http.StatusInternalServerError, common.Response{
 				Message:    err.Error(),

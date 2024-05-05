@@ -1,17 +1,13 @@
 package ttv
 
 import (
-	"strconv"
-	"sync"
-
 	"seno-medika.com/config/db"
-	"seno-medika.com/model/doctorstation"
-	"seno-medika.com/model/nursestation"
 	doctorstation2 "seno-medika.com/model/station/doctorstation"
 	"seno-medika.com/model/station/nursestation"
 	"strconv"
 	"sync"
 )
+
 
 func FindSkriningAwalById(
 	id string, errorChan chan error,
@@ -105,7 +101,7 @@ func FindRiwayatPenyakitById(
 
 func FindAnamnesisById(
 	id string, errorChan *error,
-	riwayatPenyakitRes *doctorstation.Anamnesis,
+	riwayatPenyakitRes *doctorstation2.Anamnesis,
 	wg *sync.WaitGroup,
 ) {
 	defer wg.Done()
@@ -133,7 +129,7 @@ func FindAnamnesisById(
 
 func FindAnamnesisByPasienId(
 	id string, errorChan *error,
-	riwayatPenyakitRes *doctorstation.Anamnesis,
+	riwayatPenyakitRes *doctorstation2.Anamnesis,
 	wg *sync.WaitGroup,
 ) {
 	defer wg.Done()
