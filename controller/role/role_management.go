@@ -15,6 +15,11 @@ import (
 	"sync"
 )
 
+type filterResponse struct {
+	User []person.UserWithoutPassword `json:"user"`
+	Size    int                    `json:"size"`
+}
+
 func AddUser(c *gin.Context) {
 	var userInput person.User
 	var wg sync.WaitGroup
@@ -530,17 +535,33 @@ func GetUser(c *gin.Context) {
 	findBy := c.Query("find_by")
 	target := c.Query("target")
 
-	if findBy == "" || target == "" {
-		c.JSON(http.StatusBadRequest, common.Response{
-			Message:    "Bad Request",
-			StatusCode: http.StatusBadRequest,
-			Status:     "Bad Request",
-			Data:       nil,
-		})
-		return
-	}
 
 	switch findBy {
+	case "dashboard":
+		page := c.Query("page")
+		if page == "" {
+			page = "1"
+		}
+		val, _ := strconv.Atoi(page)
+		user, size, err := superadmin2.FindByFilter(strconv.Itoa(10*val - 10), "10")
+
+		if err != nil {
+			c.JSON(http.StatusBadRequest, common.Response{
+				Message:    err.Error(),
+				StatusCode: http.StatusBadRequest,
+				Status:     "Bad Request",
+				Data:       nil,
+			})
+			return
+		}
+
+		c.JSON(http.StatusOK, common.Response{
+			Message:    "Successfully get all user",
+			StatusCode: http.StatusOK,
+			Status:     "ok",
+			Data:       filterResponse{User: user, Size: size},
+		})
+		return
 	case "id":
 		val, _ := strconv.Atoi(target)
 		user, err := superadmin2.FindById(val)
