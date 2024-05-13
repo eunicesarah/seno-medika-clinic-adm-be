@@ -14,6 +14,7 @@ func AddPemeriksaanDokterDefault(pemeriksaan doctorstation.PemeriksaanDokter) er
 	)
 
 	errChan := make(chan error, 2)
+	wg.Add(2)
 
 	go func() {
 		defer wg.Done()

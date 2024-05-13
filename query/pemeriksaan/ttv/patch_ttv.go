@@ -7,6 +7,11 @@ import (
 )
 
 func ChangeSkriningAwalById(id string, skriningAwal nursestation.SkriningAwal) error {
+	var skrinAwalID string
+	errID := db.DB.QueryRow("SELECT skrin_awal_id FROM anamnesis WHERE pasien_id = $1 ORDER BY skrin_awal_id DESC LIMIT 1", id).Scan(&skrinAwalID)
+	if errID != nil {
+		return errID
+	}
 	val, err := db.DB.Exec(
 		`UPDATE skrining_awal SET
 	           disabilitas = $1,
@@ -20,7 +25,7 @@ func ChangeSkriningAwalById(id string, skriningAwal nursestation.SkriningAwal) e
 	           nyeri_berulang = $9,
 			   sifat_nyeri = $10
 	           WHERE skrin_awal_id = $11`,
-		skriningAwal.Disabilitas, skriningAwal.Ambulansi, skriningAwal.HambatanKomunikasi, skriningAwal.JalanTidakSeimbang, skriningAwal.JalanAlatBantu, skriningAwal.MenopangSaatDuduk, skriningAwal.HasilCaraJalan, skriningAwal.SkalaNyeri, skriningAwal.NyeriBerulang, skriningAwal.SifatNyeri, id)
+		skriningAwal.Disabilitas, skriningAwal.Ambulansi, skriningAwal.HambatanKomunikasi, skriningAwal.JalanTidakSeimbang, skriningAwal.JalanAlatBantu, skriningAwal.MenopangSaatDuduk, skriningAwal.HasilCaraJalan, skriningAwal.SkalaNyeri, skriningAwal.NyeriBerulang, skriningAwal.SifatNyeri, skrinAwalID)
 	if err != nil {
 		return err
 	}
@@ -33,14 +38,19 @@ func ChangeSkriningAwalById(id string, skriningAwal nursestation.SkriningAwal) e
 }
 
 func ChangeSkriningGiziById(id string, skriningGizi nursestation.SkriningGizi) error {
+	var skrinGiziID string
+	errID := db.DB.QueryRow("SELECT skrin_gizi_id FROM anamnesis WHERE pasien_id = $1 ORDER BY skrin_gizi_id DESC LIMIT 1", id).Scan(&skrinGiziID)
+	if errID != nil {
+		return errID
+	}
 	val, err := db.DB.Exec(
 		`UPDATE skrining_gizi SET
 	           penurunan_bb = $1,
 	           tdk_nafsu_makan = $2,
 	           diagnosis_khusus = $3,
-	           nama_penyakit = $4
+	           nama_penyakit = $4,
 	           WHERE skrin_gizi_id = $5`,
-		skriningGizi.PenurunanBB, skriningGizi.TdkNafsuMakan, skriningGizi.DiagnosisKhusus, skriningGizi.NamaPenyakit, id)
+		skriningGizi.PenurunanBB, skriningGizi.TdkNafsuMakan, skriningGizi.DiagnosisKhusus, skriningGizi.NamaPenyakit, skrinGiziID)
 	if err != nil {
 		return err
 	}
@@ -53,6 +63,11 @@ func ChangeSkriningGiziById(id string, skriningGizi nursestation.SkriningGizi) e
 }
 
 func ChangeTTVById(id string, ttv nursestation.TTV) error {
+	var ttvID string
+	errID := db.DB.QueryRow("SELECT ttv_id FROM anamnesis WHERE pasien_id = $1 ORDER BY ttv_id DESC LIMIT 1", id).Scan(&ttvID)
+	if errID != nil {
+		return errID
+	}
 	val, err := db.DB.Exec(
 		`UPDATE ttv SET
 	           kesadaran = $1,
@@ -71,7 +86,7 @@ func ChangeTTVById(id string, ttv nursestation.TTV) error {
 	           psikolososial_spirit = $14,
 	           keterangan = $15
 	           WHERE ttv_id = $16`,
-		ttv.Kesadaran, ttv.Sistole, ttv.Diastole, ttv.TinggiBadan, ttv.CaraUkurTB, ttv.BeratBadan, ttv.LingkarPerut, ttv.DetakNadi, ttv.Nafas, ttv.Saturasi, ttv.Suhu, ttv.DetakJantung, ttv.Triage, ttv.PsikolososialSpirit, ttv.Keterangan, id)
+		ttv.Kesadaran, ttv.Sistole, ttv.Diastole, ttv.TinggiBadan, ttv.CaraUkurTB, ttv.BeratBadan, ttv.LingkarPerut, ttv.DetakNadi, ttv.Nafas, ttv.Saturasi, ttv.Suhu, ttv.DetakJantung, ttv.Triage, ttv.PsikolososialSpirit, ttv.Keterangan, ttvID)
 	if err != nil {
 		return err
 	}
@@ -84,13 +99,18 @@ func ChangeTTVById(id string, ttv nursestation.TTV) error {
 }
 
 func ChangeRiwayatPenyakitById(id string, riwayatPenyakit nursestation.RiwayatPenyakit) error {
+	var riwayatID string
+	errID := db.DB.QueryRow("SELECT riwayat_penyakit_id FROM anamnesis WHERE pasien_id = $1 ORDER BY riwayat_penyakit_id DESC LIMIT 1", id).Scan(&riwayatID)
+	if errID != nil {
+		return errID
+	}
 	val, err := db.DB.Exec(
 		`UPDATE riwayat_penyakit SET
-	           rps = $1,
-	           rpd = $2,
-	           rpk = $3
-	           WHERE riwayat_penyakit_id = $4`,
-		riwayatPenyakit.RPS, riwayatPenyakit.RPD, riwayatPenyakit.RPK, id)
+			   rps = $1,
+			   rpd = $2,
+			   rpk = $3
+			   WHERE riwayat_penyakit_id = $4`,
+		riwayatPenyakit.RPS, riwayatPenyakit.RPD, riwayatPenyakit.RPK, riwayatID)
 	if err != nil {
 		return err
 	}
@@ -103,13 +123,18 @@ func ChangeRiwayatPenyakitById(id string, riwayatPenyakit nursestation.RiwayatPe
 }
 
 func ChangeAlergiById(id string, alergi doctorstation2.Alergi) error {
+	var alergiID string
+	errID := db.DB.QueryRow("SELECT alergi_id FROM anamnesis WHERE pasien_id = $1 ORDER BY alergi_id DESC LIMIT 1", id).Scan(&alergiID)
+	if errID != nil {
+		return errID
+	}
 	val, err := db.DB.Exec(
 		`UPDATE alergi SET
 	           obat = $1,
 	           makanan = $2,
 	           lainnya = $3
 	           WHERE alergi_id = $4`,
-		alergi.Obat, alergi.Makanan, alergi.Lainnya, id)
+		alergi.Obat, alergi.Makanan, alergi.Lainnya, alergiID)
 	if err != nil {
 		return err
 	}

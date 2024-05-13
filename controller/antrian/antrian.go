@@ -133,7 +133,8 @@ func GetAntrian(c *gin.Context) {
 	var target = c.Query("target")
 	var findBy = c.Query("find_by")
 
-	if findBy == "pemeriksaan_ttv" || findBy == "pemeriksaan_dokter" || findBy == "dashboard" {
+	if findBy == "pemeriksaan_ttv" || findBy == "pemeriksaan_dokter" ||
+		findBy == "dashboard" || findBy == "obat_sudah_diberikan" || findBy == "obat_belum_diberikan" {
 		poli := c.Query("poli")
 		limit := c.Query("limit")
 		page := c.Query("page")

@@ -274,6 +274,25 @@ func FindTTV(c *gin.Context) {
 			Data:       ttvVar,
 		})
 		return
+	case "pasien_id":
+		ttvVar, err := ttv2.FindNurseStationByPasienId(target)
+		if err != nil {
+			c.JSON(http.StatusInternalServerError, common.Response{
+				Message:    err.Error(),
+				Status:     "Internal Server Error",
+				StatusCode: http.StatusInternalServerError,
+				Data:       nil,
+			})
+			return
+		}
+
+		c.JSON(http.StatusOK, common.Response{
+			Message:    "Successfully get ttv",
+			Status:     "ok",
+			StatusCode: http.StatusOK,
+			Data:       ttvVar,
+		})
+		return
 
 	default:
 		ttvVars, err := ttv2.FindAllNurseStation()

@@ -106,3 +106,30 @@ func FindByRole(role string) ([]person.UserWithoutPassword, error) {
 
 	return users, nil
 }
+
+func FindByFilter(page, limit string) ([]person.UserWithoutPassword, int, error) {
+	var (
+		users []person.UserWithoutPassword
+		size int
+	)
+	err := db.DB.QueryRow("SELECT COUNT(*) FROM users").Scan(&size)
+	if err != nil {
+		return nil, 0, err
+	}
+	rows, err := db.DB.Query("SELECT user_id, user_uuid, nama, email, role FROM users LIMIT $1 OFFSET $2", limit, page)
+	if err != nil {
+		return nil, 0, err
+	}
+
+	for rows.Next() {
+		var user person.UserWithoutPassword
+		err = rows.Scan(&user.UserID, &user.UserUUID, &user.Nama, &user.Email, &user.Role)
+		if err != nil {
+			return nil, 0, err
+		}
+
+		users = append(users, user)
+	}
+
+	return users, size, nil
+}

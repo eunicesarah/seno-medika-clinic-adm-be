@@ -109,7 +109,7 @@ CREATE TABLE public.nota (
                                 pasien_id SERIAL NOT NULL,
                                 dokter_id SERIAL NOT NULL,
                                 resep_id SERIAL NOT NULL,
-                                list_tindakan_id integer NOT NULL,
+                                list_tindakan_id SERIAL NOT NULL,
                                 total_biaya bigint NOT NULL,
                                 metode_pembayaran character varying(50) NOT NULL
 );
@@ -140,7 +140,7 @@ CREATE TABLE public.rekam_medis (
 
 CREATE TABLE public.resep (
                                 resep_id SERIAL NOT NULL,
-                                pemeriksaan_dokter_id integer NOT NULL,
+                                pemeriksaan_dokter_id SERIAL NOT NULL,
                                 deskripsi character varying(500),
                                 ruang_tujuan character varying(500),
                                 status_obat character varying(500)
@@ -195,9 +195,9 @@ CREATE TABLE public.ttv (
 );
 
 CREATE TABLE public.list_cppt (
-                                pasien_id integer NOT NULL,
+                                pasien_id SERIAL NOT NULL,
                                 no_erm character varying(255) NOT NULL,
-                                cppt_id integer NOT NULL
+                                cppt_id SERIAL NOT NULL
 );
 
 CREATE TABLE public.cppt (
@@ -211,14 +211,14 @@ CREATE TABLE public.cppt (
 
 CREATE TABLE public.pemeriksaan_dokter (
                                 pemeriksaan_dokter_id SERIAL NOT NULL,
-                                antrian_id integer NOT NULL,
-                                dokter_id integer NOT NULL,
-                                perawat_id integer NOT NULL
+                                antrian_id SERIAL NOT NULL,
+                                dokter_id SERIAL NOT NULL,
+                                perawat_id SERIAL NOT NULL
 );
 
 CREATE TABLE public.pemeriksaan_fisik (
                                 pemeriksaan_fisik_id SERIAL NOT NULL,
-                                pemeriksaan_dokter_id integer NOT NULL,
+                                pemeriksaan_dokter_id SERIAL NOT NULL,
                                 terapi_yg_sdh_dilakukan character varying(255),
                                 rencana_tindakan character varying(255),
                                 tindakan_keperawatan character varying(255),
@@ -230,8 +230,8 @@ CREATE TABLE public.pemeriksaan_fisik (
 
 CREATE TABLE public.riwayat_pemeriksaan (
                                 riwayat_pemeriksaan_id SERIAL NOT NULL,
-                                pemeriksaan_dokter_id integer NOT NULL,
-                                pasien_id integer NOT NULL,
+                                pemeriksaan_dokter_id SERIAL NOT NULL,
+                                pasien_id SERIAL NOT NULL,
                                 tanggal date NOT NULL,
                                 pemeriksaan character varying(255),
                                 keterangan character varying(255)
@@ -239,7 +239,7 @@ CREATE TABLE public.riwayat_pemeriksaan (
 
 CREATE TABLE public.keadaan_fisik (
                                 keadaan_fisik_id SERIAL NOT NULL,
-                                pemeriksaan_dokter_id integer NOT NULL,
+                                pemeriksaan_dokter_id SERIAL NOT NULL,
                                 pemeriksaan_kulit boolean,
                                 pemeriksaan_kuku boolean,
                                 pemeriksaan_kepala boolean,
@@ -258,7 +258,7 @@ CREATE TABLE public.keadaan_fisik (
 
 CREATE TABLE public.diagnosa (
                                 diagnosa_id SERIAL NOT NULL,
-                                pemeriksaan_dokter_id integer NOT NULL,
+                                pemeriksaan_dokter_id SERIAL NOT NULL,
                                 diagnosa character varying(255),
                                 jenis character varying(255),
                                 kasus character varying(255),
@@ -285,14 +285,14 @@ CREATE TABLE public.tindakan (
 );
 
 CREATE TABLE public.penanganan (
-                                tindakan_id integer NOT NULL,
-                                list_tindakan_id integer NOT NULL
+                                tindakan_id SERIAL NOT NULL,
+                                list_tindakan_id SERIAL NOT NULL
 );
 
 CREATE TABLE public.anatomi (
                                 anatomi_id SERIAL NOT NULL,
-                                pasien_id integer NOT NULL,
-                                pemeriksaan_dokter_id integer NOT NULL,
+                                pasien_id SERIAL NOT NULL,
+                                pemeriksaan_dokter_id SERIAL NOT NULL,
                                 bagian_tubuh character varying(255),
                                 keterangan character varying(255)
 );

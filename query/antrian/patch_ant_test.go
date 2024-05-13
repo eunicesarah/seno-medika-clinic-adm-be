@@ -15,7 +15,7 @@ func TestChangeStatusAntrianById_Success(t *testing.T) {
 
 	_db.Exec("INSERT INTO antrian (antrian_id, pasien_id, nomor_antrian, status, poli, instalasi, created_at) VALUES ($2, $1, 'test', true, 'test','akjfkjdfkskdf')", 2)
 
-	err := ChangeStatusAntrianById(2, "true")
+	err := ChangeStatusAntrianById("2", "true")
 	if err != nil {
 		t.Errorf("Error ChangeStatusAntrianById: %s", err)
 	}
@@ -115,7 +115,7 @@ func TestChangeStatusAntrianById_Fail(t *testing.T) {
 	// Simulate DB error by closing the connection
 	db.DB.Close()
 
-	err := ChangeStatusAntrianById(2, "true")
+	err := ChangeStatusAntrianById("2", "true")
 	if err == nil {
 		t.Errorf("Expected error, got nil")
 	}
