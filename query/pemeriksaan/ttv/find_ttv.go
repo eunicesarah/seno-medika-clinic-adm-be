@@ -1,21 +1,26 @@
 package ttv
 
 import (
+	"strconv"
+	"sync"
+
 	"seno-medika.com/config/db"
+	"seno-medika.com/model/doctorstation"
+	"seno-medika.com/model/nursestation"
 	doctorstation2 "seno-medika.com/model/station/doctorstation"
 	"seno-medika.com/model/station/nursestation"
 	"strconv"
 	"sync"
 )
 
-
 func FindSkriningAwalById(
 	id string, errorChan chan error,
 	wg *sync.WaitGroup, skriningAwalRes *nursestation.SkriningAwal,
 ) {
 	defer wg.Done()
+	skrinAwalId := db.DB.QueryRow("SELECT skrin_awal_id FROM anamnesis WHERE pasien_id = $1", id)
 
-	if err := db.DB.QueryRow("SELECT * FROM skrining_awal WHERE skrin_awal_id = $1", id).Scan(
+	if err := db.DB.QueryRow("SELECT * FROM skrining_awal WHERE skrin_awal_id = $1", skrinAwalId).Scan(
 		&skriningAwalRes.SkriningAwalID,
 		&skriningAwalRes.Disabilitas,
 		&skriningAwalRes.Ambulansi,
@@ -38,8 +43,9 @@ func FindSkriningGiziById(
 	wg *sync.WaitGroup, skriningGiziRes *nursestation.SkriningGizi,
 ) {
 	defer wg.Done()
+	skrinGiziId := db.DB.QueryRow("SELECT skrin_gizi_id FROM anamnesis WHERE pasien_id = $1", id)
 
-	if err := db.DB.QueryRow("SELECT * FROM skrining_gizi WHERE skrin_gizi_id = $1", id).Scan(
+	if err := db.DB.QueryRow("SELECT * FROM skrining_gizi WHERE skrin_gizi_id = $1", skrinGiziId).Scan(
 		&skriningGiziRes.SkriningGiziID,
 		&skriningGiziRes.PenurunanBB,
 		&skriningGiziRes.TdkNafsuMakan,
@@ -58,8 +64,9 @@ func FindTTVById(
 	wg *sync.WaitGroup, ttvRes *nursestation.TTV,
 ) {
 	defer wg.Done()
+	ttvId := db.DB.QueryRow("SELECT ttv_id FROM anamnesis WHERE pasien_id = $1", id)
 
-	if err := db.DB.QueryRow("SELECT * FROM ttv WHERE ttv_id = $1", id).Scan(
+	if err := db.DB.QueryRow("SELECT * FROM ttv WHERE ttv_id = $1", ttvId).Scan(
 		&ttvRes.TTVID,
 		&ttvRes.Kesadaran,
 		&ttvRes.Sistole,
@@ -87,8 +94,9 @@ func FindRiwayatPenyakitById(
 	wg *sync.WaitGroup, riwayatPenyakitRes *nursestation.RiwayatPenyakit,
 ) {
 	defer wg.Done()
+	riwayatPenyakitId := db.DB.QueryRow("SELECT riwayat_penyakit_id FROM anamnesis WHERE pasien_id = $1", id)
 
-	if err := db.DB.QueryRow("SELECT * FROM riwayat_penyakit WHERE rwt_penyakit_id = $1", id).Scan(
+	if err := db.DB.QueryRow("SELECT * FROM riwayat_penyakit WHERE riwayat_penyakit_id = $1", riwayatPenyakitId).Scan(
 		&riwayatPenyakitRes.RiwayatPenyakitID,
 		&riwayatPenyakitRes.RPS,
 		&riwayatPenyakitRes.RPD,
@@ -101,7 +109,7 @@ func FindRiwayatPenyakitById(
 
 func FindAnamnesisById(
 	id string, errorChan *error,
-	riwayatPenyakitRes *doctorstation2.Anamnesis,
+	riwayatPenyakitRes *doctorstation.Anamnesis,
 	wg *sync.WaitGroup,
 ) {
 	defer wg.Done()
@@ -129,7 +137,7 @@ func FindAnamnesisById(
 
 func FindAnamnesisByPasienId(
 	id string, errorChan *error,
-	riwayatPenyakitRes *doctorstation2.Anamnesis,
+	riwayatPenyakitRes *doctorstation.Anamnesis,
 	wg *sync.WaitGroup,
 ) {
 	defer wg.Done()
