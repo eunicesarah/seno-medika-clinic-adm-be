@@ -6,7 +6,7 @@ import (
 	"seno-medika.com/model/station/pharmacystation"
 )
 
-func PatchResepById(id string, resep pharmacystation.Resep) error {
+func PutResepById(id string, resep pharmacystation.Resep) error {
 	val, err := db.DB.Exec(
 		`UPDATE resep SET 
                  pemeriksaan_dokter_id = $1,
@@ -18,7 +18,7 @@ func PatchResepById(id string, resep pharmacystation.Resep) error {
 		resep.Deskripsi,
 		resep.RuangTujuan,
 		resep.StatusObat,
-		resep.ResepID)
+		id)
 
 	if err != nil {
 		return err

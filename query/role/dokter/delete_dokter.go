@@ -15,3 +15,10 @@ func DeleteDokterById(id string) error {
 	}
 	return nil
 }
+
+func DeleteTindakanById(id string) error {
+	if _, err := db.DB.Exec("DELETE FROM tindakan where tindakan_id = $1", id); err != nil {
+		return err
+	}
+	return nil
+}

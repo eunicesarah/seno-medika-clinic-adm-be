@@ -5,6 +5,7 @@ import (
 	"net/http"
 	"seno-medika.com/model/common"
 	"seno-medika.com/model/station/pharmacystation"
+	"seno-medika.com/query/obat"
 	"seno-medika.com/query/obat/resep"
 )
 
@@ -36,7 +37,38 @@ func AddResep(c *gin.Context) {
 		StatusCode: http.StatusCreated,
 		Data:       nil,
 	})
+	return
+}
 
+func AddListObat(c *gin.Context) {
+	var listVal pharmacystation.ListObat
+
+	if err := c.ShouldBindJSON(&listVal); err != nil {
+		c.JSON(http.StatusBadRequest, common.Response{
+			Message:    err.Error(),
+			Status:     "Bad Request",
+			StatusCode: http.StatusBadRequest,
+			Data:       nil,
+		})
+		return
+	}
+
+	if err := obat.AddListObat(listVal); err != nil {
+		c.JSON(http.StatusInternalServerError, common.Response{
+			Message:    err.Error(),
+			Status:     "Internal Server Error",
+			StatusCode: http.StatusInternalServerError,
+			Data:       nil,
+		})
+		return
+	}
+
+	c.JSON(http.StatusCreated, common.Response{
+		Message:    "Successfully add list",
+		Status:     "Status Created",
+		StatusCode: http.StatusCreated,
+		Data:       nil,
+	})
 	return
 }
 
@@ -89,7 +121,7 @@ func PatchResep(c *gin.Context) {
 
 	switch updateBy {
 	case "id":
-		if err := resep.PatchResepById(target, resVal); err != nil {
+		if err := resep.PutResepById(target, resVal); err != nil {
 			c.JSON(http.StatusInternalServerError, common.Response{
 				Message:    err.Error(),
 				Status:     "Internal Server Error",

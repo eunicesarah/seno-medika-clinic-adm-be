@@ -283,3 +283,9 @@ func PatchDokter(c *gin.Context) {
 	})
 	return
 }
+
+//TODO: add tindakan
+
+func GetTindakan(c *gin.Context) {
+
+}

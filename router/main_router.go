@@ -24,4 +24,5 @@ func MainRouter(r *gin.Engine) {
 	role.KasirRouter(r)
 	apotek.ApotekRouter(r)
 	pemeriksaan.PemeriksaanDokterRouter(r)
+	obat.ResepRouter(r)
 }

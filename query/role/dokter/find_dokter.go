@@ -3,6 +3,7 @@ package dokter
 import (
 	"seno-medika.com/config/db"
 	"seno-medika.com/model/person"
+	"seno-medika.com/model/station/cashierstation"
 	"sync"
 )
 
@@ -125,4 +126,56 @@ func FindDokterByID(id string) (person.Dokter, error) {
 	}
 
 	return dokter, nil
+}
+
+func FindAllTindakan() ([]cashierstation.Tindakan, error) {
+	var tindVal []cashierstation.Tindakan
+
+	val, err := db.DB.Query("SELECT * FROM tindakan")
+	if err != nil {
+		return nil, err
+	}
+
+	for val.Next() {
+		var temp cashierstation.Tindakan
+		if err := val.Scan(
+			&temp.TindakanID,
+			&temp.ProsedurTindakan,
+			&temp.Jumlah,
+			&temp.Keterangan,
+			&temp.TanggalRencana,
+			&temp.HargaTindakan,
+			&temp.IndikasiTindakan,
+			&temp.Tujuan,
+			&temp.Risiko,
+			&temp.Komplikasi,
+			&temp.AlternatifRisiko,
+		); err != nil {
+			return nil, err
+		}
+
+		tindVal = append(tindVal, temp)
+	}
+
+	return tindVal, nil
+}
+func FindTindakanById(id string) (cashierstation.Tindakan, error) {
+	var tindVal cashierstation.Tindakan
+	if err := db.DB.QueryRow("SELECT * FROM tindakan WHERE tindakan_id = $1", id).Scan(
+		&tindVal.TindakanID,
+		&tindVal.ProsedurTindakan,
+		&tindVal.Jumlah,
+		&tindVal.Keterangan,
+		&tindVal.TanggalRencana,
+		&tindVal.HargaTindakan,
+		&tindVal.IndikasiTindakan,
+		&tindVal.Tujuan,
+		&tindVal.Risiko,
+		&tindVal.Komplikasi,
+		&tindVal.AlternatifRisiko,
+	); err != nil {
+		return tindVal, err
+	}
+
+	return tindVal, nil
 }
