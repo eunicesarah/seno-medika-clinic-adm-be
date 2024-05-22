@@ -304,7 +304,7 @@ func PatchUser(c *gin.Context) {
 				return
 			}
 
-			id := putInput.Key.(int)
+			id := putInput.Key.(string)
 			err := superadmin2.ChangeNameById(id, putInput.Value.(string))
 			if err != nil {
 				c.JSON(http.StatusBadRequest, common.Response{
@@ -370,8 +370,8 @@ func PatchUser(c *gin.Context) {
 				return
 			}
 
-			id := putInput.Key.(int)
-			err := superadmin2.ChangeEmailById(strconv.Itoa(id), putInput.Value.(string))
+			id := putInput.Key.(string)
+			err := superadmin2.ChangeEmailById(id, putInput.Value.(string))
 			if err != nil {
 				c.JSON(http.StatusBadRequest, common.Response{
 					Message:    err.Error(),

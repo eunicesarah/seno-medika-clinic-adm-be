@@ -40,7 +40,7 @@ func ChangePasswordByUuid(uid string, password string) error {
 	return nil
 }
 
-func ChangeNameById(id int, name string) error {
+func ChangeNameById(id string, name string) error {
 	val, err := db.DB.Exec("UPDATE users SET nama = $1 WHERE user_id = $2", name, id)
 	if err != nil {
 		return err
