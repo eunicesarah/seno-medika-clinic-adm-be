@@ -9,6 +9,7 @@ import (
 	"seno-medika.com/helper"
 	"seno-medika.com/model/common"
 	"seno-medika.com/model/person"
+	"seno-medika.com/model/station/cashierstation"
 	dokter2 "seno-medika.com/query/role/dokter"
 	"sync"
 )
@@ -284,8 +285,161 @@ func PatchDokter(c *gin.Context) {
 	return
 }
 
-//TODO: add tindakan
+func AddTindakan(c *gin.Context) {
+	var tindVal cashierstation.Tindakan
+
+	if err := c.ShouldBind(&tindVal); err != nil {
+		c.JSON(http.StatusBadRequest, common.Response{
+			Message:    err.Error(),
+			Status:     "Bad Request",
+			StatusCode: http.StatusBadRequest,
+			Data:       nil,
+		})
+		return
+	}
+
+	if err := dokter2.AddTindakan(tindVal); err != nil {
+		c.JSON(http.StatusInternalServerError, common.Response{
+			Message:    err.Error(),
+			Status:     "Internal Server Error",
+			StatusCode: http.StatusInternalServerError,
+			Data:       nil,
+		})
+		return
+	}
+
+	c.JSON(http.StatusCreated, common.Response{
+		Message:    "Successfully add tindakan",
+		Status:     "Status Created",
+		StatusCode: http.StatusCreated,
+		Data:       nil,
+	})
+	return
+}
 
 func GetTindakan(c *gin.Context) {
+	findBy := c.Query("find_by")
+	target := c.Query("target")
 
+	switch findBy {
+	case "id":
+		tindVal, err := dokter2.FindTindakanById(target)
+		if err != nil {
+			c.JSON(http.StatusInternalServerError, common.Response{
+				Message:    err.Error(),
+				Status:     "Internal Server Error",
+				StatusCode: http.StatusInternalServerError,
+				Data:       nil,
+			})
+			return
+		}
+
+		c.JSON(http.StatusOK, common.Response{
+			Message:    "Successfully get tindakan",
+			Status:     "ok",
+			StatusCode: http.StatusOK,
+			Data:       tindVal,
+		})
+		return
+	default:
+		tindVal, err := dokter2.FindAllTindakan()
+		if err != nil {
+			c.JSON(http.StatusInternalServerError, common.Response{
+				Message:    err.Error(),
+				Status:     "Internal Server Error",
+				StatusCode: http.StatusInternalServerError,
+				Data:       nil,
+			})
+			return
+		}
+
+		c.JSON(http.StatusOK, common.Response{
+			Message:    "Successfully get tindakan",
+			Status:     "ok",
+			StatusCode: http.StatusOK,
+			Data:       tindVal,
+		})
+		return
+	}
+}
+
+func DeleteTindakan(c *gin.Context) {
+	deleteBy := c.Query("delete_by")
+	target := c.Query("target")
+
+	switch deleteBy {
+	case "id":
+		if err := dokter2.DeleteTindakanById(target); err != nil {
+			c.JSON(http.StatusInternalServerError, common.Response{
+				Message:    err.Error(),
+				Status:     "Internal Server Error",
+				StatusCode: http.StatusInternalServerError,
+				Data:       nil,
+			})
+			return
+		}
+
+		c.JSON(http.StatusOK, common.Response{
+			Message:    "Successfully delete tindakan",
+			Status:     "ok",
+			StatusCode: http.StatusOK,
+			Data:       nil,
+		})
+		return
+
+	default:
+		c.JSON(http.StatusBadRequest, common.Response{
+			Message:    "Invalid delete by",
+			Status:     "Bad Request",
+			StatusCode: http.StatusBadRequest,
+			Data:       nil,
+		})
+		return
+	}
+}
+
+func PutTindakan(c *gin.Context) {
+	changeBy := c.Query("update_by")
+	target := c.Query("target")
+
+	switch changeBy {
+	case "id":
+		var tindVal cashierstation.Tindakan
+		if err := c.ShouldBind(&tindVal); err != nil {
+			c.JSON(http.StatusBadRequest, common.Response{
+				Message:    err.Error(),
+				Status:     "Bad Request",
+				StatusCode: http.StatusBadRequest,
+				Data:       nil,
+			})
+			return
+		}
+
+		if err := dokter2.PutTindakanById(target, tindVal); err != nil {
+			c.JSON(http.StatusInternalServerError, common.Response{
+				Message:    err.Error(),
+				Status:     "Internal Server Error",
+				StatusCode: http.StatusInternalServerError,
+				Data:       nil,
+			})
+			return
+		}
+
+		c.JSON(http.StatusOK, common.Response{
+			Message:    "Successfully update tindakan",
+			Status:     "ok",
+			StatusCode: http.StatusOK,
+			Data:       nil,
+		})
+		return
+
+	default:
+		c.JSON(http.StatusBadRequest, common.Response{
+			Message:    "Invalid change by",
+			Status:     "Bad Request",
+			StatusCode: http.StatusBadRequest,
+			Data:       nil,
+		})
+		return
+	}
 }

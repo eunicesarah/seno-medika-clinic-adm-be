@@ -10,4 +10,8 @@ func DokterRouter(r *gin.Engine) {
 	r.GET("/dokter", role.GetDokter)
 	r.PATCH("/dokter", role.PatchDokter)
 	r.DELETE("/dokter", role.DeleteDokter)
+	r.POST("/dokter/tindakan", role.AddTindakan)
+	r.GET("/dokter/tindakan", role.GetTindakan)
+	r.PUT("/dokter/tindakan", role.PutTindakan)
+	r.DELETE("/dokter/tindakan", role.DeleteTindakan)
 }

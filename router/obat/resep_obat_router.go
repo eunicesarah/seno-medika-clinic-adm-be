@@ -8,6 +8,6 @@ import (
 func ResepRouter(r *gin.Engine) {
 	r.POST("/resep", obat.AddResep)
 	r.GET("/resep", obat.GetResep)
-	r.PATCH("/resep", obat.PatchResep)
+	r.PUT("/resep", obat.PutResep)
 	r.DELETE("/resep", obat.DeleteResep)
 }

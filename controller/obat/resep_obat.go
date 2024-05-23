@@ -105,7 +105,7 @@ func DeleteResep(c *gin.Context) {
 
 }
 
-func PatchResep(c *gin.Context) {
+func PutResep(c *gin.Context) {
 	updateBy := c.Query("update_by")
 	target := c.Query("target")
 	var resVal pharmacystation.Resep
