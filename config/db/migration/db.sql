@@ -303,6 +303,93 @@ ALTER TABLE ONLY public.antrian
 ALTER TABLE ONLY public.antrian
     ALTER COLUMN status SET DEFAULT 'pemeriksaan_ttv';
 
+ALTER TABLE ONLY public.anatomi
+    ALTER COLUMN bagian_tubuh SET DEFAULT '';
+
+ALTER TABLE ONLY public.anatomi
+    ALTER COLUMN keterangan SET DEFAULT '';
+
+ALTER TABLE ONLY public.diagnosa
+    ALTER COLUMN diagnosa SET DEFAULT '';
+
+ALTER TABLE ONLY public.diagnosa
+    ALTER COLUMN jenis SET DEFAULT '';
+
+ALTER TABLE ONLY public.diagnosa
+    ALTER COLUMN kasus SET DEFAULT '';
+
+ALTER TABLE ONLY public.diagnosa
+    ALTER COLUMN status_diagnosis SET DEFAULT '';
+
+ALTER TABLE ONLY public.keadaan_fisik
+    ALTER COLUMN pemeriksaan_kulit SET DEFAULT false;
+
+ALTER TABLE ONLY public.keadaan_fisik
+    ALTER COLUMN pemeriksaan_kuku SET DEFAULT false;
+
+ALTER TABLE ONLY public.keadaan_fisik
+    ALTER COLUMN pemeriksaan_kepala SET DEFAULT false;
+
+ALTER TABLE ONLY public.keadaan_fisik
+    ALTER COLUMN pemeriksaan_mata SET DEFAULT false;
+
+ALTER TABLE ONLY public.keadaan_fisik
+    ALTER COLUMN pemeriksaan_telinga SET DEFAULT false;
+
+ALTER TABLE ONLY public.keadaan_fisik
+    ALTER COLUMN pemeriksaan_hidung_sinus SET DEFAULT false;
+
+ALTER TABLE ONLY public.keadaan_fisik
+    ALTER COLUMN pemeriksaan_mulut_bibir SET DEFAULT false;
+
+ALTER TABLE ONLY public.keadaan_fisik
+    ALTER COLUMN pemeriksaan_leher SET DEFAULT false;
+
+ALTER TABLE ONLY public.keadaan_fisik
+    ALTER COLUMN pemeriksaan_dada_punggung SET DEFAULT false;
+
+ALTER TABLE ONLY public.keadaan_fisik
+    ALTER COLUMN pemeriksaan_kardiovaskuler SET DEFAULT false;
+
+ALTER TABLE ONLY public.keadaan_fisik
+    ALTER COLUMN pemeriksaan_abdomen_perut SET DEFAULT false;
+
+ALTER TABLE ONLY public.keadaan_fisik
+    ALTER COLUMN pemeriksaan_ekstremitas_atas SET DEFAULT false;
+
+ALTER TABLE ONLY public.keadaan_fisik
+    ALTER COLUMN pemeriksaan_ekstremitas_bawah SET DEFAULT false;
+
+ALTER TABLE ONLY public.keadaan_fisik
+    ALTER COLUMN pemeriksaan_genitalia_pria SET DEFAULT false;
+
+ALTER TABLE ONLY public.pemeriksaan_fisik
+    ALTER COLUMN terapi_yg_sdh_dilakukan SET DEFAULT '';
+
+ALTER TABLE ONLY public.pemeriksaan_fisik
+    ALTER COLUMN rencana_tindakan SET DEFAULT '';
+
+ALTER TABLE ONLY public.pemeriksaan_fisik
+    ALTER COLUMN tindakan_keperawatan SET DEFAULT '';
+
+ALTER TABLE ONLY public.pemeriksaan_fisik
+    ALTER COLUMN observasi SET DEFAULT '';
+
+ALTER TABLE ONLY public.pemeriksaan_fisik
+    ALTER COLUMN merokok SET DEFAULT false;
+
+ALTER TABLE ONLY public.pemeriksaan_fisik
+    ALTER COLUMN konsumsi_alkohol SET DEFAULT false;
+
+ALTER TABLE ONLY public.pemeriksaan_fisik
+    ALTER COLUMN kurang_sayur SET DEFAULT false;
+
+ALTER TABLE ONLY public.riwayat_pemeriksaan
+    ALTER COLUMN pemeriksaan SET DEFAULT '';
+
+ALTER TABLE ONLY public.riwayat_pemeriksaan
+    ALTER COLUMN keterangan SET DEFAULT '';
+
 ALTER TABLE ONLY public.pasien
     ADD CONSTRAINT "PK_pasien" PRIMARY KEY (pasien_id, no_erm);
 
