@@ -121,7 +121,8 @@ func PutResep(c *gin.Context) {
 
 	switch updateBy {
 	case "id":
-		if err := resep.PutResepById(target, resVal); err != nil {
+		updatedResep, err := resep.PutResepById(target, resVal)
+		if err != nil {
 			c.JSON(http.StatusInternalServerError, common.Response{
 				Message:    err.Error(),
 				Status:     "Internal Server Error",
@@ -132,11 +133,12 @@ func PutResep(c *gin.Context) {
 		}
 
 		c.JSON(http.StatusOK, common.Response{
-			Message:    "Successfully update resep",
+			Message:    "Successfully updated resep",
 			Status:     "ok",
 			StatusCode: http.StatusOK,
-			Data:       nil,
+			Data:       updatedResep,
 		})
+
 		return
 
 	default:

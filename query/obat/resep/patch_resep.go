@@ -6,7 +6,7 @@ import (
 	"seno-medika.com/model/station/pharmacystation"
 )
 
-func PutResepById(id string, resep pharmacystation.Resep) error {
+func PutResepById(id string, resep pharmacystation.Resep) (pharmacystation.Resep, error) {
 	val, err := db.DB.Exec(
 		`UPDATE resep SET 
                  pemeriksaan_dokter_id = $1,
@@ -21,12 +21,27 @@ func PutResepById(id string, resep pharmacystation.Resep) error {
 		id)
 
 	if err != nil {
-		return err
+		return pharmacystation.Resep{}, err
 	}
 
 	if rows, _ := val.RowsAffected(); rows == 0 {
-		return errors.New("id obat not found")
+		return pharmacystation.Resep{}, errors.New("id obat not found")
 	}
 
-	return nil
+	// Fetch the updated record from the database
+	var updatedResep pharmacystation.Resep
+	err = db.DB.QueryRow(
+		`SELECT resep_id, pemeriksaan_dokter_id, deskripsi, ruang_tujuan, status_obat 
+                 FROM resep WHERE resep_id = $1`, id).Scan(
+		&updatedResep.ResepID,
+		&updatedResep.PemeriksaanDokterID,
+		&updatedResep.Deskripsi,
+		&updatedResep.RuangTujuan,
+		&updatedResep.StatusObat)
+
+	if err != nil {
+		return pharmacystation.Resep{}, err
+	}
+
+	return updatedResep, nil
 }

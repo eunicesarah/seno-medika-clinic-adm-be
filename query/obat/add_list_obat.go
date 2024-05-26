@@ -6,7 +6,7 @@ import (
 )
 
 func AddListObat(list pharmacystation.ListObat) error {
-	if _, err := db.DB.Exec("INSERT INTO list_obat(resep_id, jumlah, dosis, aturan_pakai, keterangan) VALUES ($1, $2, $3, $4, $5)", list.ResepID, list.Jumlah, list.Dosis, list.AturanPakai, list.Keterangan); err != nil {
+	if _, err := db.DB.Exec("INSERT INTO list_obat(resep_id, jumlah, dosis, aturan_pakai, keterangan, obat_id) VALUES ($1, $2, $3, $4, $5, $6)", list.ResepID, list.Jumlah, list.Dosis, list.AturanPakai, list.Keterangan, list.ObatID); err != nil {
 		return err
 	}
 
