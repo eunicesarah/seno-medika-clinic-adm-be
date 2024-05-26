@@ -10,4 +10,5 @@ func PemeriksaanDokterRouter(r *gin.Engine) {
 	r.GET("/pemeriksaan_dokter", pemeriksaan.GetPemeriksaanDokter)
 	r.DELETE("/pemeriksaan_dokter", pemeriksaan.DeletePemeriksaanDokter)
 	r.PATCH("/pemeriksaan_dokter", pemeriksaan.PatchPemeriksaanDokter)
+	r.POST("/list-anatomi", pemeriksaan.AddListAnatomiCtr)
 }

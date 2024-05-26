@@ -103,3 +103,13 @@ func AddPemeriksaanDokterDefault(pemeriksaan doctorstation.PemeriksaanDokter) er
 
 	return nil
 }
+
+func AddListAnatomi(anatomi []doctorstation.Anatomi) error {
+	for _, val := range anatomi {
+		if _, err := db.DB.Exec("INSERT INTO anatomi(pasien_id, pemeriksaan_dokter_id, bagian_tubuh, keterangan) VALUES ($1, $2, $3, $4)", val.PasienId, val.PemeriksaanDokterId, val.BagianTubuh, val.Keterangan); err != nil {
+			return err
+		}
+	}
+
+	return nil
+}

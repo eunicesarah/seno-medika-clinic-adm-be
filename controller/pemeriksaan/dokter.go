@@ -42,6 +42,40 @@ func AddPemeriksaanDokter(c *gin.Context) {
 	return
 }
 
+func AddListAnatomiCtr(c *gin.Context) {
+	var (
+		res []doctorstation.Anatomi
+	)
+
+	if err := c.ShouldBind(&res); err != nil {
+		c.JSON(http.StatusBadRequest, common.Response{
+			Message:    err.Error(),
+			Status:     "Bad Request",
+			StatusCode: http.StatusBadRequest,
+			Data:       nil,
+		})
+		return
+	}
+
+	if err := dokter.AddListAnatomi(res); err != nil {
+		c.JSON(http.StatusInternalServerError, common.Response{
+			Message:    err.Error(),
+			Status:     "Internal Service Error",
+			StatusCode: http.StatusInternalServerError,
+			Data:       nil,
+		})
+		return
+	}
+
+	c.JSON(http.StatusCreated, common.Response{
+		Message:    "Successfully add list",
+		Status:     "ok",
+		StatusCode: http.StatusCreated,
+		Data:       nil,
+	})
+	return
+}
+
 func DeletePemeriksaanDokter(c *gin.Context) {
 	deleteBy := c.Query("delete_by")
 	target := c.Query("target")

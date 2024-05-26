@@ -6,7 +6,7 @@ type PemeriksaanDokterMerge struct {
 	RiwayatPemeriksaan RiwayatPemeriksaan `json:"riwayat_pemeriksaan"`
 	KeadaanFisik       KeadaanFisik       `json:"keadaan_fisik"`
 	Diagnosa           Diagnosa           `json:"diagnosa"`
-	Anatomi            Anatomi            `json:"anatomi"`
+	Anatomi            []Anatomi          `json:"anatomi"`
 }
 
 type ListCppt struct {

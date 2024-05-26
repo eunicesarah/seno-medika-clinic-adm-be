@@ -57,10 +57,23 @@ func FindPemeriksaanDokterById(pemeriksaanId string) (doctorstation.PemeriksaanD
 
 	go func() {
 		defer wg.Done()
-		if err := db.DB.QueryRow("SELECT anatomi_id, pasien_id, bagian_tubuh, keterangan FROM anatomi WHERE pemeriksaan_dokter_id = $1", pemeriksaanId).Scan(&pemeriksaan.Anatomi.AnatomiId, &pemeriksaan.Anatomi.PasienId, &pemeriksaan.Anatomi.BagianTubuh, &pemeriksaan.Anatomi.Keterangan); err != nil {
+
+		rows, err := db.DB.Query("SELECT anatomi_id, pasien_id, bagian_tubuh, keterangan FROM anatomi WHERE pemeriksaan_dokter_id = $1", pemeriksaanId)
+		if err != nil {
 			errChan <- err
 			return
 		}
+
+		for rows.Next() {
+			var temp doctorstation.Anatomi
+			if err := rows.Scan(temp.AnatomiId, temp.PasienId, temp.PemeriksaanDokterId, temp.BagianTubuh, temp.Keterangan); err != nil {
+				errChan <- err
+				return
+			}
+
+			pemeriksaan.Anatomi = append(pemeriksaan.Anatomi, temp)
+		}
+
 	}()
 
 	wg.Wait()
